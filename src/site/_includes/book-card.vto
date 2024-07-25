@@ -1,0 +1,26 @@
+<div class="card">
+    <div class="card-content">
+        <div class="media">
+            <div class="media-content">
+                <p class="title is-4">{{ title }}</p>
+                <p class="subtitle is-6">{{ author }}</p>
+            </div>
+        </div>
+        {{ if showContent }}
+        <div class="content">
+            {{ content }}
+        </div>
+        {{ /if }}
+        {{ if scheduled }}
+        <time datetime="{{ date.toISOString() }}">{{ date.toLocaleString('en-us', { dateStyle: 'medium' }) }}</time>
+        {{ /if }}
+    </div>
+    <footer class="card-footer">
+        {{ if ltid }}
+        <p class="card-footer-item">
+            <span>View on <a href="https://www.librarything.com/work/{{ ltid }}">LibraryThing</a></span>
+        </p>
+        {{ /if }}
+        <p class="card-footer-item"><span>Club Thoughts on <a href="{{ url }}">{{ title }}</a></span></p>
+    </footer>
+</div>
