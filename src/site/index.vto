@@ -1,0 +1,26 @@
+---
+layout: main.vto
+---
+
+<section class="hero is-info">
+    <div class="hero-body">
+        <h1 class="title">JoCo Book Club</h1>
+        <p class="subtitle">The JoCo Book Club is a… TODO</p>
+    </div>
+</section>
+
+<section class="section">
+    <h1 class="title">Upcoming Club Reads</h1>
+
+    <div class="container">
+        {{ for upcoming of search.pages("upcoming") }}
+        {{ include "book-card.vto" { ...upcoming, showExcerpt: true } }}
+        {{ /for }}
+    <div>
+</section>
+
+<footer class="footer">
+    <div class="content">
+        <a class="button" href="./previous/">Previous Club Choices</a>
+    </div>
+</footer>

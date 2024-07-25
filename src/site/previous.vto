@@ -1,0 +1,15 @@
+---
+title: Previous Club Choices
+layout: main.vto
+renderOrder: 1
+---
+
+<section class="section">
+    <h1 class="title">Previous Club Choices</h1>
+
+    <div class="container">
+        {{ for previous of search.pages("previous") }}
+        {{ include "book-card.vto" { ...previous } }}
+        {{ /for }}
+    <div>
+</section>
