@@ -45,7 +45,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: src/site/
+        working-directory: ./src/site/
 
     steps:
       - name: Run site build
