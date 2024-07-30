@@ -11,5 +11,9 @@
     "types": [
       "lume/types.ts"
     ]
+  },
+  "fmt": {
+    "semiColons": false,
+    "singleQuote": true
   }
 }
