@@ -6,5 +6,5 @@ ltid: "21713349"
 
 Blurb from JoCoNaut:
 
-> "I liked it a lot and I think it might be fun to talk about. The story
-telling is creative."
+> "I liked it a lot and I think it might be fun to talk about. The story telling
+> is creative."
