@@ -40,15 +40,6 @@ jobs:
       # - name: Run tests
       #   run: deno test -A
 
-  build-site:
-    needs: test
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ./src/site/
-
-    steps:
       - name: Run site build
         run: deno task build
-        
+        working-directory: ./src/site/
