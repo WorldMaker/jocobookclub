@@ -41,6 +41,7 @@ jobs:
       #   run: deno test -A
 
   build-site:
+    needs: test
     runs-on: ubuntu-latest
 
     defaults:
