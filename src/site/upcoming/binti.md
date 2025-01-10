@@ -1,0 +1,13 @@
+---
+title: "Binti: The Complete Trilogy"
+author: Nnedi Okorafor
+ltid: "22496438"
+---
+
+Blurb from a JoCoNaut:
+
+> "I enjoyed it and would like to read it again."
+
+Content Warnings include Racism & colourism, Panic attack (on-page),
+Nonconsensual body modifications, Blood & gore depiction including dead bodies,
+Death of a friend, Mass murder, Animal death mentioned, War themes, Bullying
