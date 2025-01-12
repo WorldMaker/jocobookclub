@@ -19,6 +19,16 @@ layout: main.vto
     <div>
 </section>
 
+<section class="section">
+    <h1 class="title">Current Ballot</h1>
+
+    <div class="container">
+        {{ for book of search.pages("ballot") }}
+        {{ include "book-card.vto" { ...book, currentBallot: true } }}
+        {{ /for }}
+    </div>
+</section>
+
 <footer class="footer">
     <div class="content">
         <a class="button" href="./previous/">Previous Club Choices</a>
