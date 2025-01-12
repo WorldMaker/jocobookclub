@@ -1,5 +1,7 @@
 {
   "imports": {
+    "@simplewebauthn/server": "jsr:@simplewebauthn/server@^13.0.0",
+    "@std/ulid": "jsr:@std/ulid@^1.0.0",
     "hono": "jsr:@hono/hono@^4.5.3"
   },
   "tasks": {
