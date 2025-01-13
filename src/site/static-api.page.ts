@@ -46,7 +46,7 @@ export default function* staticApi({ search }: Lume.Data) {
     contentType: 'application/json',
     content: JSON.stringify(upcomingBooksByLtid),
   }
-  const ballotBooks = search.pages("ballot")
+  const ballotBooks = search.pages('ballot')
     .map((page) => ({
       title: page.title!,
       author: page.author,
@@ -56,7 +56,7 @@ export default function* staticApi({ search }: Lume.Data) {
   const ballotBooksByLtid = byLtId(ballotBooks)
   yield {
     url: '/static-api/ballot.json',
-    contentType: "application/json",
+    contentType: 'application/json',
     content: JSON.stringify(ballotBooksByLtid),
   }
 }
