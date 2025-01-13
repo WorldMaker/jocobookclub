@@ -128,7 +128,12 @@ const app = new Hono<{ Variables: Variables }>()
     const session = c.get('session')
     const ballot = await getUserBallot(kv, session.userId)
     if (!ballot.success) {
-      return c.json<Ballot>({ userId: session.userId, books: {} })
+      return c.json<Ballot>({
+        userId: session.userId,
+        active: false,
+        books: {},
+        updated: new Date().toISOString(),
+      })
     }
     return c.json(ballot.data)
   })
