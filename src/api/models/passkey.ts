@@ -5,6 +5,7 @@ import {
   PublicKeyCredentialCreationOptionsJSON,
   PublicKeyCredentialRequestOptionsJSON,
 } from '@simplewebauthn/server'
+import { UserId } from './user.ts'
 
 export interface Passkey {
   id: Base64URLString
@@ -17,11 +18,11 @@ export interface Passkey {
   transports?: AuthenticatorTransportFuture[]
 }
 
-export function getPasskeysForUser(kv: Deno.Kv, userId: string) {
+export function getPasskeysForUser(kv: Deno.Kv, userId: UserId) {
   return kv.list<Passkey>({ prefix: ['passkey', userId] })
 }
 
-export function getPasskey(kv: Deno.Kv, userId: string, id: Base64URLString) {
+export function getPasskey(kv: Deno.Kv, userId: UserId, id: Base64URLString) {
   return kv.get<Passkey>(['passkey', userId, id])
 }
 
@@ -71,7 +72,7 @@ export async function getUserRegistrationChallenge(
 
 export function storeLoginChallenge(
   kv: Deno.Kv,
-  userId: string,
+  userId: UserId,
   options: PublicKeyCredentialRequestOptionsJSON,
   expireIn = defaultChallengeExpiresIn,
 ) {
@@ -80,7 +81,7 @@ export function storeLoginChallenge(
 
 export async function getLoginChallenge(
   kv: Deno.Kv,
-  userId: string,
+  userId: UserId,
 ) {
   const key = ['login-challenge', userId]
   const challenge = await kv.get<PublicKeyCredentialRequestOptionsJSON>([

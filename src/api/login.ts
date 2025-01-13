@@ -29,11 +29,11 @@ const inviteVerifyQuerySchema = z.object({
 })
 
 const authOptionsQuerySchema = z.object({
-  email: z.string(),
+  email: z.string().email(),
 })
 
 const loginVerifySchema = z.object({
-  email: z.string(),
+  email: z.string().email(),
   id: z.string(),
 })
 
@@ -76,8 +76,8 @@ const app = new Hono()
       }
       let session: Session | undefined
       let userId: string | undefined
-      if (existingUser.value) {
-        userId = existingUser.value.id
+      if (existingUser.success) {
+        userId = existingUser.data.id
         const newSession = {
           token: createSessionToken(),
           userId,
@@ -129,12 +129,12 @@ const app = new Hono()
       const { email } = c.req.valid('query')
       const kv = await Deno.openKv()
       const user = await getUserByEmail(kv, email)
-      if (!user.value) {
+      if (!user.success) {
         return c.notFound()
       }
       const passkeys: Passkey[] = []
       for await (
-        const passkey of getPasskeysForUser(kv, user.value.id)
+        const passkey of getPasskeysForUser(kv, user.data.id)
       ) {
         passkeys.push(passkey.value)
       }
@@ -145,7 +145,7 @@ const app = new Hono()
           transports: passkey.transports,
         })),
       })
-      await storeLoginChallenge(kv, user.value.id, options)
+      await storeLoginChallenge(kv, user.data.id, options)
       return c.json(options)
     },
   )
@@ -153,15 +153,15 @@ const app = new Hono()
     const { email, id } = c.req.valid('json')
     const kv = await Deno.openKv()
     const user = await getUserByEmail(kv, email)
-    if (!user.value) {
+    if (!user.success) {
       return c.notFound()
     }
-    const passkey = await getPasskey(kv, user.value.id, id)
+    const passkey = await getPasskey(kv, user.data.id, id)
     if (!passkey.value) {
       c.status(400)
       return c.json({ error: 'Unknown passkey' })
     }
-    const expectedChallenge = await getLoginChallenge(kv, user.value.id)
+    const expectedChallenge = await getLoginChallenge(kv, user.data.id)
     if (!expectedChallenge.value) {
       return c.notFound()
     }
@@ -196,7 +196,7 @@ const app = new Hono()
     })
     const newSession = {
       token: createSessionToken(),
-      userId: user.value.id,
+      userId: user.data.id,
       expiresAt: new Date(),
     }
     const session = await updateSession(kv, newSession)

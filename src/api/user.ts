@@ -18,6 +18,7 @@ import { getSessionByToken, Session } from './models/session.ts'
 import { getUserById } from './models/user.ts'
 
 interface Variables {
+  kv: Deno.Kv
   session: Session
 }
 
@@ -27,25 +28,26 @@ const app = new Hono<{ Variables: Variables }>()
     bearerAuth({
       verifyToken: async (token, c) => {
         const kv = await Deno.openKv()
+        c.set('kv', kv)
         const session = await getSessionByToken(kv, token)
-        if (!session.value) {
+        if (!session.success) {
           return false
         }
-        c.set('session', session.value)
+        c.set('session', session.data)
         return true
       },
     }),
   )
   .get('/user/register-options', async (c) => {
-    const kv = await Deno.openKv()
+    const kv = c.get('kv')
     const session = c.get('session')
     const existingUser = await getUserById(kv, session.userId)
-    if (!existingUser.value) {
+    if (!existingUser.success) {
       return c.notFound()
     }
-    const { email } = existingUser.value
+    const { id: userId, email } = existingUser.data
     const passkeys: Passkey[] = []
-    for await (const passkey of getPasskeysForUser(kv, existingUser.value.id)) {
+    for await (const passkey of getPasskeysForUser(kv, userId)) {
       passkeys.push(passkey.value)
     }
     const options = await generateRegistrationOptions({
@@ -68,10 +70,10 @@ const app = new Hono<{ Variables: Variables }>()
     return c.json(options)
   })
   .post('/user/register-verify', async (c) => {
-    const kv = await Deno.openKv()
+    const kv = c.get('kv')
     const session = c.get('session')
     const existingUser = await getUserById(kv, session.userId)
-    if (!existingUser.value) {
+    if (!existingUser.success) {
       return c.notFound()
     }
     const expectedChallenge = await getUserRegistrationChallenge(
@@ -104,7 +106,7 @@ const app = new Hono<{ Variables: Variables }>()
       verification
         .registrationInfo!
     await updatePasskey(kv, {
-      userId: existingUser.value.id,
+      userId: existingUser.data.id,
       webauthnUserId: expectedChallenge.value.user.id,
       id: credential.id,
       publicKey: credential.publicKey,

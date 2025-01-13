@@ -24,17 +24,17 @@ const app = new Hono()
       const inviteId = c.req.param('invite')
       const { sessionKey } = c.req.valid('query')
       const invite = await getInviteById(kv, inviteId)
-      if (!invite.value) {
+      if (!invite.success) {
         return c.notFound()
       }
-      const email = invite.value.openEnrollment
+      const email = invite.data.type === 'open-enrollment'
         ? c.req.query().email
-        : invite.value.specificEmail!
+        : invite.data.email
       const existingUser = await getUserByEmail(kv, email)
       const passkeys: Passkey[] = []
-      if (existingUser.value) {
+      if (existingUser.success) {
         for await (
-          const passkey of getPasskeysForUser(kv, existingUser.value.id)
+          const passkey of getPasskeysForUser(kv, existingUser.data.id)
         ) {
           passkeys.push(passkey.value)
         }

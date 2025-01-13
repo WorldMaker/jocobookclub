@@ -1,11 +1,17 @@
-export interface Session {
-  token: string
-  userId: string
-  expiresAt: Date
-}
+import { z } from 'zod'
+import { UserId } from './user.ts'
 
-export function getSessionByToken(kv: Deno.Kv, token: string) {
-  return kv.get<Session>(['session', token])
+export const Session = z.object({
+  token: z.string(),
+  userId: UserId,
+  expiresAt: z.date(),
+})
+
+export type Session = z.infer<typeof Session>
+
+export async function getSessionByToken(kv: Deno.Kv, token: string) {
+  const maybeSession = await kv.get(['session', token])
+  return Session.safeParse(maybeSession.value)
 }
 
 const defaultExpiresIn = 2 /* hours */ * 60 /* mins */ * 60 /* secs */ *
@@ -17,7 +23,7 @@ export async function updateSession(
   expireIn = defaultExpiresIn,
 ) {
   const newSession = {
-    ...session,
+    ...Session.parse(session),
     expiresAt: new Date(new Date().getTime() + expireIn),
   }
   const commit = await kv.set(['session', session.token], {
