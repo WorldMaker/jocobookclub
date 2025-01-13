@@ -16,6 +16,9 @@ import {
 import { origin, rpId, rpName } from './models/rp.ts'
 import { getSessionByToken, Session } from './models/session.ts'
 import { getUserById } from './models/user.ts'
+import { Ballot, getUserBallot, updateUserBallot } from './models/ballot.ts'
+import { zValidator } from '@hono/zod-validator'
+import { queueVoted } from './models/voting.ts'
 
 interface Variables {
   kv: Deno.Kv
@@ -38,7 +41,7 @@ const app = new Hono<{ Variables: Variables }>()
       },
     }),
   )
-  .get('/user/register-options', async (c) => {
+  .get('/register-options', async (c) => {
     const kv = c.get('kv')
     const session = c.get('session')
     const existingUser = await getUserById(kv, session.userId)
@@ -69,7 +72,7 @@ const app = new Hono<{ Variables: Variables }>()
     await storeUserRegistrationChallenge(kv, session.token, options)
     return c.json(options)
   })
-  .post('/user/register-verify', async (c) => {
+  .post('/register-verify', async (c) => {
     const kv = c.get('kv')
     const session = c.get('session')
     const existingUser = await getUserById(kv, session.userId)
@@ -119,6 +122,26 @@ const app = new Hono<{ Variables: Variables }>()
       session,
       verification,
     })
+  })
+  .get('/ballot', async (c) => {
+    const kv = c.get('kv')
+    const session = c.get('session')
+    const ballot = await getUserBallot(kv, session.userId)
+    if (!ballot.success) {
+      return c.json<Ballot>({ userId: session.userId, books: {} })
+    }
+    return c.json(ballot.data)
+  })
+  .put('/ballot', zValidator('json', Ballot), async (c) => {
+    const kv = c.get('kv')
+    const session = c.get('session')
+    const ballot = c.req.valid('json')
+    if (ballot.userId !== session.userId) {
+      return c.status(403)
+    }
+    await updateUserBallot(kv, ballot)
+    await queueVoted(kv, ballot.userId)
+    return c.json(ballot)
   })
 
 export default app
