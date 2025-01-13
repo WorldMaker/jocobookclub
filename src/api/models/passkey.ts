@@ -4,32 +4,32 @@ import {
   CredentialDeviceType,
   PublicKeyCredentialCreationOptionsJSON,
   PublicKeyCredentialRequestOptionsJSON,
-} from "@simplewebauthn/server";
+} from '@simplewebauthn/server'
 
 export interface Passkey {
-  id: Base64URLString;
-  publicKey: Uint8Array;
-  userId: string;
-  webauthnUserId: Base64URLString;
-  counter: number;
-  deviceType: CredentialDeviceType;
-  backedUp: boolean;
-  transports?: AuthenticatorTransportFuture[];
+  id: Base64URLString
+  publicKey: Uint8Array
+  userId: string
+  webauthnUserId: Base64URLString
+  counter: number
+  deviceType: CredentialDeviceType
+  backedUp: boolean
+  transports?: AuthenticatorTransportFuture[]
 }
 
 export function getPasskeysForUser(kv: Deno.Kv, userId: string) {
-  return kv.list<Passkey>({ prefix: ["passkey", userId] });
+  return kv.list<Passkey>({ prefix: ['passkey', userId] })
 }
 
 export function getPasskey(kv: Deno.Kv, userId: string, id: Base64URLString) {
-  return kv.get<Passkey>(["passkey", userId, id]);
+  return kv.get<Passkey>(['passkey', userId, id])
 }
 
 export function updatePasskey(kv: Deno.Kv, passkey: Passkey) {
-  return kv.set(["passkey", passkey.userId, passkey.id], passkey);
+  return kv.set(['passkey', passkey.userId, passkey.id], passkey)
 }
 
-const defaultChallengeExpiresIn = 10 /* mins */ * 60 /* secs */ * 1000; /* ms */
+const defaultChallengeExpiresIn = 10 /* mins */ * 60 /* secs */ * 1000 /* ms */
 
 export function storeRegistrationChallenge(
   kv: Deno.Kv,
@@ -37,17 +37,17 @@ export function storeRegistrationChallenge(
   options: PublicKeyCredentialCreationOptionsJSON,
   expireIn = defaultChallengeExpiresIn,
 ) {
-  return kv.set(["register-challenge", sessionKey], options, { expireIn });
+  return kv.set(['register-challenge', sessionKey], options, { expireIn })
 }
 
-export function getRegistrationChallenge(
+export async function getRegistrationChallenge(
   kv: Deno.Kv,
   sessionKey: string,
 ) {
-  return kv.get<PublicKeyCredentialCreationOptionsJSON>([
-    "register-challenge",
-    sessionKey,
-  ]);
+  const key = ['register-challenge', sessionKey]
+  const challenge = await kv.get<PublicKeyCredentialCreationOptionsJSON>(key)
+  await kv.delete(key)
+  return challenge
 }
 
 export function storeUserRegistrationChallenge(
@@ -56,17 +56,17 @@ export function storeUserRegistrationChallenge(
   options: PublicKeyCredentialCreationOptionsJSON,
   expireIn = defaultChallengeExpiresIn,
 ) {
-  return kv.set(["user-register-challenge", sessionKey], options, { expireIn });
+  return kv.set(['user-register-challenge', sessionKey], options, { expireIn })
 }
 
-export function getUserRegistrationChallenge(
+export async function getUserRegistrationChallenge(
   kv: Deno.Kv,
   sessionKey: string,
 ) {
-  return kv.get<PublicKeyCredentialCreationOptionsJSON>([
-    "user-register-challenge",
-    sessionKey,
-  ]);
+  const key = ['user-register-challenge', sessionKey]
+  const challenge = await kv.get<PublicKeyCredentialCreationOptionsJSON>(key)
+  await kv.delete(key)
+  return challenge
 }
 
 export function storeLoginChallenge(
@@ -75,15 +75,18 @@ export function storeLoginChallenge(
   options: PublicKeyCredentialRequestOptionsJSON,
   expireIn = defaultChallengeExpiresIn,
 ) {
-  return kv.set(["login-challenge", userId], options, { expireIn });
+  return kv.set(['login-challenge', userId], options, { expireIn })
 }
 
-export function getLoginChallenge(
+export async function getLoginChallenge(
   kv: Deno.Kv,
   userId: string,
 ) {
-  return kv.get<PublicKeyCredentialRequestOptionsJSON>([
-    "login-challenge",
+  const key = ['login-challenge', userId]
+  const challenge = await kv.get<PublicKeyCredentialRequestOptionsJSON>([
+    'login-challenge',
     userId,
-  ]);
+  ])
+  await kv.delete(key)
+  return challenge
 }
