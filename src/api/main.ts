@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import { cors } from 'hono/cors'
 import inviteApp from './invite.ts'
 import loginApp from './login.ts'
 import userApp from './user.ts'
@@ -13,6 +14,10 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
     c.set('kv', kv)
     await next()
   })
+  .use(cors({
+    origin: 'https://worldmaker.net/jocobookclub/',
+    allowHeaders: ['Authorization'],
+  }))
   .route('/invite', inviteApp)
   .route('/login', loginApp)
   .route('/user', userApp)
