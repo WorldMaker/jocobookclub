@@ -23,6 +23,7 @@ import {
   updatePasskey,
 } from './models/passkey.ts'
 import { getLoginChallenge } from './models/passkey.ts'
+import { KvProvidedVariables } from './kv.ts'
 
 const inviteVerifyQuerySchema = z.object({
   sessionKey: z.string(),
@@ -37,12 +38,12 @@ const loginVerifySchema = z.object({
   id: z.string(),
 })
 
-const app = new Hono()
+const app = new Hono<{ Variables: KvProvidedVariables }>()
   .post(
     '/invite-verify',
     zValidator('json', inviteVerifyQuerySchema),
     async (c) => {
-      const kv = await Deno.openKv()
+      const kv = c.get('kv')
       const { sessionKey } = c.req.valid('json')
       if (!sessionKey) {
         return c.notFound()
@@ -127,7 +128,7 @@ const app = new Hono()
     zValidator('query', authOptionsQuerySchema),
     async (c) => {
       const { email } = c.req.valid('query')
-      const kv = await Deno.openKv()
+      const kv = c.get('kv')
       const user = await getUserByEmail(kv, email)
       if (!user.success) {
         return c.notFound()
@@ -151,7 +152,7 @@ const app = new Hono()
   )
   .post('/verify', zValidator('json', loginVerifySchema), async (c) => {
     const { email, id } = c.req.valid('json')
-    const kv = await Deno.openKv()
+    const kv = c.get('kv')
     const user = await getUserByEmail(kv, email)
     if (!user.success) {
       return c.notFound()

@@ -10,17 +10,18 @@ import {
 } from './models/passkey.ts'
 import { rpId, rpName } from './models/rp.ts'
 import { getUserByEmail } from './models/user.ts'
+import { KvProvidedVariables } from './kv.ts'
 
 const registerOptionsQuerySchema = z.object({
   sessionKey: z.string(),
 })
 
-const app = new Hono()
+const app = new Hono<{ Variables: KvProvidedVariables }>()
   .get(
     '/:invite/register-options',
     zValidator('query', registerOptionsQuerySchema),
     async (c) => {
-      const kv = await Deno.openKv()
+      const kv = c.get('kv')
       const inviteId = c.req.param('invite')
       const { sessionKey } = c.req.valid('query')
       const invite = await getInviteById(kv, inviteId)

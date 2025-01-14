@@ -20,9 +20,9 @@ import { Ballot, getUserBallot, updateUserBallot } from './models/ballot.ts'
 import { zValidator } from '@hono/zod-validator'
 import { queueVoted } from './models/voting.ts'
 import { getFinalTally } from './models/tally.ts'
+import { KvProvidedVariables } from './kv.ts'
 
-interface Variables {
-  kv: Deno.Kv
+interface Variables extends KvProvidedVariables {
   session: Session
 }
 
@@ -31,8 +31,7 @@ const app = new Hono<{ Variables: Variables }>()
     '/*',
     bearerAuth({
       verifyToken: async (token, c) => {
-        const kv = await Deno.openKv()
-        c.set('kv', kv)
+        const kv = c.get('kv')
         const session = await getSessionByToken(kv, token)
         if (!session.success) {
           return false
