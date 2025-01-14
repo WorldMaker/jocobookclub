@@ -19,6 +19,7 @@ import { getUserById } from './models/user.ts'
 import { Ballot, getUserBallot, updateUserBallot } from './models/ballot.ts'
 import { zValidator } from '@hono/zod-validator'
 import { queueVoted } from './models/voting.ts'
+import { getFinalTally } from './models/tally.ts'
 
 interface Variables {
   kv: Deno.Kv
@@ -147,6 +148,14 @@ const app = new Hono<{ Variables: Variables }>()
     await updateUserBallot(kv, ballot)
     await queueVoted(kv, ballot.userId)
     return c.json(ballot)
+  })
+  .get('/final-tally', async (c) => {
+    const kv = c.get('kv')
+    const tally = await getFinalTally(kv)
+    if (!tally.success) {
+      return c.notFound()
+    }
+    return c.json(tally.data)
   })
 
 export default app
