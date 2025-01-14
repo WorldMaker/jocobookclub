@@ -14,5 +14,5 @@ import { UserId } from '../models/user.ts'
  * @returns Reversed ULID
  */
 export function reverseUlid(ulid: UserId) {
-    return [...ulid].reverse().join('')
+  return [...ulid].reverse().join('')
 }

@@ -159,43 +159,45 @@ export function tallyFinal(tally: Tally): FinalTally {
  * depending on scale. We could also use multiple layers of tallies given the
  * simple map/reduce nature of them we could use some form of essentially a
  * binary tree of tallies.
- * 
+ *
  * Buckets need to be in lexicographic order
  */
-export const buckets = Object.freeze([
-  '0',
-  '1',
-  '2',
-  '3',
-  '4',
-  '5',
-  '6',
-  '7',
-  '8',
-  '9',
-  'A',
-  'B',
-  'C',
-  'D',
-  'E',
-  'F',
-  'G',
-  'H',
-  'J',
-  'K',
-  'M',
-  'N',
-  'P',
-  'Q',
-  'R',
-  'S',
-  'T',
-  'V',
-  'W',
-  'X',
-  'Y',
-  'Z',
-] as const)
+export const buckets = Object.freeze(
+  [
+    '0',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'J',
+    'K',
+    'M',
+    'N',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z',
+  ] as const,
+)
 
 export type Bucket = typeof buckets[number]
 
@@ -205,15 +207,26 @@ export async function getTally(kv: Deno.Kv, bucket: Bucket) {
 }
 
 export function getBucketForUser(userId: UserId) {
-    return buckets.find((bucket) => reverseUlid(userId).startsWith(bucket))
+  return buckets.find((bucket) => reverseUlid(userId).startsWith(bucket))
 }
 
-export async function tallyBucket(kv: Deno.Kv, bucket: Bucket, books: EligibleBooks) {
+export async function tallyBucket(
+  kv: Deno.Kv,
+  bucket: Bucket,
+  books: EligibleBooks,
+) {
   const bucketIndex = buckets.indexOf(bucket)
   let tally = zeroTally(books)
-  for await (const maybeBallot of kv.list(bucketIndex + 1 === buckets.length
-    ? { prefix: ['ballot'], start: ['ballot', bucket] }
-    : { start: ['ballot', bucket], end: ['ballot', buckets[bucketIndex + 1]] })) {
+  for await (
+    const maybeBallot of kv.list(
+      bucketIndex + 1 === buckets.length
+        ? { prefix: ['ballot'], start: ['ballot', bucket] }
+        : {
+          start: ['ballot', bucket],
+          end: ['ballot', buckets[bucketIndex + 1]],
+        },
+    )
+  ) {
     const ballot = Ballot.safeParse(maybeBallot.value)
     if (!ballot.success) {
       continue
@@ -221,23 +234,22 @@ export async function tallyBucket(kv: Deno.Kv, bucket: Bucket, books: EligibleBo
     const userTally = getTallyFromBallot(tally.books, ballot.data)
     tally = addTally(tally, userTally)
   }
-  await kv.set(['tally', bucket], tally)
   return tally
 }
 
 export async function tallyFinalRanking(kv: Deno.Kv, books: EligibleBooks) {
-    let finalTally = zeroTally(books)
-    for (const bucket of buckets) {
-        const tally = await getTally(kv, bucket)
-        if (!tally.success) {
-            continue
-        }
-        finalTally = addTally(finalTally, tally.data)
+  let finalTally = zeroTally(books)
+  for (const bucket of buckets) {
+    const tally = await getTally(kv, bucket)
+    if (!tally.success) {
+      continue
     }
-    await kv.set(['final-tally'], tallyFinal(finalTally))
+    finalTally = addTally(finalTally, tally.data)
+  }
+  return tallyFinal(finalTally)
 }
 
 export async function getFinalTally(kv: Deno.Kv) {
-    const maybeFinalTally = await kv.get(['final-tally'])
-    return FinalTally.safeParse(maybeFinalTally.value)
+  const maybeFinalTally = await kv.get(['final-tally'])
+  return FinalTally.safeParse(maybeFinalTally.value)
 }

@@ -9,6 +9,10 @@ export const QueueMessages = z.discriminatedUnion('type', [
     at: z.date(),
   }),
   z.object({
+    type: z.literal('recount-requested'),
+    at: z.date(),
+  }),
+  z.object({
     type: z.literal('user-voted'),
     userId: UserId,
     at: z.date(),

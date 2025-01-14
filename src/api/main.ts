@@ -3,8 +3,10 @@ import inviteApp from './invite.ts'
 import loginApp from './login.ts'
 import userApp from './user.ts'
 import { KvProvidedVariables } from './kv.ts'
+import { listenQueue } from './queue.ts'
 
 const kv = await Deno.openKv()
+kv.listenQueue((msg) => listenQueue(kv, msg))
 
 const app = new Hono<{ Variables: KvProvidedVariables }>()
   .use(async (c, next) => {
@@ -16,4 +18,3 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
   .route('/user', userApp)
 
 Deno.serve(app.fetch)
- 
