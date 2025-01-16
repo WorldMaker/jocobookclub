@@ -17,6 +17,15 @@ const registerOptionsQuerySchema = z.object({
 })
 
 const app = new Hono<{ Variables: KvProvidedVariables }>()
+  .get('/:invite', async (c) => {
+    const kv = c.get('kv')
+    const inviteId = c.req.param('invite')
+    const invite = await getInviteById(kv, inviteId)
+    if (!invite.success) {
+      return c.notFound()
+    }
+    return c.json(invite.data)
+  })
   .get(
     '/:invite/register-options',
     zValidator('query', registerOptionsQuerySchema),
