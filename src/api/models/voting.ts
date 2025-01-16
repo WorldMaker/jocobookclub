@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { UserId } from './user.ts'
-import { Bucket } from './tally.ts'
+import type { Bucket } from './tally.ts'
 
 export const QueueMessages = z.discriminatedUnion('type', [
   z.object({

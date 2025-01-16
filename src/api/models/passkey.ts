@@ -1,11 +1,11 @@
-import {
+import type {
   AuthenticatorTransportFuture,
   Base64URLString,
   CredentialDeviceType,
   PublicKeyCredentialCreationOptionsJSON,
   PublicKeyCredentialRequestOptionsJSON,
 } from '@simplewebauthn/server'
-import { UserId } from './user.ts'
+import type { UserId } from './user.ts'
 
 export interface Passkey {
   id: Base64URLString

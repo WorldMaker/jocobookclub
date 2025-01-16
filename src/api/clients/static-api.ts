@@ -1,4 +1,4 @@
-import { EligibleBooks } from '../models/tally.ts'
+import type { EligibleBooks } from '../models/tally.ts'
 
 const staticApiUrl = 'https://worldmaker.net/jocobookclub/static-api'
 

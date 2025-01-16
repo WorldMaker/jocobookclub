@@ -3,5 +3,11 @@
     "semiColons": false,
     "singleQuote": true,
     "exclude": ["dist"]
+  },
+  "workspace": ["./src/api", "./src/bf", "./src/site"],
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "jsx",
+    "jsxFragmentFactory": "Fragment"
   }
 }

@@ -34,6 +34,10 @@ jobs:
         with:
           deno-version: v1.x
 
+      - name: Run bf build
+        run: deno task build
+        working-directory: ./src/bf/
+
       - name: Run site build
         run: deno task build
         working-directory: ./src/site/
