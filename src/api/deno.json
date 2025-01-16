@@ -1,4 +1,6 @@
 {
+  "name": "@worldmaker/jocobookclub-api",
+  "exports": "./main.ts",
   "fmt": {
     "semiColons": false,
     "singleQuote": true
@@ -12,9 +14,5 @@
   },
   "tasks": {
     "start": "deno run --allow-net main.ts"
-  },
-  "compilerOptions": {
-    "jsx": "precompile",
-    "jsxImportSource": "hono/jsx"
   }
 }

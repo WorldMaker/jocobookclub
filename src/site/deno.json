@@ -7,11 +7,6 @@
     "build": "deno task lume",
     "serve": "deno task lume -s"
   },
-  "compilerOptions": {
-    "types": [
-      "lume/types.ts"
-    ]
-  },
   "fmt": {
     "semiColons": false,
     "singleQuote": true

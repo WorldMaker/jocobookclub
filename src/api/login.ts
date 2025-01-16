@@ -10,7 +10,7 @@ import {
 } from '@simplewebauthn/server'
 import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
-import { rpId } from './models/rp.ts'
+import { rpId, origin } from './models/rp.ts'
 import { getUserByEmail, updateUser, User } from './models/user.ts'
 import { createSessionToken, Session, updateSession } from './models/session.ts'
 import { ulid } from '@std/ulid'
