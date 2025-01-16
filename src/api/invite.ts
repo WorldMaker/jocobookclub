@@ -22,9 +22,9 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
     const inviteId = c.req.param('invite')
     const invite = await getInviteById(kv, inviteId)
     if (!invite.success) {
-      return c.notFound()
+      return c.json({}, 404)
     }
-    return c.json(invite.data)
+    return c.json(invite.data, 200)
   })
   .get(
     '/:invite/register-options',
@@ -35,7 +35,7 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
       const { sessionKey } = c.req.valid('query')
       const invite = await getInviteById(kv, inviteId)
       if (!invite.success) {
-        return c.notFound()
+        return c.json({}, 404)
       }
       const email = invite.data.type === 'open-enrollment'
         ? c.req.query().email
@@ -66,7 +66,7 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
         },
       })
       await storeRegistrationChallenge(kv, sessionKey, options)
-      return c.json(options)
+      return c.json(options, 200)
     },
   )
 

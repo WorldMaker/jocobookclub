@@ -46,7 +46,7 @@ const app = new Hono<{ Variables: Variables }>()
     const session = c.get('session')
     const existingUser = await getUserById(kv, session.userId)
     if (!existingUser.success) {
-      return c.notFound()
+      return c.json({}, 404)
     }
     const { id: userId, email } = existingUser.data
     const passkeys: Passkey[] = []
@@ -70,21 +70,21 @@ const app = new Hono<{ Variables: Variables }>()
       },
     })
     await storeUserRegistrationChallenge(kv, session.token, options)
-    return c.json(options)
+    return c.json(options, 200)
   })
   .post('/register-verify', async (c) => {
     const kv = c.get('kv')
     const session = c.get('session')
     const existingUser = await getUserById(kv, session.userId)
     if (!existingUser.success) {
-      return c.notFound()
+      return c.json({}, 404)
     }
     const expectedChallenge = await getUserRegistrationChallenge(
       kv,
       session.token,
     )
     if (!expectedChallenge.value) {
-      return c.notFound()
+      return c.json({}, 404)
     }
     let verification: VerifiedRegistrationResponse
     try {
@@ -95,15 +95,13 @@ const app = new Hono<{ Variables: Variables }>()
         expectedRPID: rpId,
       })
     } catch (error) {
-      c.status(400)
       const message = error && typeof error == 'object' && 'message' in error
         ? error.message
         : 'Unable to verify passkey'
-      return c.json({ error: message })
+      return c.json({ error: message }, 400)
     }
     if (!verification.verified) {
-      c.status(400)
-      return c.json({ error: 'Unable to verify passkey' })
+      return c.json({ error: 'Unable to verify passkey' }, 400)
     }
     const { credential, credentialDeviceType, credentialBackedUp } =
       verification
@@ -121,7 +119,7 @@ const app = new Hono<{ Variables: Variables }>()
     return c.json({
       session,
       verification,
-    })
+    }, 200)
   })
   .get('/ballot', async (c) => {
     const kv = c.get('kv')
@@ -142,7 +140,7 @@ const app = new Hono<{ Variables: Variables }>()
     const session = c.get('session')
     const ballot = c.req.valid('json')
     if (ballot.userId !== session.userId) {
-      return c.status(403)
+      return c.json({}, 403)
     }
     await updateUserBallot(kv, ballot)
     await queueVoted(kv, ballot.userId)
@@ -152,9 +150,9 @@ const app = new Hono<{ Variables: Variables }>()
     const kv = c.get('kv')
     const tally = await getFinalTally(kv)
     if (!tally.success) {
-      return c.notFound()
+      return c.json({}, 404)
     }
-    return c.json(tally.data)
+    return c.json(tally.data, 200)
   })
 
 export default app

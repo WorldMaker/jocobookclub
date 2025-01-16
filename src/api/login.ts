@@ -46,11 +46,11 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
       const kv = c.get('kv')
       const { sessionKey } = c.req.valid('json')
       if (!sessionKey) {
-        return c.notFound()
+        return c.json({}, 404)
       }
       const expectedChallenge = await getRegistrationChallenge(kv, sessionKey)
       if (!expectedChallenge.value) {
-        return c.notFound()
+        return c.json({}, 404)
       }
       let verification: VerifiedRegistrationResponse
       try {
@@ -61,19 +61,17 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
           expectedRPID: rpId,
         })
       } catch (error) {
-        c.status(400)
         const message = error && typeof error == 'object' && 'message' in error
           ? error.message
           : 'Unable to verify passkey'
-        return c.json({ error: message })
+        return c.json({ error: message }, 400)
       }
       const existingUser = await getUserByEmail(
         kv,
         expectedChallenge.value.user.name,
       )
       if (!verification.verified) {
-        c.status(400)
-        return c.json({ error: 'Unable to verify passkey' })
+        return c.json({ error: 'Unable to verify passkey' }, 400)
       }
       let session: Session | undefined
       let userId: string | undefined
@@ -101,8 +99,7 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
         session = await updateSession(kv, newSession)
       }
       if (!session || !userId) {
-        c.status(400)
-        return c.json({ error: 'Unable to verify passkey' })
+        return c.json({ error: 'Unable to verify passkey' }, 400)
       }
       const { credential, credentialDeviceType, credentialBackedUp } =
         verification
@@ -120,7 +117,7 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
       return c.json({
         session,
         verification,
-      })
+      }, 200)
     },
   )
   .get(
@@ -131,7 +128,7 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
       const kv = c.get('kv')
       const user = await getUserByEmail(kv, email)
       if (!user.success) {
-        return c.notFound()
+        return c.json({}, 404)
       }
       const passkeys: Passkey[] = []
       for await (
@@ -147,7 +144,7 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
         })),
       })
       await storeLoginChallenge(kv, user.data.id, options)
-      return c.json(options)
+      return c.json(options, 200)
     },
   )
   .post('/verify', zValidator('json', loginVerifySchema), async (c) => {
@@ -155,16 +152,15 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
     const kv = c.get('kv')
     const user = await getUserByEmail(kv, email)
     if (!user.success) {
-      return c.notFound()
+      return c.json({}, 404)
     }
     const passkey = await getPasskey(kv, user.data.id, id)
     if (!passkey.value) {
-      c.status(400)
-      return c.json({ error: 'Unknown passkey' })
+      return c.json({ error: 'Unknown passkey' }, 400)
     }
     const expectedChallenge = await getLoginChallenge(kv, user.data.id)
     if (!expectedChallenge.value) {
-      return c.notFound()
+      return c.json({}, 404)
     }
     let verification: VerifiedAuthenticationResponse
     try {
@@ -181,15 +177,13 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
         },
       })
     } catch (error) {
-      c.status(400)
       const message = error && typeof error == 'object' && 'message' in error
         ? error.message
         : 'Unable to verify passkey'
-      return c.json({ error: message })
+      return c.json({ error: message }, 400)
     }
     if (!verification.verified) {
-      c.status(400)
-      return c.json({ error: 'Unable to verify passkey' })
+      return c.json({ error: 'Unable to verify passkey' }, 400)
     }
     await updatePasskey(kv, {
       ...passkey.value,
@@ -202,9 +196,9 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
     }
     const session = await updateSession(kv, newSession)
     if (!session) {
-      return c.status(500)
+      return c.json({ error: 'Unable to start session' }, 500)
     }
-    return c.json({ session, verification })
+    return c.json({ session, verification }, 200)
   })
 
 export default app
