@@ -8,6 +8,11 @@
     "semiColons": false,
     "singleQuote": true
   },
+  "lint": {
+    "rules": {
+      "exclude": ["no-slow-types"]
+    }
+  },
   "imports": {
     "@hono/zod-validator": "npm:@hono/zod-validator@^0.4.2",
     "@simplewebauthn/server": "jsr:@simplewebauthn/server@^13.0.0",

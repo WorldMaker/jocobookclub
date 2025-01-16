@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { Ballot } from './ballot.ts'
-import { UserId } from './user.ts'
+import type { UserId } from './user.ts'
 import { reverseUlid } from '../util/reverse.ts'
 
 export const EligibleBooks = z.array(z.string())

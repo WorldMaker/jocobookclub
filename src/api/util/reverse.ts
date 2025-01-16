@@ -1,4 +1,4 @@
-import { UserId } from '../models/user.ts'
+import type { UserId } from '../models/user.ts'
 
 /**
  * Reverse the ULID string
