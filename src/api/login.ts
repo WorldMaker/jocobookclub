@@ -1,29 +1,33 @@
 import { Hono } from 'hono'
 import {
-  AuthenticationResponseJSON,
+  type AuthenticationResponseJSON,
   generateAuthenticationOptions,
-  RegistrationResponseJSON,
-  VerifiedAuthenticationResponse,
-  VerifiedRegistrationResponse,
+  type RegistrationResponseJSON,
+  type VerifiedAuthenticationResponse,
+  type VerifiedRegistrationResponse,
   verifyAuthenticationResponse,
   verifyRegistrationResponse,
 } from '@simplewebauthn/server'
 import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 import { origin, rpId } from './models/rp.ts'
-import { getUserByEmail, updateUser, User } from './models/user.ts'
-import { createSessionToken, Session, updateSession } from './models/session.ts'
+import { getUserByEmail, updateUser, type User } from './models/user.ts'
+import {
+  createSessionToken,
+  type Session,
+  updateSession,
+} from './models/session.ts'
 import { ulid } from '@std/ulid'
 import {
   getPasskey,
   getPasskeysForUser,
   getRegistrationChallenge,
-  Passkey,
+  type Passkey,
   storeLoginChallenge,
   updatePasskey,
 } from './models/passkey.ts'
 import { getLoginChallenge } from './models/passkey.ts'
-import { KvProvidedVariables } from './kv.ts'
+import type { KvProvidedVariables } from './kv.ts'
 
 const inviteVerifyQuerySchema = z.object({
   sessionKey: z.string(),

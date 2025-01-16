@@ -1,6 +1,9 @@
 {
   "name": "@worldmaker/jocobookclub-api",
-  "exports": "./main.ts",
+  "exports": {
+    ".": "./main.ts",
+    "./models": "./models/index.ts"
+  },
   "fmt": {
     "semiColons": false,
     "singleQuote": true

@@ -1,7 +1,7 @@
 import {
   generateRegistrationOptions,
-  RegistrationResponseJSON,
-  VerifiedRegistrationResponse,
+  type RegistrationResponseJSON,
+  type VerifiedRegistrationResponse,
   verifyRegistrationResponse,
 } from '@simplewebauthn/server'
 import { Hono } from 'hono'
@@ -9,18 +9,18 @@ import { bearerAuth } from 'hono/bearer-auth'
 import {
   getPasskeysForUser,
   getUserRegistrationChallenge,
-  Passkey,
+  type Passkey,
   storeUserRegistrationChallenge,
   updatePasskey,
 } from './models/passkey.ts'
 import { origin, rpId, rpName } from './models/rp.ts'
-import { getSessionByToken, Session } from './models/session.ts'
+import { getSessionByToken, type Session } from './models/session.ts'
 import { getUserById } from './models/user.ts'
 import { Ballot, getUserBallot, updateUserBallot } from './models/ballot.ts'
 import { zValidator } from '@hono/zod-validator'
 import { queueVoted } from './models/voting.ts'
 import { getFinalTally } from './models/tally.ts'
-import { KvProvidedVariables } from './kv.ts'
+import type { KvProvidedVariables } from './kv.ts'
 
 interface Variables extends KvProvidedVariables {
   session: Session

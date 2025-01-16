@@ -5,12 +5,12 @@ import { z } from 'zod'
 import { getInviteById } from './models/invite.ts'
 import {
   getPasskeysForUser,
-  Passkey,
+  type Passkey,
   storeRegistrationChallenge,
 } from './models/passkey.ts'
 import { rpId, rpName } from './models/rp.ts'
 import { getUserByEmail } from './models/user.ts'
-import { KvProvidedVariables } from './kv.ts'
+import type { KvProvidedVariables } from './kv.ts'
 
 const registerOptionsQuerySchema = z.object({
   sessionKey: z.string(),
