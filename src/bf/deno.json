@@ -1,10 +1,12 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "build": "deno run -A _build.ts"
   },
   "imports": {
+    "@luca/esbuild-deno-loader": "jsr:@luca/esbuild-deno-loader@^0.11.1",
     "@std/assert": "jsr:@std/assert@1",
     "@worldmaker/butterfloat": "jsr:@worldmaker/butterfloat@^1.5.0",
+    "esbuild": "npm:esbuild@^0.24.2",
     "hono": "npm:hono@^4.6.16",
     "rxjs": "npm:rxjs@^7.8.1"
   }

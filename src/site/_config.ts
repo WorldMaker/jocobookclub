@@ -8,4 +8,6 @@ const site = lume({
 
 site.use(basePath())
 
+site.copy('bf')
+
 export default site
