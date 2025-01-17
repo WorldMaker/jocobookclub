@@ -1,23 +1,29 @@
 import {
+  ComponentDescription,
   Fragment,
   jsx,
-  runStamps,
-  StampCollection,
+  run,
 } from '@worldmaker/butterfloat'
 import { map, Subscription } from 'rxjs'
 import { SessionManager } from '../vm/session-manager.ts'
 import Login from './login.tsx'
 import User from './user.tsx'
 
-function LoginButton() {
+interface LoginButtonProps {
+  loginUrl: string | null
+  passkeyUrl: string | null
+}
+
+function LoginButton({ loginUrl, passkeyUrl }: LoginButtonProps) {
   const sessionManager = new SessionManager()
-  const user = <User email={sessionManager.email} />
+  const user = <User email={sessionManager.email} url={passkeyUrl} />
+  const login = <Login url={loginUrl} />
   const children = sessionManager.email.pipe(
     map((email) => {
       if (email) {
         return () => user
       }
-      return Login
+      return () => login
     }),
   )
   return (
@@ -30,16 +36,17 @@ class LoginButtonComponent extends HTMLElement {
 
   connectedCallback() {
     this.innerHTML = ''
-    const stampCollection = new StampCollection()
-    const login = this.ownerDocument.getElementById('login-button-login')
-    if (login) {
-      stampCollection.registerOnlyStamp(Login, login as HTMLTemplateElement)
-    }
-    const user = this.ownerDocument.getElementById('login-button-user')
-    if (user) {
-      stampCollection.registerOnlyStamp(User, user as HTMLTemplateElement)
-    }
-    this.#subscription = runStamps(this, LoginButton, stampCollection)
+    const loginUrl = this.getAttribute('login')
+    const passkeyUrl = this.getAttribute('passkeyUrl')
+    this.#subscription = run(
+      this,
+      (
+        <LoginButton
+          loginUrl={loginUrl}
+          passkeyUrl={passkeyUrl}
+        />
+      ) as ComponentDescription,
+    )
   }
 
   disconnectedCallback() {
