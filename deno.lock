@@ -37,7 +37,7 @@
     "jsr:@std/ulid@1": "1.0.0",
     "jsr:@std/yaml@0.224.3": "0.224.3",
     "jsr:@std/yaml@^1.0.0-rc.1": "1.0.5",
-    "jsr:@worldmaker/butterfloat@^1.5.0": "1.5.0",
+    "jsr:@worldmaker/butterfloat@^1.5.1": "1.5.1",
     "npm:@hexagon/base64@^1.1.27": "1.1.28",
     "npm:@hono/zod-validator@~0.4.2": "0.4.2_hono@4.6.16_zod@3.24.1",
     "npm:@js-temporal/polyfill@0.4.4": "0.4.4",
@@ -198,8 +198,8 @@
     "@std/yaml@1.0.5": {
       "integrity": "71ba3d334305ee2149391931508b2c293a8490f94a337eef3a09cade1a2a2742"
     },
-    "@worldmaker/butterfloat@1.5.0": {
-      "integrity": "5b12335995f616c59600a8acc76520f6fd35f7bd8bec4c299a09371f98316a97",
+    "@worldmaker/butterfloat@1.5.1": {
+      "integrity": "d896168549bf0e49f89f7f9446533fd080cf7891fd65d1366169de7ccfd5ad62",
       "dependencies": [
         "npm:rxjs"
       ]
@@ -698,7 +698,7 @@
         "dependencies": [
           "jsr:@luca/esbuild-deno-loader@~0.11.1",
           "jsr:@std/assert@1",
-          "jsr:@worldmaker/butterfloat@^1.5.0",
+          "jsr:@worldmaker/butterfloat@^1.5.1",
           "npm:esbuild@~0.24.2",
           "npm:hono@^4.6.16",
           "npm:rxjs@^7.8.1"
