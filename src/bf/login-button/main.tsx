@@ -1,4 +1,9 @@
-import { Fragment, jsx, runStamps, StampCollection } from '@worldmaker/butterfloat'
+import {
+  Fragment,
+  jsx,
+  runStamps,
+  StampCollection,
+} from '@worldmaker/butterfloat'
 import { map, Subscription } from 'rxjs'
 import { SessionManager } from '../vm/session-manager.ts'
 import Login from './login.tsx'
@@ -8,14 +13,16 @@ function LoginButton() {
   const sessionManager = new SessionManager()
   const user = <User email={sessionManager.email} />
   const children = sessionManager.email.pipe(
-    map(email => {
+    map((email) => {
       if (email) {
         return () => user
       }
       return Login
-    })
+    }),
   )
-  return <Fragment childrenBind={children} childrenBindMode='replace'></Fragment>
+  return (
+    <Fragment childrenBind={children} childrenBindMode='replace'></Fragment>
+  )
 }
 
 class LoginButtonComponent extends HTMLElement {

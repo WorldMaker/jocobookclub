@@ -19,4 +19,7 @@ userStamp.id = 'login-button-user'
 document.body.appendChild(userStamp)
 
 await Deno.mkdir('../site/_includes/bf', { recursive: true })
-await Deno.writeTextFile('../site/_includes/bf/login-button.html', document.body.innerHTML)
+await Deno.writeTextFile(
+  '../site/_includes/bf/login-button.html',
+  document.body.innerHTML,
+)
