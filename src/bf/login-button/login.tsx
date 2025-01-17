@@ -1,5 +1,9 @@
 import { jsx } from '@worldmaker/butterfloat'
 
-export default function Login() {
-  return <a class='navbar-item' href='/login'>Login</a>
+interface LoginProps {
+  url: string | null
+}
+
+export default function Login({ url }: LoginProps) {
+  return <a class='navbar-item' href={url ?? '/login'}>Login</a>
 }

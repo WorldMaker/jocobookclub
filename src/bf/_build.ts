@@ -16,5 +16,3 @@ await esbuild.build({
   jsxFactory: 'jsx',
   jsxFragment: 'Fragment',
 })
-
-await import('./_stamp.ts')

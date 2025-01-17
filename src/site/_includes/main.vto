@@ -21,12 +21,10 @@
                     JoCoBookClub
                 </a>
                 <a class="navbar-item" href="/previous">Previous Books</a>
-                <login-button style="display: contents;"></login-button>
+                <login-button login="{{ "/login" |> url }}" passkey="{{ "/passkey" |> url }}" style="display: contents;"></login-button>
             </div>
         </nav>
 
         {{ content }}
-
-        {{ include "bf/login-button.vto" }}
     </body>
 </html>
