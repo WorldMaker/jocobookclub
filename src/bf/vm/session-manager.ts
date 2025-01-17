@@ -47,3 +47,7 @@ export class SessionManager {
     localStorage.removeItem('email')
   }
 }
+
+// shared singleton instance
+const sessionManager = new SessionManager()
+export default sessionManager

@@ -5,7 +5,7 @@ import {
   run,
 } from '@worldmaker/butterfloat'
 import { map, Subscription } from 'rxjs'
-import { SessionManager } from '../vm/session-manager.ts'
+import sessionManager from '../vm/session-manager.ts'
 import Login from './login.tsx'
 import User from './user.tsx'
 
@@ -15,7 +15,6 @@ interface LoginButtonProps {
 }
 
 function LoginButton({ loginUrl, passkeyUrl }: LoginButtonProps) {
-  const sessionManager = new SessionManager()
   const user = <User email={sessionManager.email} url={passkeyUrl} />
   const login = <Login url={loginUrl} />
   const children = sessionManager.email.pipe(

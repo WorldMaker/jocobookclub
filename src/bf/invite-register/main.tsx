@@ -3,7 +3,7 @@ import { Fragment, jsx, run } from '@worldmaker/butterfloat'
 import { Invite } from '@worldmaker/jocobookclub-api/models'
 import { defer, map } from 'rxjs'
 import { apiClient } from '../client.ts'
-import { SessionManager } from '../vm/session-manager.ts'
+import sessionManager from '../vm/session-manager.ts'
 import { combineLatest, concat, of, Subscription } from 'rxjs'
 import AlreadyLoggedIn from './logged-in.tsx'
 import InvalidInvite from './invalid-invite.tsx'
@@ -11,7 +11,6 @@ import InviteRegistrationFormSkeleton from './skeleton.tsx'
 import InviteRegistrationForm from './form.tsx'
 
 function InviteRegister() {
-  const sessionManager = new SessionManager()
   const inviteCode = location.hash.slice(1)
   const invite = concat(
     of({ loading: true, data: null }),
