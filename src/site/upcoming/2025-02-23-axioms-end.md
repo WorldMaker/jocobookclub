@@ -2,6 +2,7 @@
 title: "Axiom's End"
 author: Lindsay Ellis
 ltid: "23821128"
+scheduled: true
 ---
 
 Blurb from a JoCoNaut:
