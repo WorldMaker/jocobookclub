@@ -11,7 +11,4 @@ await esbuild.build({
   format: 'esm',
   jsxFactory: 'jsx',
   jsxFragment: 'Fragment',
-  define: {
-    JSXInternal: '{}',
-  },
 })
