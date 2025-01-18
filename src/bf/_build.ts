@@ -6,7 +6,7 @@ await esbuild.build({
   entryPoints: [{ out: 'invite-register', in: './invite-register/main.tsx' }, {
     out: 'login-button',
     in: './login-button/main.tsx',
-  }],
+  }, { out: 'logout-button', in: './logout-button/main.tsx' }],
   outdir: '../site/bf/',
   bundle: true,
   splitting: true,

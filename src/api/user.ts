@@ -14,7 +14,11 @@ import {
   updatePasskey,
 } from './models/passkey.ts'
 import { origin, rpId, rpName } from './models/rp.ts'
-import { getSessionByToken, type Session } from './models/session.ts'
+import {
+  deleteSession,
+  getSessionByToken,
+  type Session,
+} from './models/session.ts'
 import { getUserById } from './models/user.ts'
 import { Ballot, getUserBallot, updateUserBallot } from './models/ballot.ts'
 import { zValidator } from '@hono/zod-validator'
@@ -153,6 +157,12 @@ const app = new Hono<{ Variables: Variables }>()
       return c.json({}, 404)
     }
     return c.json(tally.data, 200)
+  })
+  .delete('/session', async (c) => {
+    const kv = c.get('kv')
+    const session = c.get('session')
+    await deleteSession(kv, session.token)
+    return c.json({}, 200)
   })
 
 export default app
