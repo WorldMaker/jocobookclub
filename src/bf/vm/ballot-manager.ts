@@ -104,3 +104,7 @@ export class BallotManager {
     }
   }
 }
+
+// shared singleton instance
+const ballotManager = new BallotManager()
+export default ballotManager

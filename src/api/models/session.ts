@@ -41,3 +41,7 @@ export function createSessionToken() {
   // TODO: something weirder than v4 UUID?
   return crypto.randomUUID()
 }
+
+export function deleteSession(kv: Deno.Kv, token: string) {
+  return kv.delete(['session', token])
+}

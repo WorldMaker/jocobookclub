@@ -3,8 +3,11 @@ import { jsx } from '@worldmaker/butterfloat'
 export default function InviteRegistrationFormSkeleton() {
   return (
     <section class='section'>
-      <h1 class='title'>Register with Invite</h1>
-      <p>Register with an invite code:</p>
+      <h1 class='title'>Register</h1>
+      <p>
+        Register with a Passkey. <strong>TIP:</strong>{' '}
+        Best results may be to login first on iOS or Android.
+      </p>
 
       <div className='field'>
         <label class='label' for='email'>Email</label>
