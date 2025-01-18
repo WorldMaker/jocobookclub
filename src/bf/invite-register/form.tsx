@@ -10,7 +10,7 @@ export default function InviteRegistrationForm(
 ) {
   return (
     <section class='section'>
-      <h1 class='title'>Register with Invite</h1>
+      <h1 class='title'>Register</h1>
       <p>
         Register with a Passkey. <strong>TIP:</strong>{' '}
         Best results may be to login first on iOS or Android.
