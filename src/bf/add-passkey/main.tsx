@@ -16,7 +16,7 @@ function PasskeyRegistration() {
     map((state) => {
       switch (state.type) {
         case 'idle':
-          return AddPasskey
+          return () => <AddPasskey vm={vm} />
         case 'logged-out':
           return Login
         case 'success':
