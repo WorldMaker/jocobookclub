@@ -53,6 +53,7 @@ export default function InviteRegistrationForm(
               autocomplete='username'
               value={invite.type === 'specific-email' ? invite.email : ''}
               disabled={invite.type === 'specific-email'}
+              events={{ change: events.emailChanged }}
             />
           </div>
         </div>
