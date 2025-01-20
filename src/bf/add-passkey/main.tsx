@@ -15,8 +15,8 @@ function PasskeyRegistration() {
   const children = vm.state.pipe(
     map((state) => {
       switch (state.type) {
-        case 'idle':
-          return () => <AddPasskey vm={vm} />
+        case 'ready':
+          return () => <AddPasskey vm={vm} session={state.session} />
         case 'logged-out':
           return Login
         case 'success':

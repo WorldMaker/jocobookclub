@@ -6,7 +6,7 @@ import { Login } from './login.tsx'
 
 function LogoutButton() {
   const children = sessionManager.session.pipe(
-    map((session) => session ? Logout : Login),
+    map((session) => session ? () => <Logout session={session} /> : Login),
   )
 
   return <Fragment childrenBind={children} childrenBindMode='replace' />
