@@ -6,11 +6,11 @@ import InvalidInvite from './invalid-invite.tsx'
 import InviteRegistrationFormSkeleton from './skeleton.tsx'
 import InviteRegistrationForm from './form.tsx'
 import { RegistrationVm } from './vm.ts'
-import { Success } from '../add-paskey/success.tsx'
-import { RegistrationError } from '../add-paskey/error.tsx'
-import { UserCheck } from '../add-paskey/user-check.tsx'
-import { SessionError } from '../add-paskey/session-error.tsx'
-import { VerificationError } from '../add-paskey/verification-error.tsx'
+import { Success } from '../add-passkey/success.tsx'
+import { RegistrationError } from '../add-passkey/error.tsx'
+import { UserCheck } from '../add-passkey/user-check.tsx'
+import { SessionError } from '../add-passkey/session-error.tsx'
+import { VerificationError } from '../add-passkey/verification-error.tsx'
 
 function InviteRegister() {
   const vm = new RegistrationVm()

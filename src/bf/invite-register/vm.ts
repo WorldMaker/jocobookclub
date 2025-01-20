@@ -5,7 +5,7 @@ import {
 import { butterfly } from '@worldmaker/butterfloat'
 import { Invite, Session } from '@worldmaker/jocobookclub-api/models'
 import { combineLatest, defer, firstValueFrom, map, Observable } from 'rxjs'
-import { RegistrationState } from '../add-paskey/vm.ts'
+import { RegistrationState } from '../add-passkey/vm.ts'
 import { apiClient } from '../client.ts'
 import sessionManager from '../vm/session-manager.ts'
 
