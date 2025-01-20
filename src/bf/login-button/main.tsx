@@ -36,7 +36,7 @@ class LoginButtonComponent extends HTMLElement {
   connectedCallback() {
     this.innerHTML = ''
     const loginUrl = this.getAttribute('login')
-    const passkeyUrl = this.getAttribute('passkeyUrl')
+    const passkeyUrl = this.getAttribute('passkey')
     this.#subscription = run(
       this,
       (
