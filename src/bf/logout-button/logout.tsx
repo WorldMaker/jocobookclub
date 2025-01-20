@@ -17,7 +17,9 @@ export function Logout(
 ) {
   const { click } = events
   bindEffect(click, async (_) => {
-    const result = await apiClient.user.session.$delete({}, { headers: { Authorization: `Bearer ${session.token}` } })
+    const result = await apiClient.user.session.$delete({}, {
+      headers: { Authorization: `Bearer ${session.token}` },
+    })
     if (result.ok) {
       sessionManager.ended()
     }

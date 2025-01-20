@@ -10,15 +10,15 @@ import sessionManager from '../vm/session-manager.ts'
 
 export type RegistrationState =
   | { type: 'success' }
-  | { type: 'error', error: unknown }
+  | { type: 'error'; error: unknown }
   | { type: 'busy' }
-  | { type: 'user-check', backedup: boolean, multiDevice: boolean }
+  | { type: 'user-check'; backedup: boolean; multiDevice: boolean }
   | { type: 'session-error' }
   | { type: 'verification-error' }
 
 export type AddPasskeyState =
   | RegistrationState
-  | { type: 'ready', session: Session }
+  | { type: 'ready'; session: Session }
   | { type: 'logged-out' }
 
 export class RegistrationVm {
@@ -57,7 +57,9 @@ export class RegistrationVm {
 
   async register(session: Session) {
     this.#setState({ type: 'busy' })
-    const resp = await apiClient.user['register-options'].$get({}, {headers: {Authorization: `Bearer ${session.token}`}})
+    const resp = await apiClient.user['register-options'].$get({}, {
+      headers: { Authorization: `Bearer ${session.token}` },
+    })
     if (!resp.ok) {
       this.#setState({ type: 'session-error' })
       return
@@ -74,7 +76,7 @@ export class RegistrationVm {
 
     const verificationResp = await apiClient.user['register-verify'].$post({
       json: attResp,
-    }, {headers: {Authorization: `Bearer ${session.token}`}})
+    }, { headers: { Authorization: `Bearer ${session.token}` } })
     if (!verificationResp.ok) {
       this.#setState({ type: 'verification-error' })
       return

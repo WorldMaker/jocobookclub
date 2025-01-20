@@ -33,7 +33,10 @@ export class RegistrationVm {
         ) {
           return sessionAndInviteState
         }
-        if ((sessionAndInviteState.type === 'logged-in' || sessionAndInviteState.type === 'invited') && state.type === 'busy') {
+        if (
+          (sessionAndInviteState.type === 'logged-in' ||
+            sessionAndInviteState.type === 'invited') && state.type === 'busy'
+        ) {
           return sessionAndInviteState
         }
         return state

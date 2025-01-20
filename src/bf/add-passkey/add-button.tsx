@@ -16,7 +16,7 @@ export function AddPasskey(
   { bindEffect, events }: ComponentContext<AddPasskeyEvents>,
 ) {
   const { click } = events
-  bindEffect(click, async _ => await vm.register(session))
+  bindEffect(click, async (_) => await vm.register(session))
   return (
     <button class='button is-primary' events={{ click }}>Add Passkey</button>
   )
