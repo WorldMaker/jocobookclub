@@ -9,17 +9,20 @@ export interface InviteRegistrationFormProps {
 
 interface InviteRegistrationFormEvents {
   emailChanged: ObservableEvent<InputEvent>
-  submit: ObservableEvent<MouseEvent>
+  submit: ObservableEvent<SubmitEvent>
 }
 
 export default function InviteRegistrationForm(
   { invite, vm }: InviteRegistrationFormProps,
-  { bindEffect, bindImmediateEffect, events }: ComponentContext<
+  { bindImmediateEffect, events }: ComponentContext<
     InviteRegistrationFormEvents
   >,
 ) {
-  bindImmediateEffect(events.emailChanged, (e) => vm.emailChanged(e.data))
-  bindEffect(events.submit, (_) => vm.register(invite.id))
+  bindImmediateEffect(events.emailChanged, (e) => vm.emailChanged((e.target as HTMLInputElement).value))
+  bindImmediateEffect(events.submit, async (e) => {
+    e.preventDefault()
+    await vm.register(invite.id)
+  })
   return (
     <section class='section'>
       <h1 class='title'>Register</h1>
@@ -28,34 +31,36 @@ export default function InviteRegistrationForm(
         Best results may be to login first on iOS or Android.
       </p>
 
-      <div class='field'>
-        <label
-          class='label'
-          for='email'
-          events={{ change: events.emailChanged }}
-        >
-          Email
-        </label>
-        <div class='control'>
-          <input
-            class='input'
-            type='text'
-            id='email'
-            name='email'
-            required
-            autocomplete='username'
-            value={invite.type === 'specific-email' ? invite.email : ''}
-            disabled={invite.type === 'specific-email'}
-          />
+      <form events={{ submit: events.submit }}>
+        <div class='field'>
+          <label
+            class='label'
+            for='email'
+            events={{ change: events.emailChanged }}
+          >
+            Email
+          </label>
+          <div class='control'>
+            <input
+              class='input'
+              type='text'
+              id='email'
+              name='email'
+              required
+              autocomplete='username'
+              value={invite.type === 'specific-email' ? invite.email : ''}
+              disabled={invite.type === 'specific-email'}
+            />
+          </div>
         </div>
-      </div>
-      <div class='field'>
-        <div class='control'>
-          <button class='button' events={{ click: events.submit }}>
-            Register Passkey
-          </button>
+        <div class='field'>
+          <div class='control'>
+            <button class='button' type='submit'>
+              Register Passkey
+            </button>
+          </div>
         </div>
-      </div>
+      </form>
     </section>
   )
 }
