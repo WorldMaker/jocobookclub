@@ -14,7 +14,10 @@ export function Form(
   { vm }: FormProps,
   { bindImmediateEffect, events }: ComponentContext<FormEvents>,
 ) {
-  bindImmediateEffect(events.emailChanged, (e) => vm.emailChanged((e.target as HTMLInputElement).value))
+  bindImmediateEffect(
+    events.emailChanged,
+    (e) => vm.emailChanged((e.target as HTMLInputElement).value),
+  )
   bindImmediateEffect(events.login, async (e) => {
     e.preventDefault()
     await vm.login()

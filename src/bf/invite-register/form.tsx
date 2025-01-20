@@ -18,7 +18,10 @@ export default function InviteRegistrationForm(
     InviteRegistrationFormEvents
   >,
 ) {
-  bindImmediateEffect(events.emailChanged, (e) => vm.emailChanged((e.target as HTMLInputElement).value))
+  bindImmediateEffect(
+    events.emailChanged,
+    (e) => vm.emailChanged((e.target as HTMLInputElement).value),
+  )
   bindImmediateEffect(events.submit, async (e) => {
     e.preventDefault()
     await vm.register(invite.id)
