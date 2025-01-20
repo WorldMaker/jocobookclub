@@ -3,11 +3,9 @@ import {
   startRegistration,
 } from '@simplewebauthn/browser'
 import { butterfly } from '@worldmaker/butterfloat'
-import { map, Observable } from 'rxjs'
+import { combineLatest, map, Observable } from 'rxjs'
 import { apiClient } from '../client.ts'
 import sessionManager from '../vm/session-manager.ts'
-import { merge } from 'rxjs'
-import { combineLatest } from 'rxjs'
 
 export type RegistrationState =
   | { type: 'success' }

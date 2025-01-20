@@ -4,12 +4,10 @@ import {
 } from '@simplewebauthn/browser'
 import { butterfly } from '@worldmaker/butterfloat'
 import { Invite, Session } from '@worldmaker/jocobookclub-api/models'
-import { combineLatest, defer, map, Observable } from 'rxjs'
-import { apiClient } from '../client.ts'
+import { combineLatest, defer, firstValueFrom, map, Observable } from 'rxjs'
 import { RegistrationState } from '../add-paskey/vm.ts'
+import { apiClient } from '../client.ts'
 import sessionManager from '../vm/session-manager.ts'
-import { merge } from 'rxjs'
-import { firstValueFrom } from 'rxjs'
 
 type InviteRegistrationState =
   | RegistrationState
