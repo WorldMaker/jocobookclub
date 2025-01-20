@@ -29,12 +29,11 @@ export class RegistrationVm {
     return combineLatest([this.#sessionAndInviteState, this.#state]).pipe(
       map(([sessionAndInviteState, state]) => {
         if (
-          sessionAndInviteState.type === 'logged-in' ||
           sessionAndInviteState.type === 'invalid-invite'
         ) {
           return sessionAndInviteState
         }
-        if (sessionAndInviteState.type === 'invited' && state.type === 'busy') {
+        if ((sessionAndInviteState.type === 'logged-in' || sessionAndInviteState.type === 'invited') && state.type === 'busy') {
           return sessionAndInviteState
         }
         return state
