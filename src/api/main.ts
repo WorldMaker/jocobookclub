@@ -16,7 +16,7 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
   })
   .use(cors({
     origin: ['https://worldmaker.net', 'http://localhost:3000'],
-    allowHeaders: ['Authorization'],
+    allowHeaders: ['Authorization', 'Content-Type'],
   }))
   .route('/invite', inviteApp)
   .route('/login', loginApp)
