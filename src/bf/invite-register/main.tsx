@@ -1,48 +1,42 @@
 /// <reference lib="dom" />
 import { Fragment, jsx, run } from '@worldmaker/butterfloat'
-import { Invite } from '@worldmaker/jocobookclub-api/models'
-import { defer, map } from 'rxjs'
-import { apiClient } from '../client.ts'
-import sessionManager from '../vm/session-manager.ts'
-import { combineLatest, concat, of, Subscription } from 'rxjs'
+import { Subscription, map } from 'rxjs'
 import AlreadyLoggedIn from './logged-in.tsx'
 import InvalidInvite from './invalid-invite.tsx'
 import InviteRegistrationFormSkeleton from './skeleton.tsx'
 import InviteRegistrationForm from './form.tsx'
+import { RegistrationVm } from './vm.ts'
+import { Success } from '../add-paskey/success.tsx'
+import { RegistrationError } from '../add-paskey/error.tsx'
+import { UserCheck } from '../add-paskey/user-check.tsx'
+import { SessionError } from '../add-paskey/session-error.tsx'
+import { VerificationError } from '../add-paskey/verification-error.tsx'
 
 function InviteRegister() {
-  const inviteCode = location.hash.slice(1)
-  const invite = concat(
-    of({ loading: true, data: null }),
-    defer(async () => {
-      if (!inviteCode || inviteCode.length < 5) {
-        return { loading: false, data: null }
+  const vm = new RegistrationVm()
+  const children = vm.state.pipe(
+    map((state) => {
+      switch (state.type) {
+        case 'logged-in':
+          return AlreadyLoggedIn
+        case 'invalid-invite':
+          return InvalidInvite
+        case 'invited':
+          return () => <InviteRegistrationForm invite={state.invite} vm={vm} />
+        case 'success':
+          return Success
+        case 'error':
+          return () => <RegistrationError error={state.error} />
+        case 'user-check':
+          return () => <UserCheck backedup={state.backedup} multiDevice={state.multiDevice} />
+        case 'session-error':
+          return SessionError
+        case 'verification-error':
+          return VerificationError
+        case 'busy':
+        default:
+          return InviteRegistrationFormSkeleton
       }
-      const response = await apiClient.invite[':invite'].$get({
-        param: { invite: inviteCode },
-      })
-      if (response.ok) {
-        const maybeInvite = await response.json()
-        const invite = Invite.safeParse(maybeInvite)
-        if (invite.success) {
-          return { loading: false, data: invite.data }
-        }
-      }
-      return { loading: false, data: null }
-    }),
-  )
-  const children = combineLatest([sessionManager.session, invite]).pipe(
-    map(([session, invite]) => {
-      if (session) {
-        return AlreadyLoggedIn
-      }
-      if (invite.loading) {
-        return InviteRegistrationFormSkeleton
-      }
-      if (!invite.data) {
-        return InvalidInvite
-      }
-      return () => <InviteRegistrationForm invite={invite.data} />
     }),
   )
   return (

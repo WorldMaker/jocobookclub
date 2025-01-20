@@ -4,7 +4,7 @@ import { UserId } from './user.ts'
 export const Session = z.object({
   token: z.string(),
   userId: UserId,
-  expiresAt: z.date(),
+  expiresAt: z.coerce.date(),
 })
 
 export type Session = z.infer<typeof Session>
