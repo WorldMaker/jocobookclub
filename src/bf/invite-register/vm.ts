@@ -1,7 +1,10 @@
-import { startRegistration, RegistrationResponseJSON } from '@simplewebauthn/browser'
+import {
+  RegistrationResponseJSON,
+  startRegistration,
+} from '@simplewebauthn/browser'
 import { butterfly } from '@worldmaker/butterfloat'
 import { Invite, Session } from '@worldmaker/jocobookclub-api/models'
-import { Observable, combineLatest, defer, map } from 'rxjs'
+import { combineLatest, defer, map, Observable } from 'rxjs'
 import { apiClient } from '../client.ts'
 import { RegistrationState } from '../add-paskey/vm.ts'
 import sessionManager from '../vm/session-manager.ts'
@@ -27,14 +30,17 @@ export class RegistrationVm {
   get state() {
     return combineLatest([this.#sessionAndInviteState, this.#state]).pipe(
       map(([sessionAndInviteState, state]) => {
-        if (sessionAndInviteState.type === 'logged-in' || sessionAndInviteState.type === 'invalid-invite') {
+        if (
+          sessionAndInviteState.type === 'logged-in' ||
+          sessionAndInviteState.type === 'invalid-invite'
+        ) {
           return sessionAndInviteState
         }
         if (sessionAndInviteState.type === 'invited' && state.type === 'busy') {
           return sessionAndInviteState
         }
         return state
-      })
+      }),
     )
   }
 
@@ -46,7 +52,9 @@ export class RegistrationVm {
 
   constructor() {
     ;[this.#email, this.#setEmail] = butterfly<string>('')
-    ;[this.#state, this.#setState] = butterfly<RegistrationState>({ type: 'busy' })
+    ;[this.#state, this.#setState] = butterfly<RegistrationState>({
+      type: 'busy',
+    })
 
     const inviteState = defer(async (): Promise<InviteRegistrationState> => {
       const inviteCode = location.hash.slice(1)
@@ -66,13 +74,16 @@ export class RegistrationVm {
       return { type: 'invalid-invite' }
     })
 
-    this.#sessionAndInviteState = combineLatest([sessionManager.session, inviteState]).pipe(
+    this.#sessionAndInviteState = combineLatest([
+      sessionManager.session,
+      inviteState,
+    ]).pipe(
       map(([session, inviteState]) => {
         if (session) {
           return { type: 'logged-in' }
         }
         return inviteState
-      })
+      }),
     )
   }
 
@@ -84,13 +95,16 @@ export class RegistrationVm {
     this.#setState({ type: 'busy' })
     const email = await firstValueFrom(this.#email)
     const sessionKey = createSessionToken()
-    const resp = await apiClient.invite[':invite']['register-options'].$get({ param: { invite: inviteCode }, query: { sessionKey } })
+    const resp = await apiClient.invite[':invite']['register-options'].$get({
+      param: { invite: inviteCode },
+      query: { sessionKey },
+    })
     if (!resp.ok) {
       this.#setState({ type: 'session-error' })
       return
     }
     const options = await resp.json()
-    
+
     let attResp: RegistrationResponseJSON | null = null
     try {
       attResp = await startRegistration({ optionsJSON: options })
@@ -99,7 +113,9 @@ export class RegistrationVm {
       return
     }
 
-    const verificationResp = await apiClient.login['invite-verify'].$post({ json: { sessionKey, ...attResp } })
+    const verificationResp = await apiClient.login['invite-verify'].$post({
+      json: { sessionKey, ...attResp },
+    })
     if (!verificationResp.ok) {
       this.#setState({ type: 'verification-error' })
       return
@@ -120,8 +136,11 @@ export class RegistrationVm {
     }
     sessionManager.started(session.data, email)
 
-    const backedup = verification.verification.registrationInfo?.credentialBackedUp ?? false
-    const multiDevice = verification.verification.registrationInfo?.credentialDeviceType === 'multiDevice'
+    const backedup =
+      verification.verification.registrationInfo?.credentialBackedUp ?? false
+    const multiDevice =
+      verification.verification.registrationInfo?.credentialDeviceType ===
+        'multiDevice'
     if (!backedup || !multiDevice) {
       this.#setState({ type: 'user-check', backedup, multiDevice })
       return

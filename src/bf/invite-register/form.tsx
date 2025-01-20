@@ -14,10 +14,12 @@ interface InviteRegistrationFormEvents {
 
 export default function InviteRegistrationForm(
   { invite, vm }: InviteRegistrationFormProps,
-  { bindEffect, bindImmediateEffect, events }: ComponentContext<InviteRegistrationFormEvents>
+  { bindEffect, bindImmediateEffect, events }: ComponentContext<
+    InviteRegistrationFormEvents
+  >,
 ) {
-  bindImmediateEffect(events.emailChanged, e => vm.emailChanged(e.data))
-  bindEffect(events.submit, _ => vm.register(invite.id))
+  bindImmediateEffect(events.emailChanged, (e) => vm.emailChanged(e.data))
+  bindEffect(events.submit, (_) => vm.register(invite.id))
   return (
     <section class='section'>
       <h1 class='title'>Register</h1>
@@ -27,7 +29,13 @@ export default function InviteRegistrationForm(
       </p>
 
       <div class='field'>
-        <label class='label' for='email' events={{ change: events.emailChanged }}>Email</label>
+        <label
+          class='label'
+          for='email'
+          events={{ change: events.emailChanged }}
+        >
+          Email
+        </label>
         <div class='control'>
           <input
             class='input'
@@ -43,7 +51,9 @@ export default function InviteRegistrationForm(
       </div>
       <div class='field'>
         <div class='control'>
-          <button class='button' events={{ click: events.submit }}>Register Passkey</button>
+          <button class='button' events={{ click: events.submit }}>
+            Register Passkey
+          </button>
         </div>
       </div>
     </section>

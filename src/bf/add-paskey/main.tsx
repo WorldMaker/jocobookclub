@@ -13,7 +13,7 @@ import { Login } from '../logout-button/login.tsx'
 function PasskeyRegistration() {
   const vm = new RegistrationVm()
   const children = vm.state.pipe(
-    map(state => {
+    map((state) => {
       switch (state.type) {
         case 'idle':
           return AddPasskey
@@ -24,7 +24,12 @@ function PasskeyRegistration() {
         case 'error':
           return () => <RegistrationError error={state.error} />
         case 'user-check':
-          return () => <UserCheck backedup={state.backedup} multiDevice={state.multiDevice} />
+          return () => (
+            <UserCheck
+              backedup={state.backedup}
+              multiDevice={state.multiDevice}
+            />
+          )
         case 'session-error':
           return SessionError
         case 'verification-error':
@@ -33,7 +38,7 @@ function PasskeyRegistration() {
         default:
           return Skeleton
       }
-    })
+    }),
   )
   return <Fragment childrenBind={children} childrenBindMode='replace' />
 }
@@ -43,7 +48,7 @@ class PasskeyRegistrationComponent extends HTMLElement {
 
   connectedCallback() {
     this.innerHTML = ''
-    this.#subscription = run(this, PasskeyRegistration)    
+    this.#subscription = run(this, PasskeyRegistration)
   }
 
   disconnectedCallback() {

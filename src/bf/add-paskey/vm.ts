@@ -1,4 +1,7 @@
-import { startRegistration, RegistrationResponseJSON } from '@simplewebauthn/browser'
+import {
+  RegistrationResponseJSON,
+  startRegistration,
+} from '@simplewebauthn/browser'
 import { butterfly } from '@worldmaker/butterfloat'
 import { map, Observable } from 'rxjs'
 import { apiClient } from '../client.ts'
@@ -10,7 +13,7 @@ export type RegistrationState =
   | { type: 'success' }
   | { type: 'error'; error: unknown }
   | { type: 'busy' }
-  | { type: 'user-check'; backedup: boolean, multiDevice: boolean }
+  | { type: 'user-check'; backedup: boolean; multiDevice: boolean }
   | { type: 'session-error' }
   | { type: 'verification-error' }
 
@@ -34,12 +37,14 @@ export class RegistrationVm {
           return sessionState
         }
         return state
-      })
+      }),
     )
   }
 
   constructor() {
-    ;[this.#state, this.#setState] = butterfly<RegistrationState>({ type: 'busy' })
+    ;[this.#state, this.#setState] = butterfly<RegistrationState>({
+      type: 'busy',
+    })
 
     this.#sessionState = sessionManager.session.pipe(
       map((session) => {
@@ -47,7 +52,7 @@ export class RegistrationVm {
           return { type: 'logged-out' }
         }
         return { type: 'idle' }
-      })
+      }),
     )
   }
 
@@ -59,7 +64,7 @@ export class RegistrationVm {
       return
     }
     const options = await resp.json()
-    
+
     let attResp: RegistrationResponseJSON | null = null
     try {
       attResp = await startRegistration({ optionsJSON: options })
@@ -68,7 +73,9 @@ export class RegistrationVm {
       return
     }
 
-    const verificationResp = await apiClient.user['register-verify'].$post({ json: attResp })
+    const verificationResp = await apiClient.user['register-verify'].$post({
+      json: attResp,
+    })
     if (!verificationResp.ok) {
       this.#setState({ type: 'verification-error' })
       return
@@ -81,8 +88,11 @@ export class RegistrationVm {
       return
     }
 
-    const backedup = verification.verification.registrationInfo?.credentialBackedUp ?? false
-    const multiDevice = verification.verification.registrationInfo?.credentialDeviceType === 'multiDevice'
+    const backedup =
+      verification.verification.registrationInfo?.credentialBackedUp ?? false
+    const multiDevice =
+      verification.verification.registrationInfo?.credentialDeviceType ===
+        'multiDevice'
     if (!backedup || !multiDevice) {
       this.#setState({ type: 'user-check', backedup, multiDevice })
       return

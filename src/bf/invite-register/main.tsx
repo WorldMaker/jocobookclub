@@ -1,6 +1,6 @@
 /// <reference lib="dom" />
 import { Fragment, jsx, run } from '@worldmaker/butterfloat'
-import { Subscription, map } from 'rxjs'
+import { map, Subscription } from 'rxjs'
 import AlreadyLoggedIn from './logged-in.tsx'
 import InvalidInvite from './invalid-invite.tsx'
 import InviteRegistrationFormSkeleton from './skeleton.tsx'
@@ -28,7 +28,12 @@ function InviteRegister() {
         case 'error':
           return () => <RegistrationError error={state.error} />
         case 'user-check':
-          return () => <UserCheck backedup={state.backedup} multiDevice={state.multiDevice} />
+          return () => (
+            <UserCheck
+              backedup={state.backedup}
+              multiDevice={state.multiDevice}
+            />
+          )
         case 'session-error':
           return SessionError
         case 'verification-error':

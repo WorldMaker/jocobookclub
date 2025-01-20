@@ -9,8 +9,13 @@ interface AddPasskeyEvents {
   click: ObservableEvent<MouseEvent>
 }
 
-export function AddPasskey({ vm }: AddPasskeyProps, { bindEffect, events }: ComponentContext<AddPasskeyEvents>) {
+export function AddPasskey(
+  { vm }: AddPasskeyProps,
+  { bindEffect, events }: ComponentContext<AddPasskeyEvents>,
+) {
   const { click } = events
   bindEffect(click, vm.register)
-  return <button class='button is-primary' events={{ click }}>Add Passkey</button>
+  return (
+    <button class='button is-primary' events={{ click }}>Add Passkey</button>
+  )
 }
