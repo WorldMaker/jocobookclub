@@ -95,7 +95,7 @@ export class RegistrationVm {
     const sessionKey = createSessionToken()
     const resp = await apiClient.invite[':invite']['register-options'].$get({
       param: { invite: inviteCode },
-      query: { sessionKey },
+      query: { providedEmail: email, sessionKey },
     })
     if (!resp.ok) {
       this.#setState({ type: 'session-error' })
