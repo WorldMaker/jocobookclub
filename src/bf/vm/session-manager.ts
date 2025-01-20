@@ -22,7 +22,7 @@ export class SessionManager {
     const maybeSession = localStorage.getItem('session')
     if (maybeSession) {
       const session = Session.safeParse(JSON.parse(maybeSession))
-      if (session.success) {
+      if (session.success && session.data.expiresAt > new Date()) {
         this.#setSession(session.data)
       }
     }
