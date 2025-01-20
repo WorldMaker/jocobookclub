@@ -3,6 +3,7 @@ import {
   startRegistration,
 } from '@simplewebauthn/browser'
 import { butterfly } from '@worldmaker/butterfloat'
+import { Session } from '@worldmaker/jocobookclub-api/models'
 import { combineLatest, map, Observable } from 'rxjs'
 import { apiClient } from '../client.ts'
 import sessionManager from '../vm/session-manager.ts'
@@ -17,7 +18,7 @@ export type RegistrationState =
 
 export type AddPasskeyState =
   | RegistrationState
-  | { type: 'idle' }
+  | { type: 'ready'; session: Session }
   | { type: 'logged-out' }
 
 export class RegistrationVm {
@@ -31,7 +32,7 @@ export class RegistrationVm {
         if (sessionState.type === 'logged-out') {
           return sessionState
         }
-        if (sessionState.type === 'idle' && state.type === 'busy') {
+        if (sessionState.type === 'ready' && state.type === 'busy') {
           return sessionState
         }
         return state
@@ -49,14 +50,16 @@ export class RegistrationVm {
         if (!session) {
           return { type: 'logged-out' }
         }
-        return { type: 'idle' }
+        return { type: 'ready', session }
       }),
     )
   }
 
-  async register() {
+  async register(session: Session) {
     this.#setState({ type: 'busy' })
-    const resp = await apiClient.user['register-options'].$get()
+    const resp = await apiClient.user['register-options'].$get({}, {
+      headers: { Authorization: `Bearer ${session.token}` },
+    })
     if (!resp.ok) {
       this.#setState({ type: 'session-error' })
       return
@@ -73,7 +76,7 @@ export class RegistrationVm {
 
     const verificationResp = await apiClient.user['register-verify'].$post({
       json: attResp,
-    })
+    }, { headers: { Authorization: `Bearer ${session.token}` } })
     if (!verificationResp.ok) {
       this.#setState({ type: 'verification-error' })
       return

@@ -1,8 +1,10 @@
 import { ComponentContext, jsx, ObservableEvent } from '@worldmaker/butterfloat'
+import { Session } from '@worldmaker/jocobookclub-api/models'
 import { RegistrationVm } from './vm.ts'
 
 export interface AddPasskeyProps {
   vm: RegistrationVm
+  session: Session
 }
 
 interface AddPasskeyEvents {
@@ -10,11 +12,11 @@ interface AddPasskeyEvents {
 }
 
 export function AddPasskey(
-  { vm }: AddPasskeyProps,
+  { vm, session }: AddPasskeyProps,
   { bindEffect, events }: ComponentContext<AddPasskeyEvents>,
 ) {
   const { click } = events
-  bindEffect(click, vm.register)
+  bindEffect(click, async (_) => await vm.register(session))
   return (
     <button class='button is-primary' events={{ click }}>Add Passkey</button>
   )
