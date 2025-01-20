@@ -1,13 +1,25 @@
-import { jsx } from '@worldmaker/butterfloat'
+import { ComponentContext, jsx, ObservableEvent } from '@worldmaker/butterfloat'
 import { Invite } from '@worldmaker/jocobookclub-api/models'
+import { RegistrationVm } from './vm.ts'
 
-interface InviteRegistrationFormProps {
+export interface InviteRegistrationFormProps {
   invite: Invite
+  vm: RegistrationVm
+}
+
+interface InviteRegistrationFormEvents {
+  emailChanged: ObservableEvent<InputEvent>
+  submit: ObservableEvent<MouseEvent>
 }
 
 export default function InviteRegistrationForm(
-  { invite }: InviteRegistrationFormProps,
+  { invite, vm }: InviteRegistrationFormProps,
+  { bindEffect, bindImmediateEffect, events }: ComponentContext<
+    InviteRegistrationFormEvents
+  >,
 ) {
+  bindImmediateEffect(events.emailChanged, (e) => vm.emailChanged(e.data))
+  bindEffect(events.submit, (_) => vm.register(invite.id))
   return (
     <section class='section'>
       <h1 class='title'>Register</h1>
@@ -17,7 +29,13 @@ export default function InviteRegistrationForm(
       </p>
 
       <div class='field'>
-        <label class='label' for='email'>Email</label>
+        <label
+          class='label'
+          for='email'
+          events={{ change: events.emailChanged }}
+        >
+          Email
+        </label>
         <div class='control'>
           <input
             class='input'
@@ -33,7 +51,9 @@ export default function InviteRegistrationForm(
       </div>
       <div class='field'>
         <div class='control'>
-          <button class='button' type='submit'>Register Passkey</button>
+          <button class='button' events={{ click: events.submit }}>
+            Register Passkey
+          </button>
         </div>
       </div>
     </section>

@@ -47,6 +47,7 @@
     "npm:@peculiar/asn1-rsa@^2.3.8": "2.3.15",
     "npm:@peculiar/asn1-schema@^2.3.8": "2.3.15",
     "npm:@peculiar/asn1-x509@^2.3.8": "2.3.15",
+    "npm:@simplewebauthn/browser@^13.1.0": "13.1.0",
     "npm:esbuild@~0.24.2": "0.24.2",
     "npm:estree-walker@3.0.3": "3.0.3",
     "npm:hono@^4.6.16": "4.6.16",
@@ -382,6 +383,9 @@
         "pvtsutils",
         "tslib"
       ]
+    },
+    "@simplewebauthn/browser@13.1.0": {
+      "integrity": "sha512-WuHZ/PYvyPJ9nxSzgHtOEjogBhwJfC8xzYkPC+rR/+8chl/ft4ngjiK8kSU5HtRJfczupyOh33b25TjYbvwAcg=="
     },
     "@types/estree@1.0.5": {
       "integrity": "sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw=="
@@ -936,6 +940,7 @@
           "jsr:@luca/esbuild-deno-loader@~0.11.1",
           "jsr:@std/assert@1",
           "jsr:@worldmaker/butterfloat@^1.5.1",
+          "npm:@simplewebauthn/browser@^13.1.0",
           "npm:esbuild@~0.24.2",
           "npm:hono@^4.6.16",
           "npm:jsdom@26",
