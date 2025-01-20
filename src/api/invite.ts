@@ -13,6 +13,7 @@ import { getUserByEmail } from './models/user.ts'
 import type { KvProvidedVariables } from './kv.ts'
 
 const registerOptionsQuerySchema = z.object({
+  providedEmail: z.optional(z.string().email()),
   sessionKey: z.string(),
 })
 
@@ -32,13 +33,13 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
     async (c) => {
       const kv = c.get('kv')
       const inviteId = c.req.param('invite')
-      const { sessionKey } = c.req.valid('query')
+      const { providedEmail, sessionKey } = c.req.valid('query')
       const invite = await getInviteById(kv, inviteId)
       if (!invite.success) {
         return c.json({}, 404)
       }
       const email = invite.data.type === 'open-enrollment'
-        ? c.req.query().email
+        ? providedEmail!
         : invite.data.email
       const existingUser = await getUserByEmail(kv, email)
       const passkeys: Passkey[] = []
