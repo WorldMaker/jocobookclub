@@ -10,7 +10,7 @@ layout: main.vto
 </section>
 
 <section class="section">
-    <h1 class="title"><i class="fa-duotone fa-solid fa-book-sparkles"></i> Upcoming Club Reads</h1>
+    <h1 class="title" id="upcoming"><i class="fa-duotone fa-solid fa-book-sparkles"></i> Upcoming Club Reads</h1>
 
     <div class="container">
         {{ for upcoming of search.pages("upcoming") }}
@@ -20,7 +20,7 @@ layout: main.vto
 </section>
 
 <section class="section">
-    <h1 class="title"><i class="fa-duotone fa-solid fa-box-ballot"></i> Current Ballot</h1>
+    <h1 class="title" id="ballot"><i class="fa-duotone fa-solid fa-box-ballot"></i> Current Ballot</h1>
 
     <div class="container">
         {{ for book of search.pages("ballot") }}

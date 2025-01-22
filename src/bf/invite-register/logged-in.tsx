@@ -7,7 +7,7 @@ export default function AlreadyLoggedIn() {
       <p>
         You are already logged in. Are you looking to{' '}
         <a href='../passkey'>add a new passkey</a> or for the{' '}
-        <a href='../'>current ballot</a>?
+        <a href='../#ballot'>current ballot</a>?
       </p>
     </section>
   )

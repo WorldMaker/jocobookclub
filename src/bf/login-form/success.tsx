@@ -4,7 +4,7 @@ export function Success() {
   return (
     <div class='notification is-success'>
       You have successfully logged in.{' '}
-      <a href='../'>You can now update your current ballot.</a>
+      <a href='../#ballot'>You can now update your current ballot.</a>
     </div>
   )
 }
