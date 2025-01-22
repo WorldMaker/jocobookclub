@@ -1,23 +1,49 @@
 import { butterfly, StateSetter } from '@worldmaker/butterfloat'
-import { Ballot } from '@worldmaker/jocobookclub-api/models'
-import { Observable } from 'rxjs'
+import { Ballot, Session } from '@worldmaker/jocobookclub-api/models'
+import { map, Observable, shareReplay } from 'rxjs'
 import { apiClient } from '../client.ts'
+import sessionManager from './session-manager.ts'
 
 export class BallotManager {
+  readonly #session: Session
+
   readonly #ballot: Observable<Ballot | null>
   readonly #setBallot: (ballot: StateSetter<Ballot | null>) => void
   get ballot() {
     return this.#ballot
   }
+  get unsaved() {
+    return this.#ballot.pipe(
+      map((ballot) => {
+        if (!ballot) {
+          return false
+        }
+        if (!this.#lastBallot) {
+          return true
+        }
+        if (ballot.active != this.#lastBallot.active) {
+          return true
+        }
+        for (const [ltid, rank] of Object.entries(ballot.books)) {
+          if (this.#lastBallot.books[ltid] != rank) {
+            return true
+          }
+        }
+        return false
+      }),
+      shareReplay(1),
+    )
+  }
 
   // for "three-way merge"
   #lastBallot: Ballot | null = null
 
-  constructor() {
+  constructor(session: Session) {
+    this.#session = session
     ;[this.#ballot, this.#setBallot] = butterfly<Ballot | null>(null)
 
     // stale while revalidate with local host caching
-    const maybeBallot = localStorage.getItem('ballot')
+    const maybeBallot = localStorage.getItem(`ballot/${session.userId}`)
     if (maybeBallot) {
       const ballot = Ballot.safeParse(JSON.parse(maybeBallot))
       if (ballot.success) {
@@ -25,15 +51,23 @@ export class BallotManager {
         this.#setBallot(ballot.data)
       }
     }
+    this.load()
   }
 
   async load() {
-    const response = await apiClient.user.ballot.$get()
+    const response = await apiClient.user.ballot.$get({}, {
+      headers: { Authorization: `Bearer ${this.#session.token}` },
+    })
     if (response.ok) {
       const ballot = await response.json()
       if (this.#lastBallot && ballot.userId != this.#lastBallot.userId) {
         throw new Error('User ID mismatch between local and server ballots')
       }
+      this.#lastBallot = ballot
+      localStorage.setItem(
+        `ballot/${this.#session.userId}`,
+        JSON.stringify(ballot),
+      )
       this.#setBallot((localBallot) => {
         // try to merge local changes with server changes
         if (localBallot && this.#lastBallot) {
@@ -51,8 +85,6 @@ export class BallotManager {
         }
         return ballot
       })
-      this.#lastBallot = ballot
-      localStorage.setItem('ballot', JSON.stringify(ballot))
     }
   }
 
@@ -95,16 +127,24 @@ export class BallotManager {
     // optimistic update
     this.update(ballot)
     this.#lastBallot
-    const response = await apiClient.user.ballot.$put({ json: ballot })
+    const response = await apiClient.user.ballot.$put({ json: ballot }, {
+      headers: { Authorization: `Bearer ${this.#session.token}` },
+    })
     if (response.ok) {
       const updatedBallot = await response.json()
       this.update(updatedBallot)
-      localStorage.setItem('ballot', JSON.stringify(updatedBallot))
+      localStorage.setItem(
+        `ballot/${this.#session.userId}`,
+        JSON.stringify(updatedBallot),
+      )
       this.#lastBallot = updatedBallot
     }
   }
 }
 
 // shared singleton instance
-const ballotManager = new BallotManager()
+const ballotManager = sessionManager.session.pipe(
+  map((session) => session ? new BallotManager(session) : null),
+  shareReplay(1),
+)
 export default ballotManager
