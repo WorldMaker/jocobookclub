@@ -41,7 +41,10 @@ export function Form(
       <div class='field'>
         <div class='control'>
           <button class='button is-primary' type='submit'>
-            Login
+            <span class='icon'>
+              <i class='fa-duotone fa-solid fa-key' />
+            </span>
+            <span>Login</span>
           </button>
         </div>
       </div>

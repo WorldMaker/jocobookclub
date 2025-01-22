@@ -60,7 +60,10 @@ export default function InviteRegistrationForm(
         <div class='field'>
           <div class='control'>
             <button class='button' type='submit'>
-              Register Passkey
+              <span class='icon'>
+                <i class='fa-duotone fa-solid fa-key' />
+              </span>
+              <span>Register Passkey</span>
             </button>
           </div>
         </div>

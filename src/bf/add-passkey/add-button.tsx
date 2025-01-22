@@ -18,6 +18,11 @@ export function AddPasskey(
   const { click } = events
   bindEffect(click, async (_) => await vm.register(session))
   return (
-    <button class='button is-primary' events={{ click }}>Add Passkey</button>
+    <button class='button is-primary' events={{ click }}>
+      <span class='icon'>
+        <i class='fa-duotone fa-solid fa-key'></i>
+      </span>{' '}
+      <span>Add Passkey</span>
+    </button>
   )
 }

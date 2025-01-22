@@ -9,10 +9,13 @@ export interface UserProps {
 export default function User({ email, url }: UserProps) {
   return (
     <a
-      class='navbar-item'
+      class='navbar-item icon-text'
       href={url ?? '/passkey'}
-      bind={{ innerText: email.pipe(map((e) => e ?? '…')) }}
     >
+      <span class='icon'>
+        <i class='fa-duotone fa-solid fa-user-astronaut'></i>
+      </span>
+      <span bind={{ innerText: email.pipe(map((e) => e ?? '…')) }}></span>
     </a>
   )
 }
