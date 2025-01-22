@@ -4,13 +4,13 @@ layout: main.vto
 
 <section class="hero is-info">
     <div class="hero-body">
-        <h1 class="title">JoCo Book Club</h1>
+        <h1 class="title"><i class="fa-duotone fa-solid fa-book-open-cover"></i> <span>JoCo Book Club</span></h1>
         <p class="subtitle">The JoCo Book Club is a… TODO</p>
     </div>
 </section>
 
 <section class="section">
-    <h1 class="title">Upcoming Club Reads</h1>
+    <h1 class="title"><i class="fa-duotone fa-solid fa-book-sparkles"></i> Upcoming Club Reads</h1>
 
     <div class="container">
         {{ for upcoming of search.pages("upcoming") }}
@@ -20,7 +20,7 @@ layout: main.vto
 </section>
 
 <section class="section">
-    <h1 class="title">Current Ballot</h1>
+    <h1 class="title"><i class="fa-duotone fa-solid fa-box-ballot"></i> Current Ballot</h1>
 
     <div class="container">
         {{ for book of search.pages("ballot") }}
@@ -31,6 +31,6 @@ layout: main.vto
 
 <footer class="footer">
     <div class="content">
-        <a class="button" href="./previous/">Previous Club Choices</a>
+        <a class="button" href="./previous/"><span class="icon"><i class="fa-duotone fa-solid fa-books"></i></span><span>Previous Club Choices</span></a>
     </div>
 </footer>
