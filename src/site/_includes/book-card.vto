@@ -6,6 +6,9 @@
                 <p class="subtitle is-6">{{ author }}</p>
             </div>
         </div>
+        {{ if currentBallot }}
+        <dolphin-rating ltid="{{ ltid }}"></dolphin-rating>
+        {{ /if }}
         {{ if showContent }}
         <div class="content">
             {{ content }}

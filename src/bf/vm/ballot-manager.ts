@@ -51,6 +51,7 @@ export class BallotManager {
         this.#setBallot(ballot.data)
       }
     }
+    this.load()
   }
 
   async load() {
