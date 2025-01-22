@@ -12,17 +12,40 @@ interface DolphinEvents {
   click: ObservableEvent<MouseEvent>
 }
 
-function Dolphin({ rank, vm }: DolphinProps, { bindImmediateEffect, events }: ComponentContext<DolphinEvents>) {
+function Dolphin(
+  { rank, vm }: DolphinProps,
+  { bindImmediateEffect, events }: ComponentContext<DolphinEvents>,
+) {
   bindImmediateEffect(events.hover, (_) => vm.updateHoverRating(rank))
   bindImmediateEffect(events.click, (_) => vm.saveRating(rank))
-  const bothRatings = combineLatest([vm.hoverRating, vm.currentRating]).pipe(shareReplay(1))
-  return <span class='icon is-large is-clickable' classBind={{
-    'has-text-info': bothRatings.pipe(map(([rating, current]) => current >= rank && (rating === 0 || rating >= current))),
-    'has-text-link': bothRatings.pipe(map(([rating, current]) => rating >= rank && rating !== current)),
-    }}
-    events={{ mouseover: events.hover, click: events.click }}>
-    <i class='fa-duotone fa-solid fa-dolphin fa-2x' classBind={{'fa-swap-opacity': vm.currentRating.pipe(map(rating => rating >= rank))}} />
-  </span>
+  const bothRatings = combineLatest([vm.hoverRating, vm.currentRating]).pipe(
+    shareReplay(1),
+  )
+  return (
+    <span
+      class='icon is-large is-clickable'
+      classBind={{
+        'has-text-info': bothRatings.pipe(
+          map(([rating, current]) =>
+            current >= rank && (rating === 0 || rating >= current)
+          ),
+        ),
+        'has-text-link': bothRatings.pipe(
+          map(([rating, current]) => rating >= rank && rating !== current),
+        ),
+      }}
+      events={{ mouseover: events.hover, click: events.click }}
+    >
+      <i
+        class='fa-duotone fa-solid fa-dolphin fa-2x'
+        classBind={{
+          'fa-swap-opacity': vm.currentRating.pipe(
+            map((rating) => rating >= rank),
+          ),
+        }}
+      />
+    </span>
+  )
 }
 
 export interface RaterProps {
@@ -33,7 +56,10 @@ export interface RaterEvents {
   leave: ObservableEvent<MouseEvent>
 }
 
-export function Rater({ vm }: RaterProps, { bindImmediateEffect, events }: ComponentContext<RaterEvents>) {
+export function Rater(
+  { vm }: RaterProps,
+  { bindImmediateEffect, events }: ComponentContext<RaterEvents>,
+) {
   bindImmediateEffect(events.leave, (_) => vm.updateHoverRating(0))
   return (
     <div events={{ mouseout: events.leave }}>

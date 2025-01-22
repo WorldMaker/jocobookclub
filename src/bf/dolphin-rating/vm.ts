@@ -1,4 +1,4 @@
-import { Observable, filter, map, of, switchMap, shareReplay } from 'rxjs'
+import { filter, map, Observable, of, shareReplay, switchMap } from 'rxjs'
 import ballotManager from '../vm/ballot-manager.ts'
 import { butterfly } from '@worldmaker/butterfloat'
 import { firstValueFrom } from 'rxjs'
@@ -36,10 +36,9 @@ export class DolphinsVm {
 
     this.#currentRating = currentBallot.pipe(
       filter((ballot) => Boolean(ballot)),
-      map(ballot => ballot!.books[this.#ltid] ?? 0),
+      map((ballot) => ballot!.books[this.#ltid] ?? 0),
       shareReplay(1),
     )
-
     ;[this.#hoverRating, this.#setHoverRating] = butterfly(0)
   }
 

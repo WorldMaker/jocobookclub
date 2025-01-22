@@ -55,14 +55,19 @@ export class BallotManager {
   }
 
   async load() {
-    const response = await apiClient.user.ballot.$get({}, { headers: { Authorization: `Bearer ${this.#session.token}` } })
+    const response = await apiClient.user.ballot.$get({}, {
+      headers: { Authorization: `Bearer ${this.#session.token}` },
+    })
     if (response.ok) {
       const ballot = await response.json()
       if (this.#lastBallot && ballot.userId != this.#lastBallot.userId) {
         throw new Error('User ID mismatch between local and server ballots')
       }
       this.#lastBallot = ballot
-      localStorage.setItem(`ballot/${this.#session.userId}`, JSON.stringify(ballot))
+      localStorage.setItem(
+        `ballot/${this.#session.userId}`,
+        JSON.stringify(ballot),
+      )
       this.#setBallot((localBallot) => {
         // try to merge local changes with server changes
         if (localBallot && this.#lastBallot) {
@@ -122,11 +127,16 @@ export class BallotManager {
     // optimistic update
     this.update(ballot)
     this.#lastBallot
-    const response = await apiClient.user.ballot.$put({ json: ballot }, { headers: { Authorization: `Bearer ${this.#session.token}` } })
+    const response = await apiClient.user.ballot.$put({ json: ballot }, {
+      headers: { Authorization: `Bearer ${this.#session.token}` },
+    })
     if (response.ok) {
       const updatedBallot = await response.json()
       this.update(updatedBallot)
-      localStorage.setItem(`ballot/${this.#session.userId}`, JSON.stringify(updatedBallot))
+      localStorage.setItem(
+        `ballot/${this.#session.userId}`,
+        JSON.stringify(updatedBallot),
+      )
       this.#lastBallot = updatedBallot
     }
   }

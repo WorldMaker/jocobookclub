@@ -1,4 +1,9 @@
-import { ComponentDescription, Fragment, jsx, run } from '@worldmaker/butterfloat'
+import {
+  ComponentDescription,
+  Fragment,
+  jsx,
+  run,
+} from '@worldmaker/butterfloat'
 import { DolphinsVm } from './vm.ts'
 import { Rater } from './rater.tsx'
 import { map, Subscription } from 'rxjs'
@@ -23,7 +28,10 @@ class DolphinRatingComponent extends HTMLElement {
     this.innerHTML = ''
     const ltid = this.getAttribute('ltid')
     if (ltid) {
-      this.#subscription = run(this, <DolphinRating ltid={ltid} /> as ComponentDescription)
+      this.#subscription = run(
+        this,
+        <DolphinRating ltid={ltid} /> as ComponentDescription,
+      )
     }
   }
 
