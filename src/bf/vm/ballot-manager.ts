@@ -1,6 +1,6 @@
 import { butterfly, StateSetter } from '@worldmaker/butterfloat'
 import { Ballot, Session } from '@worldmaker/jocobookclub-api/models'
-import { map, Observable, shareReplay } from 'rxjs'
+import { firstValueFrom, map, Observable, shareReplay } from 'rxjs'
 import { apiClient } from '../client.ts'
 import sessionManager from './session-manager.ts'
 
@@ -123,10 +123,11 @@ export class BallotManager {
     this.#setBallot(ballot)
   }
 
-  async vote(ballot: Ballot) {
-    // optimistic update
-    this.update(ballot)
-    this.#lastBallot
+  async vote() {
+    const ballot = await firstValueFrom(this.ballot)
+    if (!ballot) {
+      return
+    }
     const response = await apiClient.user.ballot.$put({ json: ballot }, {
       headers: { Authorization: `Bearer ${this.#session.token}` },
     })

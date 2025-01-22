@@ -1,6 +1,6 @@
 ---
 layout: main.vto
-bfscript: /bf/dolphin-rating.js
+bfscript: /bf/ballot-page.js
 ---
 
 <section class="hero is-info">
@@ -28,6 +28,8 @@ bfscript: /bf/dolphin-rating.js
         {{ include "book-card.vto" { ...book, currentBallot: true } }}
         {{ /for }}
     </div>
+
+    <vote-button></vote-button>
 </section>
 
 <footer class="footer">
