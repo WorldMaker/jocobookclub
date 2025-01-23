@@ -24,10 +24,17 @@ bfscript: /bf/ballot-page.js
     <h1 class="title" id="ballot"><i class="fa-duotone fa-solid fa-box-ballot"></i> Current Ballot</h1>
 
     <div class="container">
+        <sort-picker></sort-picker>
+        <hr />
+
+        <book-sorter>
         {{ for book of search.pages("ballot") }}
         {{ include "book-card.vto" { ...book, currentBallot: true } }}
         {{ /for }}
+        </book-sorter>
         
+        <sort-picker></sort-picker>
+        <hr />
         <vote-button></vote-button>
     </div>
 </section>
