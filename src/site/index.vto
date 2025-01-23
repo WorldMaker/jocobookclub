@@ -11,7 +11,7 @@ bfscript: /bf/ballot-page.js
 </section>
 
 <section class="section">
-    <h1 class="title" id="upcoming"><i class="fa-duotone fa-solid fa-book-sparkles"></i> Upcoming Club Reads</h1>
+    <h1 class="title" id="upcoming"><span class="icon has-text-primary"><i class="fa-duotone fa-solid fa-book-sparkles"></i></span> Upcoming Club Reads</h1>
 
     <div class="container">
         {{ for upcoming of search.pages("upcoming") }}
@@ -21,7 +21,7 @@ bfscript: /bf/ballot-page.js
 </section>
 
 <section class="section">
-    <h1 class="title" id="ballot"><i class="fa-duotone fa-solid fa-box-ballot"></i> Current Ballot</h1>
+    <h1 class="title" id="ballot"><span class="icon has-text-info"><i class="fa-duotone fa-solid fa-box-ballot"></i></span> Current Ballot</h1>
 
     <div class="container">
         <sort-picker></sort-picker>
@@ -42,5 +42,6 @@ bfscript: /bf/ballot-page.js
 <footer class="footer">
     <div class="content">
         <a class="button" href="./previous/"><span class="icon"><i class="fa-duotone fa-solid fa-books"></i></span><span>Previous Club Choices</span></a>
+        <a class="button" href="./ranking/"><span class="icon"><i class="fa-duotone fa-solid fa-ballot"></i></span><span>Current Rankings</span></a>
     </div>
 </footer>
