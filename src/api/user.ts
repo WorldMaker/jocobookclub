@@ -132,7 +132,7 @@ const app = new Hono<{ Variables: Variables }>()
     if (!ballot.success) {
       return c.json<Ballot>({
         userId: session.userId,
-        active: false,
+        active: true,
         books: {},
         updated: new Date().toISOString(),
       })
