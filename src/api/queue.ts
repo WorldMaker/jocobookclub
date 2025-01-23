@@ -8,7 +8,7 @@ import {
   tallyFinalRanking,
   zeroTally,
 } from './models/tally.ts'
-import { QueueMessages } from './models/voting.ts'
+import { QueueMessages, queueTallied } from './models/voting.ts'
 
 export async function listenQueue(kv: Deno.Kv, msg: unknown) {
   const qmessage = QueueMessages.safeParse(msg)
@@ -70,6 +70,7 @@ export async function listenQueue(kv: Deno.Kv, msg: unknown) {
           .set(['tally-time', bucket], qmessage.data.at)
           .set(['tally', bucket], tally)
           .commit()
+        await queueTallied(kv, bucket)
       }
       break
   }
