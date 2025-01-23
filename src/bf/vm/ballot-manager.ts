@@ -12,8 +12,23 @@ export class BallotManager {
   get ballot() {
     return this.#ballot
   }
+  readonly #unsaved: Observable<boolean>
   get unsaved() {
-    return this.#ballot.pipe(
+    return this.#unsaved
+  }
+  readonly #active: Observable<boolean>
+  get active() {
+    return this.#active
+  }
+
+  // for "three-way merge"
+  #lastBallot: Ballot | null = null
+
+  constructor(session: Session) {
+    this.#session = session
+    ;[this.#ballot, this.#setBallot] = butterfly<Ballot | null>(null)
+
+    this.#unsaved = this.#ballot.pipe(
       map((ballot) => {
         if (!ballot) {
           return false
@@ -33,22 +48,19 @@ export class BallotManager {
       }),
       shareReplay(1),
     )
-  }
 
-  // for "three-way merge"
-  #lastBallot: Ballot | null = null
-
-  constructor(session: Session) {
-    this.#session = session
-    ;[this.#ballot, this.#setBallot] = butterfly<Ballot | null>(null)
+    this.#active = this.#ballot.pipe(
+      map((ballot) => ballot ? ballot.active : false),
+      shareReplay(1),
+    )
 
     // stale while revalidate with local host caching
     const maybeBallot = localStorage.getItem(`ballot/${session.userId}`)
     if (maybeBallot) {
       const ballot = Ballot.safeParse(JSON.parse(maybeBallot))
       if (ballot.success) {
-        this.#lastBallot = ballot.data
-        this.#setBallot(ballot.data)
+        this.#lastBallot = { ...ballot.data }
+        this.#setBallot({ ...ballot.data })
       }
     }
     this.load()
@@ -63,7 +75,7 @@ export class BallotManager {
       if (this.#lastBallot && ballot.userId != this.#lastBallot.userId) {
         throw new Error('User ID mismatch between local and server ballots')
       }
-      this.#lastBallot = ballot
+      this.#lastBallot = { ...ballot }
       localStorage.setItem(
         `ballot/${this.#session.userId}`,
         JSON.stringify(ballot),
@@ -83,26 +95,32 @@ export class BallotManager {
             }
           }
         }
-        return ballot
+        return { ...ballot }
       })
     }
   }
 
   activate() {
     this.#setBallot((ballot) => {
-      if (ballot) {
-        ballot.active = true
+      if (!ballot) {
+        return null
       }
-      return ballot
+      return {
+        ...ballot,
+        active: true,
+      }
     })
   }
 
   deactivate() {
     this.#setBallot((ballot) => {
-      if (ballot) {
-        ballot.active = false
+      if (!ballot) {
+        return null
       }
-      return ballot
+      return {
+        ...ballot,
+        active: false,
+      }
     })
   }
 
@@ -111,16 +129,17 @@ export class BallotManager {
       throw new Error('Rank must be between 1 and 5')
     }
     this.#setBallot((ballot) => {
-      if (ballot) {
-        ballot.books[ltid] = rank
+      if (!ballot) {
+        return null
       }
-      return ballot
+      return {
+        ...ballot,
+        books: {
+          ...ballot.books,
+          [ltid]: rank,
+        },
+      }
     })
-  }
-
-  update(ballot: Ballot) {
-    Ballot.parse(ballot)
-    this.#setBallot(ballot)
   }
 
   async vote() {
@@ -132,13 +151,15 @@ export class BallotManager {
       headers: { Authorization: `Bearer ${this.#session.token}` },
     })
     if (response.ok) {
-      const updatedBallot = await response.json()
-      this.update(updatedBallot)
-      localStorage.setItem(
-        `ballot/${this.#session.userId}`,
-        JSON.stringify(updatedBallot),
-      )
-      this.#lastBallot = updatedBallot
+      const updatedBallot = Ballot.safeParse(await response.json())
+      if (updatedBallot.success) {
+        this.#lastBallot = { ...updatedBallot.data }
+        this.#setBallot({ ...updatedBallot.data })
+        localStorage.setItem(
+          `ballot/${this.#session.userId}`,
+          JSON.stringify(updatedBallot.data),
+        )
+      }
     }
   }
 }

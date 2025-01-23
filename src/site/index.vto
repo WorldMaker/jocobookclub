@@ -27,9 +27,9 @@ bfscript: /bf/ballot-page.js
         {{ for book of search.pages("ballot") }}
         {{ include "book-card.vto" { ...book, currentBallot: true } }}
         {{ /for }}
+        
+        <vote-button></vote-button>
     </div>
-
-    <vote-button></vote-button>
 </section>
 
 <footer class="footer">
