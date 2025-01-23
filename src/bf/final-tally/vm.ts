@@ -4,7 +4,8 @@ import { map, Observable, shareReplay } from 'rxjs'
 import { apiClient } from '../client.ts'
 import sessionManager from '../vm/session-manager.ts'
 
-const ActiveBallotUrl = 'https://worldmaker.net/jocobookclub/static-api/ballot.json'
+const ActiveBallotUrl =
+  'https://worldmaker.net/jocobookclub/static-api/ballot.json'
 
 export interface BookInfo {
   title: string
@@ -39,7 +40,9 @@ export class FinalTallyVm {
       return
     }
     const books = await staticResp.json() as Record<string, BookInfo>
-    const resp = await apiClient.user['final-tally'].$get({}, { headers: { 'Authorization': `Bearer ${this.#session.token}` } })
+    const resp = await apiClient.user['final-tally'].$get({}, {
+      headers: { 'Authorization': `Bearer ${this.#session.token}` },
+    })
     if (resp.ok) {
       const finalTally = FinalTally.safeParse(await resp.json())
       if (finalTally.success) {
