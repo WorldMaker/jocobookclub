@@ -38,6 +38,7 @@ export function getTallyFromBallot(
   if (!ballot.active) {
     return tally
   }
+  tally.count = 1
   for (let i = 0; i < books.length; i++) {
     for (let j = i + 1; j < books.length; j++) {
       const book1 = books[i]
