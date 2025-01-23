@@ -4,7 +4,7 @@ import { denoPlugins } from '@luca/esbuild-deno-loader'
 await esbuild.build({
   plugins: [...denoPlugins()],
   entryPoints: [
-    { out: 'dolphin-rating', in: './dolphin-rating/main.tsx' },
+    { out: 'ballot-page', in: './pages/ballot.ts' },
     { out: 'invite-register', in: './invite-register/main.tsx' },
     {
       out: 'login-button',
