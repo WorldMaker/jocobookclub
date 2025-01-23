@@ -5,6 +5,7 @@ await esbuild.build({
   plugins: [...denoPlugins()],
   entryPoints: [
     { out: 'ballot-page', in: './pages/ballot.ts' },
+    { out: 'final-tally', in: './final-tally/main.tsx' },
     { out: 'invite-register', in: './invite-register/main.tsx' },
     {
       out: 'login-button',
