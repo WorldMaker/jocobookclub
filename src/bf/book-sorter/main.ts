@@ -1,5 +1,5 @@
 /// <reference lib="dom.iterable" />
-import { combineLatest, merge, of, NEVER, Subscription, switchMap } from 'rxjs'
+import { combineLatest, merge, NEVER, of, Subscription, switchMap } from 'rxjs'
 import sortVm from './vm.ts'
 import ballotManager from '../vm/ballot-manager.ts'
 
