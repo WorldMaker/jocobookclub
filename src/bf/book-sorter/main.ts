@@ -1,5 +1,5 @@
 /// <reference lib="dom.iterable" />
-import { combineLatest, NEVER, Subscription, switchMap } from 'rxjs'
+import { combineLatest, merge, NEVER, of, Subscription, switchMap } from 'rxjs'
 import sortVm from './vm.ts'
 import ballotManager from '../vm/ballot-manager.ts'
 
@@ -8,7 +8,7 @@ class BookSorter extends HTMLElement {
 
   connectedCallback() {
     const ballot = ballotManager.pipe(
-      switchMap((vm) => vm ? vm.ballot : NEVER),
+      switchMap((vm) => vm ? vm.ballot : merge(of(null), NEVER)),
     )
 
     this.#subscription = combineLatest([sortVm.sort, sortVm.direction, ballot])

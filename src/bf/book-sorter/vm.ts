@@ -19,18 +19,25 @@ export class SortVm {
   }
 
   constructor() {
-    ;[this.#sort, this.#setSort] = butterfly<Sort>('title')
-    ;[this.#direction, this.#setDirection] = butterfly<SortDirection>('asc')
+    const localSort = localStorage.getItem('sort')
+    ;[this.#sort, this.#setSort] = butterfly<Sort>(localSort as Sort ?? 'title')
+    const localDirection = localStorage.getItem('sort-direction')
+    ;[this.#direction, this.#setDirection] = butterfly<SortDirection>(
+      localDirection as SortDirection ?? 'asc',
+    )
   }
 
   setSort(sort: Sort) {
     // toggle direction if sort is already selected
     this.#setSort((currentSort) => {
       if (currentSort === sort) {
-        this.#setDirection((currentDirection) =>
-          currentDirection === 'asc' ? 'desc' : 'asc'
-        )
+        this.#setDirection((currentDirection) => {
+          const toggledDirection = currentDirection === 'asc' ? 'desc' : 'asc'
+          localStorage.setItem('sort-direction', toggledDirection)
+          return toggledDirection
+        })
       }
+      localStorage.setItem('sort', sort)
       return sort
     })
   }
