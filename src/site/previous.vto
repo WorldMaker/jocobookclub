@@ -7,7 +7,7 @@ renderOrder: 1
 <section class="section">
     <h1 class="title"><i class="fa-duotone fa-solid fa-books"></i> Previous Club Choices</h1>
 
-    <div class="container">
+    <div class="grid is-col-min-24">
         {{ for previous of search.pages("previous") }}
         {{ include "book-card.vto" { ...previous } }}
         {{ /for }}
