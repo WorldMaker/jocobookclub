@@ -18,33 +18,40 @@ bfscript: /bf/ballot-page.js
     </div>
 </section>
 
-<section class="section">
-    <h1 class="title" id="upcoming"><span class="icon has-text-primary"><i class="fa-duotone fa-solid fa-book-sparkles"></i></span> Upcoming Club Reads</h1>
+<div class="fixed-grid has-3-cols">
+    <div class="grid">
+        <section class="section cell is-col-span-2">
+            <h1 class="title" id="upcoming"><span class="icon has-text-primary"><i class="fa-duotone fa-solid fa-book-sparkles"></i></span> Upcoming Club Reads</h1>
 
-    <div class="container">
-        {{ for upcoming of search.pages("upcoming") }}
-        {{ include "book-card.vto" { ...upcoming, showExcerpt: true } }}
-        {{ /for }}
-    <div>
-</section>
+            {{ for upcoming of search.pages("upcoming") }}
+            {{ include "book-card.vto" { ...upcoming, showExcerpt: true } }}
+            {{ /for }}
+        </section>
+        <section class="section cell">
+            <h1 class="title"><span class="icon has-text-primary"><i class="fa-duotone fa-solid fa-ballot"></i></span> Current Rankings</h1>
+
+            <final-tally-top5><p>You will need to have JS enabled and to login to see the current rankings.</p></final-tally-top5>
+
+            <a href="./ranking/" class="button is-link is-fullwidth">View Full Rankings</a>
+        </section>
+    </div>
+</div>
 
 <section class="section">
     <h1 class="title" id="ballot"><span class="icon has-text-info"><i class="fa-duotone fa-solid fa-box-ballot"></i></span> Current Ballot</h1>
 
-    <div class="container">
-        <sort-picker></sort-picker>
-        <hr />
+    <sort-picker></sort-picker>
+    <hr />
 
-        <book-sorter>
-        {{ for book of search.pages("ballot") }}
-        {{ include "book-card.vto" { ...book, currentBallot: true } }}
-        {{ /for }}
-        </book-sorter>
-        
-        <sort-picker></sort-picker>
-        <hr />
-        <vote-button></vote-button>
-    </div>
+    <book-sorter class="grid is-col-min-24">
+    {{ for book of search.pages("ballot") }}
+    {{ include "book-card.vto" { ...book, currentBallot: true } }}
+    {{ /for }}
+    </book-sorter>
+    
+    <sort-picker></sort-picker>
+    <hr />
+    <vote-button></vote-button>
 </section>
 
 <footer class="footer">
