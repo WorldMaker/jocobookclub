@@ -1,4 +1,4 @@
-import { Fragment, jsx, run } from '@worldmaker/butterfloat'
+import { jsx, run } from '@worldmaker/butterfloat'
 import finalTallyVm from './vm.ts'
 import { map, of, Subscription, switchMap } from 'rxjs'
 import { Login } from './login.tsx'
