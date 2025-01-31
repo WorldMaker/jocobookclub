@@ -40,10 +40,13 @@ bfscript: /bf/ballot-page.js
 <section class="section">
     <h1 class="title" id="ballot"><span class="icon has-text-info"><i class="fa-duotone fa-solid fa-box-ballot"></i></span> Current Ballot</h1>
 
+    <p class="block container">Rank your interest in every book from 1 to 5 excited dolphins <i class="fa-duotone fa-solid fa-dolphin"></i>! Unranked books
+    are counted as 1 dolphin. <a href="./rules">Other Club Rules</a></p>
+
     <sort-picker></sort-picker>
     <hr />
 
-    <book-sorter class="grid is-col-min-24">
+    <book-sorter class="grid is-col-min-18">
     {{ for book of search.pages("ballot") }}
     {{ include "book-card.vto" { ...book, currentBallot: true } }}
     {{ /for }}
@@ -55,8 +58,9 @@ bfscript: /bf/ballot-page.js
 </section>
 
 <footer class="footer">
-    <div class="content">
+    <div class="content buttons">
         <a class="button" href="./previous/"><span class="icon"><i class="fa-duotone fa-solid fa-books"></i></span><span>Previous Club Choices</span></a>
         <a class="button" href="./ranking/"><span class="icon"><i class="fa-duotone fa-solid fa-ballot"></i></span><span>Current Rankings</span></a>
+        <a class="button" href="./rules/"><span class="icon"><i class="fa-duotone fa-solid fa-scale-balanced"></i></span><span>Club Rules</span></a>
     </div>
 </footer>
