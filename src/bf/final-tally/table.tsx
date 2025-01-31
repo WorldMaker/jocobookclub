@@ -1,6 +1,5 @@
 import { jsx } from '@worldmaker/butterfloat'
 import { BookInfo, Ranking } from './vm.ts'
-import { from, map, merge, NEVER } from 'rxjs'
 
 interface RowProps {
   idx: number
@@ -13,14 +12,14 @@ function Row({ idx, ltid, books }: RowProps) {
   if (!book) {
     return (
       <tr>
-        <th innerText={idx.toString()}></th>
+        <th>{idx}</th>
         <td colSpan={2}>Missing information</td>
       </tr>
     )
   }
   return (
     <tr>
-      <th innerText={idx.toString()}></th>
+      <th>{idx}</th>
       <td>
         <a href={book.url}>{book.title}</a>{' '}
         [<a href={`https://www.librarything.com/work/${ltid}`}>LT</a>]
@@ -46,16 +45,10 @@ export function Table({ ranking }: TableProps) {
         </tr>
       </thead>
       {/* The list is reversed because sorted in ascending order */}
-      <tbody
-        childrenBind={merge(
-          NEVER,
-          from(finalTally.ranking.toReversed()).pipe(
-            map((ltid, idx) => () => (
-              <Row idx={idx + 1} ltid={ltid} books={books} />
-            )),
-          ),
-        )}
-      >
+      <tbody>
+        {finalTally.ranking.toReversed().map((ltid, idx) => (
+          <Row idx={idx + 1} ltid={ltid} books={books} />
+        ))}
       </tbody>
     </table>
   )

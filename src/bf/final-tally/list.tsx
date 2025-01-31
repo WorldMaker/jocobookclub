@@ -1,6 +1,5 @@
 import { jsx } from '@worldmaker/butterfloat'
 import { BookInfo, Ranking } from './vm.ts'
-import { from, map, merge, NEVER } from 'rxjs'
 
 interface RowProps {
   ltid: string
@@ -30,14 +29,11 @@ interface ListProps {
 
 export function Top5List({ ranking }: ListProps) {
   const { finalTally, books } = ranking
-  const children = merge(
-    NEVER,
-    from(finalTally.ranking.toReversed().toSpliced(5)).pipe(
-      map((ltid) => () => <Row ltid={ltid} books={books} />),
-    ),
-  )
   return (
-    <ol type='1' childrenBind={children}>
+    <ol type='1'>
+      {finalTally.ranking.toReversed().toSpliced(5).map((ltid) => (
+        <Row ltid={ltid} books={books} />
+      ))}
     </ol>
   )
 }
