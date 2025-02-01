@@ -4,7 +4,7 @@ import type { Bucket } from './tally.ts'
 
 /**
  * A message that can be enqueued to the voting queue.
- * 
+ *
  * @see docs/voting.md
  */
 export const QueueMessages = z.discriminatedUnion('type', [
