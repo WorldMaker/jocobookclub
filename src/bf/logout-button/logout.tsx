@@ -7,7 +7,7 @@ export interface LogoutProps {
   session: Session
 }
 
-interface LogoutEvents {
+export interface LogoutEvents {
   click: ObservableEvent<MouseEvent>
 }
 

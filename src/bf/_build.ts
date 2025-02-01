@@ -1,3 +1,4 @@
+import { JSDOM } from 'jsdom'
 import esbuild from 'esbuild'
 import { denoPlugins } from '@luca/esbuild-deno-loader'
 
@@ -23,3 +24,22 @@ await esbuild.build({
   jsxFactory: 'jsx',
   jsxFragment: 'Fragment',
 })
+
+// *** Stamps ***
+
+const { window } = new JSDOM()
+const { customElements, document, HTMLElement } = window
+globalThis.customElements = customElements
+globalThis.HTMLElement = HTMLElement
+
+const { buildBallotStamps } = await import('./pages/_ballot-stamps.ts')
+await buildBallotStamps(document)
+
+const { buildInviteStamps } = await import('./_invite-register-stamps.ts')
+await buildInviteStamps(document)
+
+const { buildLoginStamps } = await import('./_login-form-stamps.ts')
+await buildLoginStamps(document)
+
+const { buildPasskeyStamps } = await import('./pages/_passkey-stamps.ts')
+await buildPasskeyStamps(document)

@@ -1,4 +1,9 @@
-import { Fragment, jsx, run } from '@worldmaker/butterfloat'
+import {
+  Fragment,
+  jsx,
+  runStamps,
+  StampCollection,
+} from '@worldmaker/butterfloat'
 import { RegistrationVm } from './vm.ts'
 import { map, Subscription } from 'rxjs'
 import { AddPasskey } from './add-button.tsx'
@@ -45,10 +50,66 @@ function PasskeyRegistration() {
 
 class PasskeyRegistrationComponent extends HTMLElement {
   #subscription: Subscription | null = null
+  static #addPasskeyStamp: HTMLTemplateElement | null = null
+  static #sessionErrorStamp: HTMLTemplateElement | null = null
+  static #skeletonStamp: HTMLTemplateElement | null = null
+  static #successStamp: HTMLTemplateElement | null = null
+  static #verificationErrorStamp: HTMLTemplateElement | null = null
+  static #loginStamp: HTMLTemplateElement | null = null
+
+  constructor() {
+    super()
+    PasskeyRegistrationComponent.#addPasskeyStamp ??= this.ownerDocument
+      .querySelector<HTMLTemplateElement>('#add-passkey')
+    PasskeyRegistrationComponent.#sessionErrorStamp ??= this.ownerDocument
+      .querySelector<HTMLTemplateElement>('#session-error')
+    PasskeyRegistrationComponent.#skeletonStamp ??= this.ownerDocument
+      .querySelector<HTMLTemplateElement>('#passkey-skeleton')
+    PasskeyRegistrationComponent.#successStamp ??= this.ownerDocument
+      .querySelector<HTMLTemplateElement>('#passkey-success')
+    PasskeyRegistrationComponent.#verificationErrorStamp ??= this.ownerDocument
+      .querySelector<HTMLTemplateElement>('#verification-error')
+    PasskeyRegistrationComponent.#loginStamp ??= this.ownerDocument
+      .querySelector<HTMLTemplateElement>('#login-notice')
+  }
 
   connectedCallback() {
     this.innerHTML = ''
-    this.#subscription = run(this, PasskeyRegistration)
+    const stamps = new StampCollection()
+    if (PasskeyRegistrationComponent.#addPasskeyStamp) {
+      stamps.registerOnlyStamp(
+        AddPasskey,
+        PasskeyRegistrationComponent.#addPasskeyStamp,
+      )
+    }
+    if (PasskeyRegistrationComponent.#sessionErrorStamp) {
+      stamps.registerOnlyStamp(
+        SessionError,
+        PasskeyRegistrationComponent.#sessionErrorStamp,
+      )
+    }
+    if (PasskeyRegistrationComponent.#skeletonStamp) {
+      stamps.registerOnlyStamp(
+        Skeleton,
+        PasskeyRegistrationComponent.#skeletonStamp,
+      )
+    }
+    if (PasskeyRegistrationComponent.#successStamp) {
+      stamps.registerOnlyStamp(
+        Success,
+        PasskeyRegistrationComponent.#successStamp,
+      )
+    }
+    if (PasskeyRegistrationComponent.#verificationErrorStamp) {
+      stamps.registerOnlyStamp(
+        VerificationError,
+        PasskeyRegistrationComponent.#verificationErrorStamp,
+      )
+    }
+    if (PasskeyRegistrationComponent.#loginStamp) {
+      stamps.registerOnlyStamp(Login, PasskeyRegistrationComponent.#loginStamp)
+    }
+    this.#subscription = runStamps(this, PasskeyRegistration, stamps)
   }
 
   disconnectedCallback() {

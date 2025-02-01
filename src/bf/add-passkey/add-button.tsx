@@ -7,7 +7,7 @@ export interface AddPasskeyProps {
   session: Session
 }
 
-interface AddPasskeyEvents {
+export interface AddPasskeyEvents {
   click: ObservableEvent<MouseEvent>
 }
 

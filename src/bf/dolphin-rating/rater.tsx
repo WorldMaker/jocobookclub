@@ -7,12 +7,12 @@ interface DolphinProps {
   vm: DolphinsVm
 }
 
-interface DolphinEvents {
+export interface DolphinEvents {
   hover: ObservableEvent<MouseEvent>
   click: ObservableEvent<MouseEvent>
 }
 
-function Dolphin(
+export function Dolphin(
   { rank, vm }: DolphinProps,
   { bindImmediateEffect, events }: ComponentContext<DolphinEvents>,
 ) {

@@ -1,4 +1,9 @@
-import { Fragment, jsx, run } from '@worldmaker/butterfloat'
+import {
+  Fragment,
+  jsx,
+  runStamps,
+  StampCollection,
+} from '@worldmaker/butterfloat'
 import sessionManager from '../vm/session-manager.ts'
 import { map, Subscription } from 'rxjs'
 import { Logout } from './logout.tsx'
@@ -14,10 +19,29 @@ function LogoutButton() {
 
 class LogoutButtonElement extends HTMLElement {
   #subscription: Subscription | null = null
+  static #logoutStamp: HTMLTemplateElement | null = null
+  static #loginStamp: HTMLTemplateElement | null = null
+
+  constructor() {
+    super()
+    LogoutButtonElement.#logoutStamp ??= this.ownerDocument.querySelector<
+      HTMLTemplateElement
+    >('#logout-button')
+    LogoutButtonElement.#loginStamp ??= this.ownerDocument.querySelector<
+      HTMLTemplateElement
+    >('#login-notice')
+  }
 
   connectedCallback() {
     this.innerHTML = ''
-    this.#subscription = run(this, LogoutButton)
+    const stamps = new StampCollection()
+    if (LogoutButtonElement.#logoutStamp) {
+      stamps.registerOnlyStamp(Logout, LogoutButtonElement.#logoutStamp)
+    }
+    if (LogoutButtonElement.#loginStamp) {
+      stamps.registerOnlyStamp(Login, LogoutButtonElement.#loginStamp)
+    }
+    this.#subscription = runStamps(this, LogoutButton, stamps)
   }
 
   disconnectedCallback() {
