@@ -3,7 +3,8 @@ import {
   Fragment,
   jsx,
   ObservableEvent,
-  run,
+  runStamps,
+  StampCollection,
 } from '@worldmaker/butterfloat'
 import ballotManager, { BallotManager } from './vm/ballot-manager.ts'
 import { map, Subscription } from 'rxjs'
@@ -12,11 +13,11 @@ interface VoteButtonProps {
   vm: BallotManager
 }
 
-interface ActivateButtonEvents {
+export interface ActivateButtonEvents {
   click: ObservableEvent<MouseEvent>
 }
 
-function ActivateButton(
+export function ActivateButton(
   { vm }: VoteButtonProps,
   { bindEffect, events }: ComponentContext<ActivateButtonEvents>,
 ) {
@@ -34,7 +35,7 @@ function ActivateButton(
   )
 }
 
-function DeactivateButton(
+export function DeactivateButton(
   { vm }: VoteButtonProps,
   { bindEffect, events }: ComponentContext<ActivateButtonEvents>,
 ) {
@@ -52,11 +53,11 @@ function DeactivateButton(
   )
 }
 
-interface VoteButtonEvents {
+export interface VoteButtonEvents {
   vote: ObservableEvent<MouseEvent>
 }
 
-function VoteButton(
+export function VoteButton(
   { vm }: VoteButtonProps,
   { bindEffect, events }: ComponentContext<VoteButtonEvents>,
 ) {
@@ -110,10 +111,40 @@ function Voter() {
 
 class VoteButtonComponent extends HTMLElement {
   #subscription: Subscription | null = null
+  static #voteButtonStamp: HTMLTemplateElement | null = null
+  static #activateButtonStamp: HTMLTemplateElement | null = null
+  static #deactivateButtonStamp: HTMLTemplateElement | null = null
+
+  constructor() {
+    super()
+    VoteButtonComponent.#voteButtonStamp ??= this.ownerDocument.querySelector<
+      HTMLTemplateElement
+    >('#vote-button')
+    VoteButtonComponent.#activateButtonStamp ??= this.ownerDocument
+      .querySelector<HTMLTemplateElement>('#vote-button-activate')
+    VoteButtonComponent.#deactivateButtonStamp ??= this.ownerDocument
+      .querySelector<HTMLTemplateElement>('#vote-button-deactivate')
+  }
 
   connectedCallback() {
     this.innerHTML = ''
-    this.#subscription = run(this, Voter)
+    const stamps = new StampCollection()
+    if (VoteButtonComponent.#voteButtonStamp) {
+      stamps.registerOnlyStamp(VoteButton, VoteButtonComponent.#voteButtonStamp)
+    }
+    if (VoteButtonComponent.#activateButtonStamp) {
+      stamps.registerOnlyStamp(
+        ActivateButton,
+        VoteButtonComponent.#activateButtonStamp,
+      )
+    }
+    if (VoteButtonComponent.#deactivateButtonStamp) {
+      stamps.registerOnlyStamp(
+        DeactivateButton,
+        VoteButtonComponent.#deactivateButtonStamp,
+      )
+    }
+    this.#subscription = runStamps(this, Voter, stamps)
   }
 
   disconnectedCallback() {

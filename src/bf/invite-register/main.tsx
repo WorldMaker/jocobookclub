@@ -1,5 +1,10 @@
 /// <reference lib="dom" />
-import { Fragment, jsx, run } from '@worldmaker/butterfloat'
+import {
+  Fragment,
+  jsx,
+  runStamps,
+  StampCollection,
+} from '@worldmaker/butterfloat'
 import { map, Subscription } from 'rxjs'
 import AlreadyLoggedIn from './logged-in.tsx'
 import InvalidInvite from './invalid-invite.tsx'
@@ -51,16 +56,83 @@ function InviteRegister() {
 
 class InviteRegisterComponent extends HTMLElement {
   #subscription: Subscription | null = null
+  static #inviteRegisterForm: HTMLTemplateElement | null = null
+  static #inviteRegisterInvalid: HTMLTemplateElement | null = null
+  static #inviteRegisterLoggedIn: HTMLTemplateElement | null = null
+  static #inviteRegisterSkeleton: HTMLTemplateElement | null = null
+  static #inviteRegisterSuccess: HTMLTemplateElement | null = null
+  static #inviteRegisterSessionError: HTMLTemplateElement | null = null
+  static #inviteRegisterVerificationError: HTMLTemplateElement | null = null
+
+  constructor() {
+    super()
+    InviteRegisterComponent.#inviteRegisterForm ??= this.ownerDocument
+      .querySelector<HTMLTemplateElement>('#invite-register-form')
+    InviteRegisterComponent.#inviteRegisterInvalid ??= this.ownerDocument
+      .querySelector<HTMLTemplateElement>('#invite-register-invalid')
+    InviteRegisterComponent.#inviteRegisterLoggedIn ??= this.ownerDocument
+      .querySelector<HTMLTemplateElement>('#invite-register-logged-in')
+    InviteRegisterComponent.#inviteRegisterSkeleton ??= this.ownerDocument
+      .querySelector<HTMLTemplateElement>('#invite-register-skeleton')
+    InviteRegisterComponent.#inviteRegisterSuccess ??= this.ownerDocument
+      .querySelector<HTMLTemplateElement>('#passkey-success')
+    InviteRegisterComponent.#inviteRegisterSessionError ??= this.ownerDocument
+      .querySelector<HTMLTemplateElement>('#session-error')
+    InviteRegisterComponent.#inviteRegisterVerificationError ??= this
+      .ownerDocument.querySelector<HTMLTemplateElement>('#verification-error')
+  }
 
   connectedCallback() {
     this.innerHTML = ''
-    this.#subscription = run(this, InviteRegister)
+    const stamps = new StampCollection()
+    if (InviteRegisterComponent.#inviteRegisterForm) {
+      stamps.registerStampAlternative(
+        InviteRegistrationForm,
+        (p) => p.invite.type === 'open-enrollment',
+        InviteRegisterComponent.#inviteRegisterForm,
+      )
+    }
+    if (InviteRegisterComponent.#inviteRegisterInvalid) {
+      stamps.registerOnlyStamp(
+        InvalidInvite,
+        InviteRegisterComponent.#inviteRegisterInvalid,
+      )
+    }
+    if (InviteRegisterComponent.#inviteRegisterLoggedIn) {
+      stamps.registerOnlyStamp(
+        AlreadyLoggedIn,
+        InviteRegisterComponent.#inviteRegisterLoggedIn,
+      )
+    }
+    if (InviteRegisterComponent.#inviteRegisterSkeleton) {
+      stamps.registerOnlyStamp(
+        InviteRegistrationFormSkeleton,
+        InviteRegisterComponent.#inviteRegisterSkeleton,
+      )
+    }
+    if (InviteRegisterComponent.#inviteRegisterSuccess) {
+      stamps.registerOnlyStamp(
+        Success,
+        InviteRegisterComponent.#inviteRegisterSuccess,
+      )
+    }
+    if (InviteRegisterComponent.#inviteRegisterSessionError) {
+      stamps.registerOnlyStamp(
+        SessionError,
+        InviteRegisterComponent.#inviteRegisterSessionError,
+      )
+    }
+    if (InviteRegisterComponent.#inviteRegisterVerificationError) {
+      stamps.registerOnlyStamp(
+        VerificationError,
+        InviteRegisterComponent.#inviteRegisterVerificationError,
+      )
+    }
+    this.#subscription = runStamps(this, InviteRegister, stamps)
   }
 
   disconnectedCallback() {
-    if (this.#subscription) {
-      this.#subscription.unsubscribe()
-    }
+    this.#subscription?.unsubscribe()
   }
 }
 

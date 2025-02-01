@@ -2,7 +2,8 @@ import {
   ComponentContext,
   jsx,
   ObservableEvent,
-  run,
+  runStamps,
+  StampCollection,
 } from '@worldmaker/butterfloat'
 import sortVm, { Sort } from './book-sorter/vm.ts'
 import { map, shareReplay, Subscription, withLatestFrom } from 'rxjs'
@@ -12,7 +13,7 @@ interface SortButtonProps {
   name: string
 }
 
-function SortButton(
+export function SortButton(
   { sort, name }: SortButtonProps,
   { bindEffect, events }: ComponentContext<
     { click: ObservableEvent<MouseEvent> }
@@ -52,7 +53,7 @@ function SortButton(
   )
 }
 
-function SortPicker() {
+export function SortPicker() {
   return (
     <div class='level'>
       <div class='level-item buttons has-addons'>
@@ -66,10 +67,52 @@ function SortPicker() {
 
 class SortPickerComponent extends HTMLElement {
   #subscription: Subscription | null = null
+  static #sortPickerTitleStamp: HTMLTemplateElement | null = null
+  static #sortPickerAuthorStamp: HTMLTemplateElement | null = null
+  static #sortPickerRankStamp: HTMLTemplateElement | null = null
+  static #sortPickerStamp: HTMLTemplateElement | null = null
+
+  constructor() {
+    super()
+    SortPickerComponent.#sortPickerTitleStamp ??= this.ownerDocument
+      .querySelector<HTMLTemplateElement>('#sort-picker-title')
+    SortPickerComponent.#sortPickerAuthorStamp ??= this.ownerDocument
+      .querySelector<HTMLTemplateElement>('#sort-picker-author')
+    SortPickerComponent.#sortPickerRankStamp ??= this.ownerDocument
+      .querySelector<HTMLTemplateElement>('#sort-picker-rank')
+    SortPickerComponent.#sortPickerStamp ??= this.ownerDocument.querySelector<
+      HTMLTemplateElement
+    >('#sort-picker')
+  }
 
   connectedCallback() {
     this.innerHTML = ''
-    this.#subscription = run(this, SortPicker)
+    const stamps = new StampCollection()
+    if (SortPickerComponent.#sortPickerTitleStamp) {
+      stamps.registerStampAlternative(
+        SortButton,
+        (p) => p.sort === 'title',
+        SortPickerComponent.#sortPickerTitleStamp,
+      )
+    }
+    if (SortPickerComponent.#sortPickerAuthorStamp) {
+      stamps.registerStampAlternative(
+        SortButton,
+        (p) => p.sort === 'author',
+        SortPickerComponent.#sortPickerAuthorStamp,
+      )
+    }
+    if (SortPickerComponent.#sortPickerRankStamp) {
+      stamps.registerStampAlternative(
+        SortButton,
+        (p) => p.sort === 'rank',
+        SortPickerComponent.#sortPickerRankStamp,
+      )
+    }
+    if (SortPickerComponent.#sortPickerStamp) {
+      stamps.registerOnlyStamp(SortPicker, SortPickerComponent.#sortPickerStamp)
+    }
+    this.#subscription = runStamps(this, SortPicker, stamps)
   }
 
   disconnectedCallback() {

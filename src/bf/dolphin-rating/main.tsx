@@ -2,10 +2,11 @@ import {
   ComponentDescription,
   Fragment,
   jsx,
-  run,
+  runStamps,
+  StampCollection,
 } from '@worldmaker/butterfloat'
 import { DolphinsVm } from './vm.ts'
-import { Rater } from './rater.tsx'
+import { Dolphin, Rater } from './rater.tsx'
 import { map, Subscription } from 'rxjs'
 
 interface DolphinRatingProps {
@@ -24,13 +25,27 @@ function DolphinRating({ ltid }: DolphinRatingProps) {
 
 class DolphinRatingComponent extends HTMLElement {
   #subscription: Subscription | null = null
+  static #dolphinStamp: HTMLTemplateElement | null = null
+
+  constructor() {
+    super()
+    DolphinRatingComponent.#dolphinStamp ??= this.ownerDocument.querySelector<
+      HTMLTemplateElement
+    >('#dolphin-rating-dolphin')
+  }
+
   connectedCallback() {
     this.innerHTML = ''
     const ltid = this.getAttribute('ltid')
     if (ltid) {
-      this.#subscription = run(
+      const stamps = new StampCollection()
+      if (DolphinRatingComponent.#dolphinStamp) {
+        stamps.registerOnlyStamp(Dolphin, DolphinRatingComponent.#dolphinStamp)
+      }
+      this.#subscription = runStamps(
         this,
         <DolphinRating ltid={ltid} /> as ComponentDescription,
+        stamps,
       )
     }
   }

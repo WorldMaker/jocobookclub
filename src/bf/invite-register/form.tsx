@@ -7,7 +7,7 @@ export interface InviteRegistrationFormProps {
   vm: RegistrationVm
 }
 
-interface InviteRegistrationFormEvents {
+export interface InviteRegistrationFormEvents {
   emailChanged: ObservableEvent<InputEvent>
   submit: ObservableEvent<SubmitEvent>
 }
@@ -31,7 +31,8 @@ export default function InviteRegistrationForm(
       <h1 class='title'>Register</h1>
       <p>
         Register with a Passkey. <strong>TIP:</strong>{' '}
-        Best results may be to login first on iOS or Android.
+        Passkeys from iOS or Android are easier to use on Windows{' '}
+        than the other way around, in many cases.
       </p>
 
       <form events={{ submit: events.submit }}>
