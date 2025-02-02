@@ -100,8 +100,21 @@ export class BallotManager {
     }
   }
 
+  #updateBallot(ballot: StateSetter<Ballot | null>) {
+    this.#setBallot((currentBallot) => {
+      const updatedBallot = typeof ballot === 'function'
+        ? ballot(currentBallot)
+        : ballot
+      localStorage.setItem(
+        `ballot/${this.#session.userId}`,
+        JSON.stringify(updatedBallot),
+      )
+      return updatedBallot
+    })
+  }
+
   activate() {
-    this.#setBallot((ballot) => {
+    this.#updateBallot((ballot) => {
       if (!ballot) {
         return null
       }
@@ -113,7 +126,7 @@ export class BallotManager {
   }
 
   deactivate() {
-    this.#setBallot((ballot) => {
+    this.#updateBallot((ballot) => {
       if (!ballot) {
         return null
       }
@@ -128,7 +141,7 @@ export class BallotManager {
     if (rank < 1 || rank > 5) {
       throw new Error('Rank must be between 1 and 5')
     }
-    this.#setBallot((ballot) => {
+    this.#updateBallot((ballot) => {
       if (!ballot) {
         return null
       }
@@ -154,11 +167,7 @@ export class BallotManager {
       const updatedBallot = Ballot.safeParse(await response.json())
       if (updatedBallot.success) {
         this.#lastBallot = { ...updatedBallot.data }
-        this.#setBallot({ ...updatedBallot.data })
-        localStorage.setItem(
-          `ballot/${this.#session.userId}`,
-          JSON.stringify(updatedBallot.data),
-        )
+        this.#updateBallot({ ...updatedBallot.data })
       }
     }
   }
