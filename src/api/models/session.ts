@@ -4,6 +4,7 @@ import { UserId } from './user.ts'
 export const Session = z.object({
   token: z.string(),
   userId: UserId,
+  admin: z.boolean().optional(),
   expiresAt: z.coerce.date(),
 })
 
