@@ -33,5 +33,5 @@ const app = new Hono<{ Variables: Variables }>()
     }
     return c.json({ success: true }, 200)
   })
-  
+
 export default app
