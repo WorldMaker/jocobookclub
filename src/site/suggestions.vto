@@ -1,0 +1,23 @@
+---
+layout: main.vto
+title: Suggestions
+bfscript: /bf/suggestions-page.js
+---
+
+<section class="section">
+    <h1 class="title"><i class="fa-duotone fa-solid fa-book"></i> Held Suggestions</h1>
+
+    <p class="container">These suggestions have been held for possible use in future rounds.</p>
+
+    <book-sorter class="grid is-col-min-18">
+        {{ for held of search.pages("held") }}
+        {{ include "book-card.vto" { ...held, currentBallot: true } }}
+        {{ /for }}
+    </book-sorter>
+</section>
+
+<section class="section">
+    <h1 class="title"><span class="icon has-text-warning"><i class="fa-duotone fa-solid fa-lightbulb fa-swap-opacity"></i></span> Suggestions</h1>
+
+    <p class="container">Coming soon!</p>
+</section>

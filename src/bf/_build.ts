@@ -14,6 +14,7 @@ await esbuild.build({
     },
     { out: 'login-form', in: './login-form/main.tsx' },
     { out: 'passkey-page', in: './pages/passkey.ts' },
+    { out: 'suggestions-page', in: './pages/suggestions.ts' },
   ],
   outdir: '../site/bf/',
   bundle: true,
