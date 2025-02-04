@@ -1,14 +1,25 @@
+import { any } from 'zod'
 import { getBallotEligibleBooks } from './clients/static-api.ts'
 import {
-  addTally,
-  buckets,
+  Bucket,
   getBucketForUser,
   tallyBucket,
-  tallyFinal,
   tallyFinalRanking,
-  zeroTally,
 } from './models/tally.ts'
-import { QueueMessages, queueTallied } from './models/voting.ts'
+import {
+  QueueMessages,
+  queueRecountBucketRequested,
+  queueTallied,
+} from './models/voting.ts'
+
+async function anyRecountBucketsRemaining(kv: Deno.Kv) {
+  for await (const bucket of kv.list({ prefix: ['recount-bucket'] })) {
+    if (bucket.value) {
+      return true
+    }
+  }
+  return false
+}
 
 export async function listenQueue(kv: Deno.Kv, msg: unknown) {
   const qmessage = QueueMessages.safeParse(msg)
@@ -32,25 +43,64 @@ export async function listenQueue(kv: Deno.Kv, msg: unknown) {
           .commit()
       }
       break
-    case 'recount-requested':
+    case 'recount-bucket-requested':
       {
         const books = await getBallotEligibleBooks()
+        const time = await kv.get<Date>(['tally-time', qmessage.data.bucket])
+        const recount = await kv.get<Date>([
+          'recount-bucket',
+          qmessage.data.bucket,
+        ])
+        if (recount.value && recount.value > qmessage.data.at) {
+          return
+        }
+        if (time.value && time.value >= qmessage.data.at) {
+          const result = await kv.atomic()
+            .check(recount)
+            .delete(['recount-bucket', qmessage.data.bucket])
+            .commit()
+          // Fan back in once all recount-bucket times are gone
+          if (result.ok && !await anyRecountBucketsRemaining(kv)) {
+            await queueTallied(kv, qmessage.data.bucket)
+          }
+          return
+        }
+        const tally = await tallyBucket(kv, qmessage.data.bucket, books)
+        const result = tally.count > 0
+          ? await kv.atomic()
+            .check(time)
+            .check(recount)
+            .delete(['recount-bucket', qmessage.data.bucket])
+            .set(['tally-time', qmessage.data.bucket], qmessage.data.at)
+            .set(['tally', qmessage.data.bucket], tally)
+            .commit()
+          : await kv.atomic()
+            .check(recount)
+            .delete(['recount-bucket', qmessage.data.bucket])
+            .delete(['tally-time', qmessage.data.bucket])
+            .delete(['tally', qmessage.data.bucket])
+            .commit()
+
+        if (!result.ok) {
+          return
+        }
+
+        // Fan back in once all recount-bucket times are gone
+        if (!await anyRecountBucketsRemaining(kv)) {
+          await queueTallied(kv, qmessage.data.bucket)
+        }
+      }
+      break
+    case 'recount-requested':
+      {
         const time = await kv.get<Date>(['final-tally-time'])
         if (time.value && time.value >= qmessage.data.at) {
           return
         }
-        let combinedTally = zeroTally(books)
-        // TODO: Divide and conquer?
-        for (const bucket of buckets) {
-          const tally = await tallyBucket(kv, bucket, books)
-          await kv.set(['tally', bucket], tally)
-          combinedTally = addTally(combinedTally, tally)
+        // Fan out to recount all buckets
+        for (const bucket of Bucket.options) {
+          await queueRecountBucketRequested(kv, bucket)
         }
-        await kv.atomic()
-          .check(time)
-          .set(['final-tally-time'], new Date())
-          .set(['final-tally'], tallyFinal(combinedTally))
-          .commit()
       }
       break
     case 'user-voted':

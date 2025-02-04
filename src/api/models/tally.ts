@@ -163,7 +163,7 @@ export function tallyFinal(tally: Tally): FinalTally {
  *
  * Buckets need to be in lexicographic order
  */
-export const buckets = Object.freeze(
+export const Bucket = z.enum(
   [
     '0',
     '1',
@@ -197,10 +197,10 @@ export const buckets = Object.freeze(
     'X',
     'Y',
     'Z',
-  ] as const,
+  ],
 )
 
-export type Bucket = typeof buckets[number]
+export type Bucket = z.infer<typeof Bucket>
 
 export async function getTally(kv: Deno.Kv, bucket: Bucket) {
   const maybeTally = await kv.get(['tally', bucket])
@@ -208,7 +208,7 @@ export async function getTally(kv: Deno.Kv, bucket: Bucket) {
 }
 
 export function getBucketForUser(userId: UserId) {
-  return buckets.find((bucket) => reverseUlid(userId).startsWith(bucket))
+  return Bucket.options.find((bucket) => reverseUlid(userId).startsWith(bucket))
 }
 
 export async function tallyBucket(
@@ -216,15 +216,15 @@ export async function tallyBucket(
   bucket: Bucket,
   books: EligibleBooks,
 ) {
-  const bucketIndex = buckets.indexOf(bucket)
+  const bucketIndex = Bucket.options.indexOf(bucket)
   let tally = zeroTally(books)
   for await (
     const maybeBallot of kv.list(
-      bucketIndex + 1 === buckets.length
+      bucketIndex + 1 === Bucket.options.length
         ? { prefix: ['ballot'], start: ['ballot', bucket] }
         : {
           start: ['ballot', bucket],
-          end: ['ballot', buckets[bucketIndex + 1]],
+          end: ['ballot', Bucket.options[bucketIndex + 1]],
         },
     )
   ) {
@@ -240,7 +240,7 @@ export async function tallyBucket(
 
 export async function tallyFinalRanking(kv: Deno.Kv, books: EligibleBooks) {
   let finalTally = zeroTally(books)
-  for (const bucket of buckets) {
+  for (const bucket of Bucket.options) {
     const tally = await getTally(kv, bucket)
     if (!tally.success) {
       continue
