@@ -62,7 +62,9 @@ export class BallotManager {
         this.#setBallot(ballot.data)
       }
     }
-    const maybeLastBallot = localStorage.getItem(`saved/ballot/${session.userId}`)
+    const maybeLastBallot = localStorage.getItem(
+      `saved/ballot/${session.userId}`,
+    )
     if (maybeLastBallot) {
       const ballot = Ballot.safeParse(JSON.parse(maybeLastBallot))
       if (ballot.success) {
