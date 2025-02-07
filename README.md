@@ -69,17 +69,14 @@ This is the static site and "static book database API" that provides the main
 front-end and primary way of describing the books that are on the ballot for
 voting. It is powered by [Lume].
 
-To get started, you should build the "best friend" library first. Then you can
-build the site, or serve it for continual updates.
-
-Example:
+Run a test server:
 
 ```sh
-$ cd src/bf
-$ deno task build
-$ cd ../site
-$ deno task serve # or build
+$ deno task serve # or build to just generate the static dist/ folder
 ```
+
+(Note that this will also build the "bf" library once at startup. It will not
+try to rebuild the library while running.)
 
 Books are described with Markdown files with Front Matter. Required Front Matter
 fields are `title`, `author`, and `ltid`. `ltid` is a string containing the Work

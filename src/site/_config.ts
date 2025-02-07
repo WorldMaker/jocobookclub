@@ -10,4 +10,13 @@ site.use(basePath())
 
 site.copy('bf')
 
+site.addEventListener('beforeBuild', async () => {
+  const command = new Deno.Command(Deno.execPath(), {
+    args: ['task', 'build'],
+    cwd: new URL('../bf/', import.meta.url),
+  })
+  const process = command.spawn()
+  await process.status
+})
+
 export default site
