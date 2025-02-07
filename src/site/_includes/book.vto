@@ -1,8 +1,11 @@
 ---
 layout: main.vto
 showContent: true
+bfscript: /bf/book-page.js
 ---
 
 <section class="section">
-    {{ include "book-card.vto" }}
+    {{ include "book-card.vto" { currentBallot: tags.some(t => /^(ballot|held)$/.test(t)) } }}
 </section>
+
+{{ include "bf/book-page.html" }}
