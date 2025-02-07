@@ -6,13 +6,13 @@
                 <p class="subtitle is-6">{{ author }}</p>
             </div>
         </div>
-        {{ if currentBallot }}
-        <dolphin-rating ltid="{{ ltid }}"></dolphin-rating>
-        {{ /if }}
         {{ if showContent }}
         <div class="content">
             {{ content }}
         </div>
+        {{ /if }}
+        {{ if currentBallot }}
+        <dolphin-rating ltid="{{ ltid }}"></dolphin-rating>
         {{ /if }}
         {{ if scheduled }}
         <time datetime="{{ date.toISOString() }}">{{ date.toLocaleString('en-us', { dateStyle: 'medium' }) }}</time>
