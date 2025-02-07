@@ -1,4 +1,8 @@
-import { buildStamp, makeTestComponentContext, makeTestEvent } from '@worldmaker/butterfloat'
+import {
+  buildStamp,
+  makeTestComponentContext,
+  makeTestEvent,
+} from '@worldmaker/butterfloat'
 import { Dolphin, type DolphinEvents } from '../dolphin-rating/rater.tsx'
 import { NEVER } from 'rxjs'
 import { DolphinsVm } from '../dolphin-rating/vm.ts'
