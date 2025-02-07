@@ -21,7 +21,7 @@ export class BallotManager {
     return this.#active
   }
 
-  // for "three-way merge"
+  // for "three-way merge", the last known *saved* ballot
   #lastBallot: Ballot | null = null
 
   constructor(session: Session) {
@@ -59,8 +59,16 @@ export class BallotManager {
     if (maybeBallot) {
       const ballot = Ballot.safeParse(JSON.parse(maybeBallot))
       if (ballot.success) {
-        this.#lastBallot = { ...ballot.data }
-        this.#setBallot({ ...ballot.data })
+        this.#setBallot(ballot.data)
+      }
+    }
+    const maybeLastBallot = localStorage.getItem(
+      `saved/ballot/${session.userId}`,
+    )
+    if (maybeLastBallot) {
+      const ballot = Ballot.safeParse(JSON.parse(maybeLastBallot))
+      if (ballot.success) {
+        this.#lastBallot = ballot.data
       }
     }
     this.load()
@@ -71,31 +79,28 @@ export class BallotManager {
       headers: { Authorization: `Bearer ${this.#session.token}` },
     })
     if (response.ok) {
-      const ballot = await response.json()
-      if (this.#lastBallot && ballot.userId != this.#lastBallot.userId) {
+      const remoteBallot = await response.json()
+      if (this.#lastBallot && remoteBallot.userId != this.#lastBallot.userId) {
         throw new Error('User ID mismatch between local and server ballots')
       }
-      this.#lastBallot = { ...ballot }
-      localStorage.setItem(
-        `ballot/${this.#session.userId}`,
-        JSON.stringify(ballot),
-      )
-      this.#setBallot((localBallot) => {
+      this.#updateBallot((localBallot) => {
+        const newBallot = structuredClone(remoteBallot)
         // try to merge local changes with server changes
         if (localBallot && this.#lastBallot) {
           if (localBallot.userId != this.#lastBallot.userId) {
             throw new Error('User ID mismatch between local ballots')
           }
           if (localBallot.active != this.#lastBallot.active) {
-            ballot.active = localBallot.active
+            newBallot.active = localBallot.active
           }
           for (const [ltid, rank] of Object.entries(localBallot.books)) {
             if (this.#lastBallot.books[ltid] != rank) {
-              ballot.books[ltid] = rank
+              newBallot.books[ltid] = rank
             }
           }
         }
-        return { ...ballot }
+        this.#updateLastBallot(remoteBallot)
+        return newBallot
       })
     }
   }
@@ -111,6 +116,14 @@ export class BallotManager {
       )
       return updatedBallot
     })
+  }
+
+  #updateLastBallot(ballot: Ballot) {
+    this.#lastBallot = structuredClone(ballot)
+    localStorage.setItem(
+      `saved/ballot/${this.#session.userId}`,
+      JSON.stringify(ballot),
+    )
   }
 
   activate() {
@@ -166,8 +179,8 @@ export class BallotManager {
     if (response.ok) {
       const updatedBallot = Ballot.safeParse(await response.json())
       if (updatedBallot.success) {
-        this.#lastBallot = { ...updatedBallot.data }
-        this.#updateBallot({ ...updatedBallot.data })
+        this.#updateLastBallot(updatedBallot.data)
+        this.#updateBallot(structuredClone(updatedBallot.data))
       }
     }
   }
