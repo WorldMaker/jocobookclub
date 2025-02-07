@@ -8,6 +8,7 @@ export const Suggestion = z.object({
   title: z.string(),
   author: z.string(),
   whyBlurb: z.string(),
+  cw: z.string().optional(),
   updated: z.string().datetime({ offset: true }),
 })
 export type Suggestion = z.infer<typeof Suggestion>
@@ -24,8 +25,12 @@ export function updateSuggestion(kv: Deno.Kv, suggestion: Suggestion) {
 
 export async function listSuggestions(kv: Deno.Kv) {
   const suggestions = []
-  for await (const suggestion of kv.list({ prefix: ['suggestion'] })) {
-    suggestions.push(Suggestion.safeParse(suggestion.value))
+  for await (const maybeSuggestion of kv.list({ prefix: ['suggestion'] })) {
+    const suggestion = Suggestion.safeParse(maybeSuggestion.value)
+    if (!suggestion.success) {
+      continue
+    }
+    suggestions.push(suggestion.data)
   }
   return suggestions
 }

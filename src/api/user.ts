@@ -25,6 +25,7 @@ import { zValidator } from '@hono/zod-validator'
 import { queueVoted } from './models/voting.ts'
 import { getFinalTally } from './models/tally.ts'
 import type { KvProvidedVariables } from './kv.ts'
+import suggestionApp from './suggestion.ts'
 
 interface Variables extends KvProvidedVariables {
   session: Session
@@ -164,5 +165,6 @@ const app = new Hono<{ Variables: Variables }>()
     await deleteSession(kv, session.token)
     return c.json({}, 200)
   })
+  .route('/suggestion', suggestionApp)
 
 export default app
