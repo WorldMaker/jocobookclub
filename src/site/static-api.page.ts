@@ -1,3 +1,9 @@
+const baseUrl = 'https://worldmaker.net/jocobookclub/'
+
+function pageUrl(url: string): string {
+  return new URL(url.startsWith('/') ? url.slice(1) : url, baseUrl).toString()
+}
+
 interface BookInfo {
   title: string
   author: string
@@ -24,7 +30,7 @@ export default function* staticApi({ search }: Lume.Data) {
       author: page.author,
       scheduledDate: page.date,
       ltid: page.ltid,
-      url: page.url,
+      url: pageUrl(page.url),
     }))
   const previousBooksByLtid = byLtId(previousBooks)
   yield {
@@ -38,7 +44,7 @@ export default function* staticApi({ search }: Lume.Data) {
       author: page.author,
       scheduledDate: page.scheduled ? page.date : undefined,
       ltid: page.ltid,
-      url: page.url,
+      url: pageUrl(page.url),
     }))
   const upcomingBooksByLtid = byLtId(upcomingBooks)
   yield {
@@ -51,7 +57,7 @@ export default function* staticApi({ search }: Lume.Data) {
       title: page.title!,
       author: page.author,
       ltid: page.ltid,
-      url: page.url,
+      url: pageUrl(page.url),
     }))
   const ballotBooksByLtid = byLtId(ballotBooks)
   yield {
