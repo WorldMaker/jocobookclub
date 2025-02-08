@@ -1,3 +1,4 @@
+import { zValidator } from '@hono/zod-validator'
 import {
   generateRegistrationOptions,
   type RegistrationResponseJSON,
@@ -5,7 +6,7 @@ import {
   verifyRegistrationResponse,
 } from '@simplewebauthn/server'
 import { Hono } from 'hono'
-import { bearerAuth } from 'hono/bearer-auth'
+import { Ballot, getUserBallot, updateUserBallot } from './models/ballot.ts'
 import {
   getPasskeysForUser,
   getUserRegistrationChallenge,
@@ -16,36 +17,14 @@ import {
 import { origin, rpId, rpName } from './models/rp.ts'
 import {
   deleteSession,
-  getSessionByToken,
-  type Session,
 } from './models/session.ts'
-import { getUserById } from './models/user.ts'
-import { Ballot, getUserBallot, updateUserBallot } from './models/ballot.ts'
-import { zValidator } from '@hono/zod-validator'
-import { queueVoted } from './models/voting.ts'
 import { getFinalTally } from './models/tally.ts'
-import type { KvProvidedVariables } from './kv.ts'
-import suggestionApp from './suggestion.ts'
+import { getUserById } from './models/user.ts'
+import { queueVoted } from './models/voting.ts'
+import { sessionToken, type SessionVariables } from './session-token.ts'
 
-interface Variables extends KvProvidedVariables {
-  session: Session
-}
-
-const app = new Hono<{ Variables: Variables }>()
-  .use(
-    '/*',
-    bearerAuth({
-      verifyToken: async (token, c) => {
-        const kv = c.get('kv')
-        const session = await getSessionByToken(kv, token)
-        if (!session.success) {
-          return false
-        }
-        c.set('session', session.data)
-        return true
-      },
-    }),
-  )
+const app = new Hono<{ Variables: SessionVariables }>()
+  .use('/*', sessionToken)
   .get('/register-options', async (c) => {
     const kv = c.get('kv')
     const session = c.get('session')
@@ -165,6 +144,5 @@ const app = new Hono<{ Variables: Variables }>()
     await deleteSession(kv, session.token)
     return c.json({}, 200)
   })
-  .route('/suggestion', suggestionApp)
 
 export default app

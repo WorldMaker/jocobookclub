@@ -1,6 +1,4 @@
 import { Hono } from 'hono'
-import type { KvProvidedVariables } from './kv.ts'
-import type { Session } from './models/session.ts'
 import {
   deleteSuggestion,
   getSuggestion,
@@ -9,12 +7,10 @@ import {
   updateSuggestion,
 } from './models/suggestion.ts'
 import { zValidator } from '@hono/zod-validator'
+import { sessionToken, type SessionVariables } from './session-token.ts'
 
-interface Variables extends KvProvidedVariables {
-  session: Session
-}
-
-const app = new Hono<{ Variables: Variables }>()
+const app = new Hono<{ Variables: SessionVariables }>()
+  .use(sessionToken)
   .get('/:id', async (c) => {
     const kv = c.get('kv')
     const id = c.req.param('id')
