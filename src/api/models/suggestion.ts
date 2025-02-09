@@ -5,9 +5,9 @@ export const Suggestion = z.object({
   id: z.string().ulid(),
   userId: UserId,
   ltid: z.string().optional(),
-  title: z.string(),
-  author: z.string(),
-  whyBlurb: z.string(),
+  title: z.string().nonempty(),
+  author: z.string().nonempty(),
+  whyBlurb: z.string().nonempty(),
   cw: z.string().optional(),
   updated: z.string().datetime({ offset: true }),
 })

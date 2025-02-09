@@ -941,12 +941,14 @@
         "dependencies": [
           "jsr:@luca/esbuild-deno-loader@~0.11.1",
           "jsr:@std/assert@1",
+          "jsr:@std/ulid@1",
           "jsr:@worldmaker/butterfloat@^1.5.2",
           "npm:@simplewebauthn/browser@^13.1.0",
           "npm:esbuild@~0.24.2",
           "npm:hono@^4.6.16",
           "npm:jsdom@26",
-          "npm:rxjs@^7.8.1"
+          "npm:rxjs@^7.8.1",
+          "npm:zod@^3.24.1"
         ]
       }
     }
