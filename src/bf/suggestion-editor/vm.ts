@@ -144,6 +144,7 @@ export class SuggestionEditorVm {
 
   edit(suggestion: Suggestion) {
     this.#savedSuggestion = structuredClone(suggestion)
+    localStorage.setItem(`saved/suggestion/${suggestion.id}`, JSON.stringify(suggestion))
     this.#updateSuggestion(suggestion)
   }
 
@@ -162,6 +163,7 @@ export class SuggestionEditorVm {
     })
     if (result.ok) {
       this.#savedSuggestion = structuredClone(suggestion)
+      localStorage.setItem(`saved/suggestion/${suggestion.id}`, JSON.stringify(suggestion))
     }
   }
 
