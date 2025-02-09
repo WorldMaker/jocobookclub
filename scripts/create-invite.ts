@@ -6,23 +6,25 @@ import { updateInvite } from '../src/api/models/invite.ts'
 // You will need to configure environment variables DENO_KV_ACCESS_TOKEN
 // and CLUB_KV_URL
 
-const hasKvAccess = Deno.env.has("DENO_KV_ACCESS_TOKEN")
-const clubUrl = Deno.env.get("CLUB_KV_URL")
+const hasKvAccess = Deno.env.has('DENO_KV_ACCESS_TOKEN')
+const clubUrl = Deno.env.get('CLUB_KV_URL')
 
 if (!hasKvAccess || !clubUrl) {
-  console.log("You need to set the DENO_KV_ACCESS_TOKEN and CLUB_KV_URL environment variables")
+  console.log(
+    'You need to set the DENO_KV_ACCESS_TOKEN and CLUB_KV_URL environment variables',
+  )
   Deno.exit(1)
 }
 
 const args = parseArgs(Deno.args, {
   boolean: ['open'],
-  string: ['email']
+  string: ['email'],
 })
 
 const kv = await Deno.openKv(clubUrl)
 
 if (!args.open && !args.email) {
-  console.error("You need to specify a type of invite with --open or --email")
+  console.error('You need to specify a type of invite with --open or --email')
   Deno.exit(1)
 }
 
@@ -32,7 +34,7 @@ let created = false
 if (args.email) {
   const invite = await updateInvite(kv, {
     id,
-    type: "specific-email",
+    type: 'specific-email',
     email: args.email,
   })
   if (invite.ok) {
@@ -51,5 +53,7 @@ if (args.email) {
 }
 
 if (created) {
-  console.log(`Invite: https://worldmaker.net/jocobookclub/invite-register/#${id}`)
+  console.log(
+    `Invite: https://worldmaker.net/jocobookclub/invite-register/#${id}`,
+  )
 }
