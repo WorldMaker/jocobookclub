@@ -193,10 +193,13 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
       ...passkey.value,
       counter: verification.authenticationInfo!.newCounter,
     })
-    const newSession = {
+    const newSession: Session = {
       token: createSessionToken(),
       userId: user.data.id,
       expiresAt: new Date(),
+    }
+    if (passkey.value.admin) {
+      newSession.admin = true
     }
     const session = await updateSession(kv, newSession)
     if (!session) {

@@ -11,6 +11,8 @@ export interface Passkey {
   id: Base64URLString
   publicKey: Uint8Array
   userId: string
+  admin?: boolean
+  nickname?: string
   webauthnUserId: Base64URLString
   counter: number
   deviceType: CredentialDeviceType
