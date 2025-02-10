@@ -210,6 +210,9 @@ const app = new Hono<{ Variables: Variables }>()
     if (!existingPasskey.value) {
       return c.json({}, 404)
     }
+    if (existingPasskey.value.admin) {
+      return c.json({ error: 'Cannot delete admin passkey' }, 403)
+    }
     await kv.delete(['passkey', session.userId, c.req.param('id')])
     return c.body(null, 204)
   })
