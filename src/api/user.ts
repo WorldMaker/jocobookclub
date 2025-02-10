@@ -196,7 +196,10 @@ const app = new Hono<{ Variables: Variables }>()
       admin: session.admin && passkey.admin,
       nickname: passkey.nickname,
     }
-    await updatePasskey(kv, updatedPasskey)
+    const result = await updatePasskey(kv, updatedPasskey)
+    if (!result.ok) {
+      return c.json({}, 500)
+    }
     return c.json(updatedPasskey, 200)
   })
   .delete('/passkey/:id', async (c) => {
