@@ -18,6 +18,10 @@
     "upgrade-session": {
       "description": "Upgrade a session to admin session",
       "command": "deno run -A --env-file --unstable-kv ./scripts/upgrade-session.ts"
+    },
+    "upgrade-user": {
+      "description": "Upgrade a book club user's passkeys to Admin passkeys",
+      "command": "deno run -A --env-file --unstable-kv ./scripts/upgrade-user.ts"
     }
   }
 }

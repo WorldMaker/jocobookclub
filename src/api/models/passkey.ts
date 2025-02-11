@@ -11,11 +11,36 @@ export interface Passkey {
   id: Base64URLString
   publicKey: Uint8Array
   userId: string
+  admin?: boolean
+  nickname?: string
   webauthnUserId: Base64URLString
   counter: number
   deviceType: CredentialDeviceType
   backedUp: boolean
   transports?: AuthenticatorTransportFuture[]
+}
+
+export type PasskeyMeta = Pick<
+  Passkey,
+  | 'id'
+  | 'userId'
+  | 'admin'
+  | 'nickname'
+  | 'backedUp'
+  | 'deviceType'
+  | 'transports'
+>
+
+export function toPasskeyMeta(passkey: Passkey): PasskeyMeta {
+  return {
+    id: passkey.id,
+    userId: passkey.userId,
+    admin: passkey.admin,
+    nickname: passkey.nickname,
+    backedUp: passkey.backedUp,
+    deviceType: passkey.deviceType,
+    transports: passkey.transports,
+  }
 }
 
 export function getPasskeysForUser(kv: Deno.Kv, userId: UserId) {

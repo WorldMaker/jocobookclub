@@ -11,7 +11,9 @@ import {
   getPasskeysForUser,
   getUserRegistrationChallenge,
   type Passkey,
+  type PasskeyMeta,
   storeUserRegistrationChallenge,
+  toPasskeyMeta,
   updatePasskey,
 } from './models/passkey.ts'
 import { origin, rpId, rpName } from './models/rp.ts'
@@ -22,6 +24,12 @@ import { getFinalTally } from './models/tally.ts'
 import { getUserById } from './models/user.ts'
 import { queueVoted } from './models/voting.ts'
 import { sessionToken, type SessionVariables } from './session-token.ts'
+import { z } from 'zod'
+
+const passkeyPatch = z.object({
+  admin: z.boolean().optional(),
+  nickname: z.string().optional(),
+})
 
 const app = new Hono<{ Variables: SessionVariables }>()
   .use('/*', sessionToken)
@@ -143,6 +151,55 @@ const app = new Hono<{ Variables: SessionVariables }>()
     const session = c.get('session')
     await deleteSession(kv, session.token)
     return c.json({}, 200)
+  })
+  .get('/passkey', async (c) => {
+    const kv = c.get('kv')
+    const session = c.get('session')
+    const passkeys: PasskeyMeta[] = []
+    for await (const passkey of getPasskeysForUser(kv, session.userId)) {
+      passkeys.push(toPasskeyMeta(passkey.value))
+    }
+    return c.json(passkeys, 200)
+  })
+  .patch('/passkey/:id', zValidator('json', passkeyPatch), async (c) => {
+    const kv = c.get('kv')
+    const session = c.get('session')
+    const passkey = c.req.valid('json')
+    const existingPasskey = await kv.get<Passkey>([
+      'passkey',
+      session.userId,
+      c.req.param('id'),
+    ])
+    if (!existingPasskey.value) {
+      return c.json({}, 404)
+    }
+    const updatedPasskey = {
+      ...existingPasskey.value,
+      admin: session.admin && passkey.admin,
+      nickname: passkey.nickname,
+    }
+    const result = await updatePasskey(kv, updatedPasskey)
+    if (!result.ok) {
+      return c.json({}, 500)
+    }
+    return c.json(toPasskeyMeta(updatedPasskey), 200)
+  })
+  .delete('/passkey/:id', async (c) => {
+    const kv = c.get('kv')
+    const session = c.get('session')
+    const existingPasskey = await kv.get<Passkey>([
+      'passkey',
+      session.userId,
+      c.req.param('id'),
+    ])
+    if (!existingPasskey.value) {
+      return c.json({}, 404)
+    }
+    if (existingPasskey.value.admin) {
+      return c.json({ error: 'Cannot delete admin passkey' }, 403)
+    }
+    await kv.delete(['passkey', session.userId, c.req.param('id')])
+    return c.body(null, 204)
   })
 
 export default app

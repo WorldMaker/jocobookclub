@@ -1,6 +1,6 @@
 export { Ballot } from './ballot.ts'
 export { Invite } from './invite.ts'
-export type { Passkey } from './passkey.ts'
+export type { Passkey, PasskeyMeta } from './passkey.ts'
 export { Session } from './session.ts'
 export { Suggestion } from './suggestion.ts'
 export { FinalTally, Tally } from './tally.ts'
