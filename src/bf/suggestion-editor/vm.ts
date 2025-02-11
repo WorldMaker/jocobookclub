@@ -112,7 +112,7 @@ export class SuggestionEditorVm {
     }
     const remoteResult = await apiClient.suggestion[':id'].$get({
       param: { id: currentSuggestionId },
-    })
+    }, { headers: { Authorization: `Bearer ${this.#session.token}` } })
     if (!remoteResult.ok) {
       return
     }
@@ -137,14 +137,24 @@ export class SuggestionEditorVm {
       }
 
       this.#savedSuggestion = structuredClone(remoteSuggestion)
-      localStorage.setItem(`saved/suggestion/${currentSuggestionId}`, JSON.stringify(remoteSuggestion))
+      localStorage.setItem(
+        `saved/suggestion/${currentSuggestionId}`,
+        JSON.stringify(remoteSuggestion),
+      )
       return newSuggestion
     })
   }
 
-  edit(suggestion: Suggestion) {
-    this.#savedSuggestion = structuredClone(suggestion)
-    localStorage.setItem(`saved/suggestion/${suggestion.id}`, JSON.stringify(suggestion))
+  edit(suggestion: Suggestion, draft = false) {
+    if (draft) {
+      this.#savedSuggestion = null
+    } else {
+      this.#savedSuggestion = structuredClone(suggestion)
+      localStorage.setItem(
+        `saved/suggestion/${suggestion.id}`,
+        JSON.stringify(suggestion),
+      )
+    }
     this.#updateSuggestion(suggestion)
   }
 
@@ -160,10 +170,13 @@ export class SuggestionEditorVm {
     const result = await apiClient.suggestion[':id'].$put({
       param: { id: suggestion.id },
       json: suggestion,
-    })
+    }, { headers: { Authorization: `Bearer ${this.#session.token}` } })
     if (result.ok) {
       this.#savedSuggestion = structuredClone(suggestion)
-      localStorage.setItem(`saved/suggestion/${suggestion.id}`, JSON.stringify(suggestion))
+      localStorage.setItem(
+        `saved/suggestion/${suggestion.id}`,
+        JSON.stringify(suggestion),
+      )
     }
   }
 
