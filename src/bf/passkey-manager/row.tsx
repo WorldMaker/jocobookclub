@@ -8,16 +8,11 @@ import {
   jsx,
   ObservableEvent,
 } from '@worldmaker/butterfloat'
-import { Passkey, Session } from '@worldmaker/jocobookclub-api/models'
-import { Observable } from 'rxjs'
 import { PasskeyVm } from './vm.ts'
 import { map } from 'rxjs'
 
 export interface RowProps {
-  session: Session
-  passkey: Passkey
-  lastKey: Observable<boolean>
-  lastAdminKey: Observable<boolean>
+  vm: PasskeyVm
 }
 
 export interface RowEvents {
@@ -68,7 +63,6 @@ function Transport({ transport }: { transport: AuthenticatorTransportFuture }) {
 
 interface AdminButtonProps {
   vm: PasskeyVm
-  lastAdminKey: Observable<boolean>
 }
 
 interface AdminButtonEvents {
@@ -76,7 +70,7 @@ interface AdminButtonEvents {
 }
 
 function AdminButton(
-  { vm, lastAdminKey }: AdminButtonProps,
+  { vm }: AdminButtonProps,
   { bindEffect, events }: ComponentContext<AdminButtonEvents>,
 ) {
   if (vm.admin) {
@@ -91,7 +85,7 @@ function AdminButton(
           'is-warning': vm.passkey.pipe(map((passkey) => !passkey.admin)),
         }}
         bind={{
-          disabled: lastAdminKey,
+          disabled: vm.lastAdminKey,
           innerText: vm.passkey.pipe(
             map((passkey) => passkey.admin ? 'Remove Admin' : 'Enable Admin'),
           ),
@@ -104,10 +98,11 @@ function AdminButton(
 }
 
 export function Row(
-  { session, passkey, lastKey, lastAdminKey }: RowProps,
+  { vm }: RowProps,
   { bindImmediateEffect, events }: ComponentContext<RowEvents>,
 ) {
-  const vm = new PasskeyVm(session, passkey, lastKey, lastAdminKey)
+  // most passkey fields are static for now in the lifetime of a VM
+  const passkey = vm.basePasskey
 
   bindImmediateEffect(
     events.nickNameChanged,
@@ -119,7 +114,6 @@ export function Row(
   return (
     <tr>
       <th>{passkey.id}</th>
-      <td>{passkey.userId}</td>
       <td>{passkey.webauthnUserId}</td>
       <td>
         <input
@@ -130,7 +124,7 @@ export function Row(
         />
       </td>
       <td>
-        {session.passkeyId === passkey.id
+        {vm.session.passkeyId === passkey.id
           ? <span class='tag is-primary'>Current Login</span>
           : ''}
         <BackedUp backedUp={passkey.backedUp} />
@@ -140,14 +134,14 @@ export function Row(
         ))}
       </td>
       <td>
-        <AdminButton vm={vm} lastAdminKey={lastAdminKey} />
+        <AdminButton vm={vm} />
         <button
           class='button is-small'
           classBind={{
             'is-danger': vm.deleted,
             'is-warning': vm.deleted.pipe(map((deleted) => !deleted)),
           }}
-          bind={{ disabled: lastKey }}
+          bind={{ disabled: vm.lastKey }}
           events={{ click: events.delete }}
         >
           Delete

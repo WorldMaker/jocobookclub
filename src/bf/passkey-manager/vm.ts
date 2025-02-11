@@ -1,12 +1,19 @@
 import { Passkey, Session } from '@worldmaker/jocobookclub-api/models'
 import { butterfly, StateSetter } from '@worldmaker/butterfloat'
-import { firstValueFrom, map, Observable, shareReplay } from 'rxjs'
+import { combineLatest, firstValueFrom, map, Observable, shareReplay } from 'rxjs'
 import { apiClient } from '../client.ts'
 
 export class PasskeyVm {
   readonly #session: Session
+  get session() {
+    return this.#session
+  }
   get admin() {
     return this.#session.admin
+  }
+  readonly #basePasskey: Passkey
+  get basePasskey() {
+    return this.#basePasskey
   }
   readonly #passkey: Observable<Passkey>
   get passkey() {
@@ -24,7 +31,13 @@ export class PasskeyVm {
     return this.#deleted
   }
   readonly #lastAdminKey: Observable<boolean>
+  get lastAdminKey() {
+    return this.#lastAdminKey
+  }
   readonly #lastKey: Observable<boolean>
+  get lastKey() {
+    return this.#lastKey
+  }
 
   constructor(
     session: Session,
@@ -33,11 +46,11 @@ export class PasskeyVm {
     lastAdminKey: Observable<boolean>,
   ) {
     this.#session = session
+    this.#basePasskey = structuredClone(passkey)
     ;[this.#passkey, this.#setPasskey] = butterfly(structuredClone(passkey))
     this.#savedPasskey = structuredClone(passkey)
     ;[this.#deleted, this.#setDeleted] = butterfly(false)
     this.#lastKey = lastKey
-    this.#lastAdminKey = lastAdminKey
 
     this.#unsaved = this.passkey.pipe(
       map((passkey) =>
@@ -46,6 +59,7 @@ export class PasskeyVm {
       ),
       shareReplay(1),
     )
+    this.#lastAdminKey = combineLatest([lastAdminKey, this.passkey]).pipe(map(([lastAdminKey, passkey]) => Boolean(lastAdminKey && passkey.admin)))
   }
 
   async save() {
@@ -53,7 +67,7 @@ export class PasskeyVm {
     const result = await apiClient.user.passkey[':id'].$patch({
       param: { id: passkey.id },
       json: { admin: this.admin && passkey.admin, nickname: passkey.nickname },
-    })
+    }, { headers: { 'Authorization': `Bearer ${this.#session.token}` } })
     if (result.ok) {
       const saved = await result.json() as Passkey
       this.#savedPasskey = saved
@@ -84,5 +98,37 @@ export class PasskeyVm {
 
   updateNickname(nickname: string) {
     this.#setPasskey((passkey) => ({ ...passkey, nickname }))
+  }
+}
+
+export class PasskeysVm {
+  readonly #session: Session
+  readonly #passkeys: Observable<PasskeyVm[]>
+  get passkeys() {
+    return this.#passkeys
+  }
+  readonly #setPasskeys: (passkeys: StateSetter<PasskeyVm[]>) => void
+  readonly #lastKey: Observable<boolean>
+  readonly #lastAdminKey: Observable<boolean>
+
+  constructor(session: Session) {
+    this.#session = session
+    ;[this.#passkeys, this.#setPasskeys] = butterfly<PasskeyVm[]>([])
+    this.#lastKey = this.#passkeys.pipe(map((passkeys) => passkeys.length === 1), shareReplay(1))
+    this.#lastAdminKey = this.#passkeys.pipe(
+      map((passkeys) => passkeys.filter((passkey) => passkey.admin).length === 1),
+      shareReplay(1),
+    )
+    this.load()
+  }
+
+  async load() {
+    const result = await apiClient.user.passkey.$get({}, { headers: { 'Authorization': `Bearer ${this.#session.token}` } })
+    if (!result.ok) {
+      return
+    }
+
+    const passkeys = await result.json() as Passkey[]
+    this.#setPasskeys(() => passkeys.map((passkey) => new PasskeyVm(this.#session, passkey, this.#lastKey, this.#lastAdminKey)))
   }
 }
