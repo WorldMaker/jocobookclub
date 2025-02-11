@@ -1,6 +1,6 @@
-import { PasskeyMeta, Session } from '@worldmaker/jocobookclub-api/models'
 import { butterfly, StateSetter } from '@worldmaker/butterfloat'
-import { combineLatest, firstValueFrom, map, Observable, shareReplay } from 'rxjs'
+import { PasskeyMeta, Session } from '@worldmaker/jocobookclub-api/models'
+import { combineLatest, concatMap, count, firstValueFrom, from, map, Observable, shareReplay, switchMap } from 'rxjs'
 import { apiClient } from '../client.ts'
 
 export class PasskeyVm {
@@ -70,7 +70,8 @@ export class PasskeyVm {
     }, { headers: { 'Authorization': `Bearer ${this.#session.token}` } })
     if (result.ok) {
       const saved = await result.json()
-      this.#savedPasskey = saved
+      this.#savedPasskey = structuredClone(saved)
+      this.#setPasskey(structuredClone(saved))
     }
   }
 
@@ -114,9 +115,12 @@ export class PasskeysVm {
   constructor(session: Session) {
     this.#session = session
     ;[this.#passkeys, this.#setPasskeys] = butterfly<PasskeyVm[]>([])
-    this.#lastKey = this.#passkeys.pipe(map((passkeys) => passkeys.length === 1), shareReplay(1))
+    this.#lastKey = this.#passkeys.pipe(switchMap(passkeys => from(passkeys)), concatMap(passkey => firstValueFrom(passkey.deleted)), count(deleted => !deleted), map((keys) => keys <= 1), shareReplay(1))
     this.#lastAdminKey = this.#passkeys.pipe(
-      map((passkeys) => passkeys.filter((passkey) => passkey.admin).length === 1),
+      switchMap((passkeys) => from(passkeys)),
+      concatMap(passkey => firstValueFrom(passkey.passkey)),
+      count((passkey) => Boolean(passkey.admin)),
+      map((keys) => keys <= 1),
       shareReplay(1),
     )
     this.load()
