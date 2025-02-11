@@ -9,7 +9,9 @@ import {
   ObservableEvent,
 } from '@worldmaker/butterfloat'
 import { PasskeyVm } from './vm.ts'
-import { map } from 'rxjs'
+import { map, NEVER } from 'rxjs'
+import { takeUntil } from 'rxjs'
+import { filter } from 'rxjs'
 
 export interface KeyProps {
   vm: PasskeyVm
@@ -108,7 +110,8 @@ export function Key(
     events.nickNameChanged,
     (event) => vm.updateNickname((event.target as HTMLInputElement).value),
   )
-  bindImmediateEffect(events.delete, (_) => vm.delete())
+  // the takeUntil here is a simple dumb way to remove this entire component from display via completion
+  bindImmediateEffect(events.delete.pipe(takeUntil(vm.deleted.pipe(filter(deleted => deleted)))), (_) => vm.delete())
   bindImmediateEffect(events.save, (_) => vm.save())
 
   return (
