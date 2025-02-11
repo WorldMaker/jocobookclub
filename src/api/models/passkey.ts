@@ -20,6 +20,20 @@ export interface Passkey {
   transports?: AuthenticatorTransportFuture[]
 }
 
+export type PasskeyMeta = Pick<Passkey, 'id' | 'userId' | 'admin' | 'nickname' | 'backedUp' | 'deviceType' | 'transports'>
+
+export function toPasskeyMeta(passkey: Passkey): PasskeyMeta {
+  return {
+    id: passkey.id,
+    userId: passkey.userId,
+    admin: passkey.admin,
+    nickname: passkey.nickname,
+    backedUp: passkey.backedUp,
+    deviceType: passkey.deviceType,
+    transports: passkey.transports,
+  }
+}
+
 export function getPasskeysForUser(kv: Deno.Kv, userId: UserId) {
   return kv.list<Passkey>({ prefix: ['passkey', userId] })
 }

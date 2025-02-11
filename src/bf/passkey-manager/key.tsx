@@ -11,11 +11,11 @@ import {
 import { PasskeyVm } from './vm.ts'
 import { map } from 'rxjs'
 
-export interface RowProps {
+export interface KeyProps {
   vm: PasskeyVm
 }
 
-export interface RowEvents {
+export interface KeyEvents {
   nickNameChanged: ObservableEvent<InputEvent>
   delete: ObservableEvent<MouseEvent>
   save: ObservableEvent<MouseEvent>
@@ -97,9 +97,9 @@ function AdminButton(
   return <></>
 }
 
-export function Row(
-  { vm }: RowProps,
-  { bindImmediateEffect, events }: ComponentContext<RowEvents>,
+export function Key(
+  { vm }: KeyProps,
+  { bindImmediateEffect, events }: ComponentContext<KeyEvents>,
 ) {
   // most passkey fields are static for now in the lifetime of a VM
   const passkey = vm.basePasskey
@@ -112,30 +112,45 @@ export function Row(
   bindImmediateEffect(events.save, (_) => vm.save())
 
   return (
-    <tr>
-      <th>{passkey.id}</th>
-      <td>{passkey.webauthnUserId}</td>
-      <td>
-        <input
-          class='input'
-          type='text'
-          value={passkey.nickname ?? ''}
-          events={{ change: events.nickNameChanged }}
-        />
-      </td>
-      <td>
-        {vm.session.passkeyId === passkey.id
-          ? <span class='tag is-primary'>Current Login</span>
-          : ''}
-        <BackedUp backedUp={passkey.backedUp} />
-        <DeviceType deviceType={passkey.deviceType} />
-        {passkey.transports?.map((transport) => (
-          <Transport transport={transport} />
-        ))}
-      </td>
-      <td>
+    <div class='media'>
+      <div class='media-left'>
+        <span class='icon is-large has-text-link'>
+          <i class='fa-duotone fa-solid fa-key'></i>
+        </span>
+      </div>
+      <div class='media-content'>
+      <div><strong>{passkey.id}</strong></div>
+      <span class='tags'>
+          {vm.session.passkeyId === passkey.id
+            ? <span class='tag is-primary'>Current Login</span>
+            : ''}
+          <BackedUp backedUp={passkey.backedUp} />
+          <DeviceType deviceType={passkey.deviceType} />
+          {passkey.transports?.map((transport) => (
+            <Transport transport={transport} />
+          ))}
+        </span>
+      <label class='label'>Nickname/Comments</label>
+      <input
+        class='input'
+        type='text'
+        value={passkey.nickname ?? ''}
+        events={{ change: events.nickNameChanged }}
+      />
+      <div class='level'>
         <AdminButton vm={vm} />
         <button
+          class='button is-small'
+          classBind={{ 'is-primary': vm.unsaved }}
+          bind={{ disabled: vm.unsaved.pipe(map((unsaved) => !unsaved)) }}
+          events={{ click: events.save }}
+        >
+          Save
+        </button>
+      </div>
+    </div>
+    <div class='media-right'>
+      <button
           class='button is-small'
           classBind={{
             'is-danger': vm.deleted,
@@ -146,15 +161,7 @@ export function Row(
         >
           Delete
         </button>
-        <button
-          class='button is-small'
-          classBind={{ 'is-primary': vm.unsaved }}
-          bind={{ disabled: vm.unsaved.pipe(map((unsaved) => !unsaved)) }}
-          events={{ click: events.save }}
-        >
-          Save
-        </button>
-      </td>
-    </tr>
+    </div>
+  </div>
   )
 }

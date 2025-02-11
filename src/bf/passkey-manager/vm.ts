@@ -1,4 +1,4 @@
-import { Passkey, Session } from '@worldmaker/jocobookclub-api/models'
+import { PasskeyMeta, Session } from '@worldmaker/jocobookclub-api/models'
 import { butterfly, StateSetter } from '@worldmaker/butterfloat'
 import { combineLatest, firstValueFrom, map, Observable, shareReplay } from 'rxjs'
 import { apiClient } from '../client.ts'
@@ -11,16 +11,16 @@ export class PasskeyVm {
   get admin() {
     return this.#session.admin
   }
-  readonly #basePasskey: Passkey
+  readonly #basePasskey: PasskeyMeta
   get basePasskey() {
     return this.#basePasskey
   }
-  readonly #passkey: Observable<Passkey>
+  readonly #passkey: Observable<PasskeyMeta>
   get passkey() {
     return this.#passkey
   }
-  readonly #setPasskey: (passkey: StateSetter<Passkey>) => void
-  #savedPasskey: Passkey
+  readonly #setPasskey: (passkey: StateSetter<PasskeyMeta>) => void
+  #savedPasskey: PasskeyMeta
   readonly #unsaved: Observable<boolean>
   get unsaved() {
     return this.#unsaved
@@ -41,7 +41,7 @@ export class PasskeyVm {
 
   constructor(
     session: Session,
-    passkey: Passkey,
+    passkey: PasskeyMeta,
     lastKey: Observable<boolean>,
     lastAdminKey: Observable<boolean>,
   ) {
@@ -69,7 +69,7 @@ export class PasskeyVm {
       json: { admin: this.admin && passkey.admin, nickname: passkey.nickname },
     }, { headers: { 'Authorization': `Bearer ${this.#session.token}` } })
     if (result.ok) {
-      const saved = await result.json() as Passkey
+      const saved = await result.json()
       this.#savedPasskey = saved
     }
   }
@@ -128,7 +128,7 @@ export class PasskeysVm {
       return
     }
 
-    const passkeys = await result.json() as Passkey[]
+    const passkeys = await result.json()
     this.#setPasskeys(() => passkeys.map((passkey) => new PasskeyVm(this.#session, passkey, this.#lastKey, this.#lastAdminKey)))
   }
 }

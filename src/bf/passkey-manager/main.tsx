@@ -1,12 +1,12 @@
 import { Fragment, jsx, runStamps, StampCollection } from '@worldmaker/butterfloat'
-import { Table } from './table.tsx'
+import { List } from './list.tsx'
 import { Login } from '../logout-button/login.tsx'
 import sessionManager from '../vm/session-manager.ts'
 import { map, type Subscription } from 'rxjs'
 
 function PasskeyManager() {
   const children = sessionManager.session.pipe(
-    map((session) => session ? () => <Table session={session} /> : Login),
+    map((session) => session ? () => <List session={session} /> : Login),
   )
 
   return <Fragment childrenBind={children} childrenBindMode='replace' />
