@@ -1,4 +1,9 @@
-import { Fragment, jsx, runStamps, StampCollection } from '@worldmaker/butterfloat'
+import {
+  Fragment,
+  jsx,
+  runStamps,
+  StampCollection,
+} from '@worldmaker/butterfloat'
 import { List } from './list.tsx'
 import { Login } from '../logout-button/login.tsx'
 import sessionManager from '../vm/session-manager.ts'

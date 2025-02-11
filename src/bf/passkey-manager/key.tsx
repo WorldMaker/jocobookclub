@@ -111,7 +111,12 @@ export function Key(
     (event) => vm.updateNickname((event.target as HTMLInputElement).value),
   )
   // the takeUntil here is a simple dumb way to remove this entire component from display via completion
-  bindImmediateEffect(events.delete.pipe(takeUntil(vm.deleted.pipe(filter(deleted => deleted)))), (_) => vm.delete())
+  bindImmediateEffect(
+    events.delete.pipe(
+      takeUntil(vm.deleted.pipe(filter((deleted) => deleted))),
+    ),
+    (_) => vm.delete(),
+  )
   bindImmediateEffect(events.save, (_) => vm.save())
 
   return (
@@ -122,8 +127,10 @@ export function Key(
         </span>
       </div>
       <div class='media-content'>
-      <div><strong>{passkey.id}</strong></div>
-      <span class='tags'>
+        <div>
+          <strong>{passkey.id}</strong>
+        </div>
+        <span class='tags'>
           {vm.session.passkeyId === passkey.id
             ? <span class='tag is-primary'>Current Login</span>
             : ''}
@@ -133,27 +140,27 @@ export function Key(
             <Transport transport={transport} />
           ))}
         </span>
-      <label class='label'>Nickname/Comments</label>
-      <input
-        class='block input'
-        type='text'
-        value={passkey.nickname ?? ''}
-        events={{ change: events.nickNameChanged }}
-      />
-      <div class='buttons'>
-        <AdminButton vm={vm} />
-        <button
-          class='button is-small'
-          classBind={{ 'is-primary': vm.unsaved }}
-          bind={{ disabled: vm.unsaved.pipe(map((unsaved) => !unsaved)) }}
-          events={{ click: events.save }}
-        >
-          Save
-        </button>
+        <label class='label'>Nickname/Comments</label>
+        <input
+          class='block input'
+          type='text'
+          value={passkey.nickname ?? ''}
+          events={{ change: events.nickNameChanged }}
+        />
+        <div class='buttons'>
+          <AdminButton vm={vm} />
+          <button
+            class='button is-small'
+            classBind={{ 'is-primary': vm.unsaved }}
+            bind={{ disabled: vm.unsaved.pipe(map((unsaved) => !unsaved)) }}
+            events={{ click: events.save }}
+          >
+            Save
+          </button>
+        </div>
       </div>
-    </div>
-    <div class='media-right'>
-      <button
+      <div class='media-right'>
+        <button
           class='button is-small'
           classBind={{
             'is-danger': vm.deleted,
@@ -164,7 +171,7 @@ export function Key(
         >
           Delete
         </button>
+      </div>
     </div>
-  </div>
   )
 }

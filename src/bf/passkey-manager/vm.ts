@@ -1,6 +1,16 @@
 import { butterfly, StateSetter } from '@worldmaker/butterfloat'
 import { PasskeyMeta, Session } from '@worldmaker/jocobookclub-api/models'
-import { combineLatest, concatMap, count, firstValueFrom, from, map, Observable, shareReplay, switchMap } from 'rxjs'
+import {
+  combineLatest,
+  concatMap,
+  count,
+  firstValueFrom,
+  from,
+  map,
+  Observable,
+  shareReplay,
+  switchMap,
+} from 'rxjs'
 import { apiClient } from '../client.ts'
 
 export class PasskeyVm {
@@ -59,7 +69,9 @@ export class PasskeyVm {
       ),
       shareReplay(1),
     )
-    this.#lastAdminKey = combineLatest([lastAdminKey, this.passkey]).pipe(map(([lastAdminKey, passkey]) => Boolean(lastAdminKey && passkey.admin)))
+    this.#lastAdminKey = combineLatest([lastAdminKey, this.passkey]).pipe(
+      map(([lastAdminKey, passkey]) => Boolean(lastAdminKey && passkey.admin)),
+    )
   }
 
   async save() {
@@ -115,10 +127,16 @@ export class PasskeysVm {
   constructor(session: Session) {
     this.#session = session
     ;[this.#passkeys, this.#setPasskeys] = butterfly<PasskeyVm[]>([])
-    this.#lastKey = this.#passkeys.pipe(switchMap(passkeys => from(passkeys)), concatMap(passkey => firstValueFrom(passkey.deleted)), count(deleted => !deleted), map((keys) => keys <= 1), shareReplay(1))
+    this.#lastKey = this.#passkeys.pipe(
+      switchMap((passkeys) => from(passkeys)),
+      concatMap((passkey) => firstValueFrom(passkey.deleted)),
+      count((deleted) => !deleted),
+      map((keys) => keys <= 1),
+      shareReplay(1),
+    )
     this.#lastAdminKey = this.#passkeys.pipe(
       switchMap((passkeys) => from(passkeys)),
-      concatMap(passkey => firstValueFrom(passkey.passkey)),
+      concatMap((passkey) => firstValueFrom(passkey.passkey)),
       count((passkey) => Boolean(passkey.admin)),
       map((keys) => keys <= 1),
       shareReplay(1),
@@ -127,12 +145,18 @@ export class PasskeysVm {
   }
 
   async load() {
-    const result = await apiClient.user.passkey.$get({}, { headers: { 'Authorization': `Bearer ${this.#session.token}` } })
+    const result = await apiClient.user.passkey.$get({}, {
+      headers: { 'Authorization': `Bearer ${this.#session.token}` },
+    })
     if (!result.ok) {
       return
     }
 
     const passkeys = await result.json()
-    this.#setPasskeys(() => passkeys.map((passkey) => new PasskeyVm(this.#session, passkey, this.#lastKey, this.#lastAdminKey)))
+    this.#setPasskeys(() =>
+      passkeys.map((passkey) =>
+        new PasskeyVm(this.#session, passkey, this.#lastKey, this.#lastAdminKey)
+      )
+    )
   }
 }

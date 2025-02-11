@@ -13,6 +13,12 @@ export interface ListProps {
 export function List({ session }: ListProps) {
   const vm = new PasskeysVm(session)
   return (
-    <div childrenBind={vm.passkeys.pipe(filter(keys => keys.length > 0), switchMap(keys => from(keys)), map((passkey) => () => <Key vm={passkey} />))} />
+    <div
+      childrenBind={vm.passkeys.pipe(
+        filter((keys) => keys.length > 0),
+        switchMap((keys) => from(keys)),
+        map((passkey) => () => <Key vm={passkey} />),
+      )}
+    />
   )
 }
