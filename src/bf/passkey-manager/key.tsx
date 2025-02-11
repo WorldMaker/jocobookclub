@@ -135,12 +135,12 @@ export function Key(
         </span>
       <label class='label'>Nickname/Comments</label>
       <input
-        class='input'
+        class='block input'
         type='text'
         value={passkey.nickname ?? ''}
         events={{ change: events.nickNameChanged }}
       />
-      <div class='level'>
+      <div class='buttons'>
         <AdminButton vm={vm} />
         <button
           class='button is-small'
