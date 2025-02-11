@@ -161,11 +161,7 @@ export function Key(
       </div>
       <div class='media-right'>
         <button
-          class='button is-small'
-          classBind={{
-            'is-danger': vm.deleted,
-            'is-warning': vm.deleted.pipe(map((deleted) => !deleted)),
-          }}
+          class='button is-small is-danger'
           bind={{ disabled: vm.lastKey }}
           events={{ click: events.delete }}
         >
