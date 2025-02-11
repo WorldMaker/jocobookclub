@@ -25,10 +25,16 @@ import { zValidator } from '@hono/zod-validator'
 import { queueVoted } from './models/voting.ts'
 import { getFinalTally } from './models/tally.ts'
 import type { KvProvidedVariables } from './kv.ts'
+import { z } from 'zod'
 
 interface Variables extends KvProvidedVariables {
   session: Session
 }
+
+const passkeyPatch = z.object({
+  admin: z.boolean().optional(),
+  nickname: z.string().optional(),
+})
 
 const app = new Hono<{ Variables: Variables }>()
   .use(
@@ -163,6 +169,52 @@ const app = new Hono<{ Variables: Variables }>()
     const session = c.get('session')
     await deleteSession(kv, session.token)
     return c.json({}, 200)
+  })
+  .get('/passkey', async (c) => {
+    const kv = c.get('kv')
+    const session = c.get('session')
+    const passkeys: Passkey[] = []
+    for await (const passkey of getPasskeysForUser(kv, session.userId)) {
+      passkeys.push(passkey.value)
+    }
+    return c.json(passkeys, 200)
+  })
+  .patch('/passkey/:id', zValidator('json', passkeyPatch), async (c) => {
+    const kv = c.get('kv')
+    const session = c.get('session')
+    const passkey = c.req.valid('json')
+    const existingPasskey = await kv.get<Passkey>([
+      'passkey',
+      session.userId,
+      c.req.param('id'),
+    ])
+    if (!existingPasskey.value) {
+      return c.json({}, 404)
+    }
+    const updatedPasskey = {
+      ...existingPasskey.value,
+      admin: session.admin && passkey.admin,
+      nickname: passkey.nickname,
+    }
+    await updatePasskey(kv, updatedPasskey)
+    return c.json(updatedPasskey, 200)
+  })
+  .delete('/passkey/:id', async (c) => {
+    const kv = c.get('kv')
+    const session = c.get('session')
+    const existingPasskey = await kv.get<Passkey>([
+      'passkey',
+      session.userId,
+      c.req.param('id'),
+    ])
+    if (!existingPasskey.value) {
+      return c.json({}, 404)
+    }
+    if (existingPasskey.value.admin) {
+      return c.json({ error: 'Cannot delete admin passkey' }, 403)
+    }
+    await kv.delete(['passkey', session.userId, c.req.param('id')])
+    return c.body(null, 204)
   })
 
 export default app

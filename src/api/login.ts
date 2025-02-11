@@ -79,19 +79,23 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
       }
       let session: Session | undefined
       let userId: string | undefined
+      const { credential, credentialDeviceType, credentialBackedUp } =
+        verification.registrationInfo!
       if (existingUser.success) {
         userId = existingUser.data.id
         const newSession = {
           token: createSessionToken(),
           userId,
+          passkeyId: credential.id,
           expiresAt: new Date(),
         }
         session = await updateSession(kv, newSession)
       } else {
         userId = ulid()
-        const newSession = {
+        const newSession: Session = {
           token: createSessionToken(),
           userId: userId,
+          passkeyId: credential.id,
           expiresAt: new Date(),
         }
         const user: User = {
@@ -105,9 +109,6 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
       if (!session || !userId) {
         return c.json({ error: 'Unable to verify passkey' }, 400)
       }
-      const { credential, credentialDeviceType, credentialBackedUp } =
-        verification
-          .registrationInfo!
       await updatePasskey(kv, {
         userId,
         webauthnUserId: expectedChallenge.value.user.id,
@@ -193,10 +194,14 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
       ...passkey.value,
       counter: verification.authenticationInfo!.newCounter,
     })
-    const newSession = {
+    const newSession: Session = {
       token: createSessionToken(),
       userId: user.data.id,
+      passkeyId: passkey.value.id,
       expiresAt: new Date(),
+    }
+    if (passkey.value.admin) {
+      newSession.admin = true
     }
     const session = await updateSession(kv, newSession)
     if (!session) {

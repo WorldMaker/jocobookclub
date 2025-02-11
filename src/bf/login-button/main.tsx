@@ -15,7 +15,13 @@ interface LoginButtonProps {
 }
 
 function LoginButton({ loginUrl, passkeyUrl }: LoginButtonProps) {
-  const user = <User email={sessionManager.email} url={passkeyUrl} />
+  const user = (
+    <User
+      email={sessionManager.email}
+      session={sessionManager.session}
+      url={passkeyUrl}
+    />
+  )
   const login = <Login url={loginUrl} />
   const children = sessionManager.session.pipe(
     map((session) => {

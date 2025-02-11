@@ -5,6 +5,7 @@ export const Session = z.object({
   token: z.string(),
   userId: UserId,
   admin: z.boolean().optional(),
+  passkeyId: z.string().optional(),
   expiresAt: z.coerce.date(),
 })
 
