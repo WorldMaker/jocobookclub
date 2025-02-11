@@ -35,8 +35,10 @@ if (!userId.success) {
 }
 
 for await (const passkey of getPasskeysForUser(kv, userId.data)) {
-  console.log(await updatePasskey(kv, {
-    ...passkey.value,
-    admin: true,
-  }))
+  console.log(
+    await updatePasskey(kv, {
+      ...passkey.value,
+      admin: true,
+    }),
+  )
 }

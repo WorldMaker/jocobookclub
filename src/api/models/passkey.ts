@@ -20,7 +20,16 @@ export interface Passkey {
   transports?: AuthenticatorTransportFuture[]
 }
 
-export type PasskeyMeta = Pick<Passkey, 'id' | 'userId' | 'admin' | 'nickname' | 'backedUp' | 'deviceType' | 'transports'>
+export type PasskeyMeta = Pick<
+  Passkey,
+  | 'id'
+  | 'userId'
+  | 'admin'
+  | 'nickname'
+  | 'backedUp'
+  | 'deviceType'
+  | 'transports'
+>
 
 export function toPasskeyMeta(passkey: Passkey): PasskeyMeta {
   return {
