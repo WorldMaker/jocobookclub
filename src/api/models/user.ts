@@ -17,9 +17,14 @@ export async function getUserById(kv: Deno.Kv, id: string) {
   return User.safeParse(maybeUser.value)
 }
 
-export async function getUserByEmail(kv: Deno.Kv, email: string) {
+export async function getUserIdByEmail(kv: Deno.Kv, email: string) {
   const maybeUserId = await kv.get(['email', email])
   const userId = UserId.safeParse(maybeUserId.value)
+  return userId
+}
+
+export async function getUserByEmail(kv: Deno.Kv, email: string) {
+  const userId = await getUserIdByEmail(kv, email)
   if (!userId.success) {
     return userId
   }

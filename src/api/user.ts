@@ -10,7 +10,9 @@ import {
   getPasskeysForUser,
   getUserRegistrationChallenge,
   type Passkey,
+  type PasskeyMeta,
   storeUserRegistrationChallenge,
+  toPasskeyMeta,
   updatePasskey,
 } from './models/passkey.ts'
 import { origin, rpId, rpName } from './models/rp.ts'
@@ -173,9 +175,9 @@ const app = new Hono<{ Variables: Variables }>()
   .get('/passkey', async (c) => {
     const kv = c.get('kv')
     const session = c.get('session')
-    const passkeys: Passkey[] = []
+    const passkeys: PasskeyMeta[] = []
     for await (const passkey of getPasskeysForUser(kv, session.userId)) {
-      passkeys.push(passkey.value)
+      passkeys.push(toPasskeyMeta(passkey.value))
     }
     return c.json(passkeys, 200)
   })
@@ -196,8 +198,11 @@ const app = new Hono<{ Variables: Variables }>()
       admin: session.admin && passkey.admin,
       nickname: passkey.nickname,
     }
-    await updatePasskey(kv, updatedPasskey)
-    return c.json(updatedPasskey, 200)
+    const result = await updatePasskey(kv, updatedPasskey)
+    if (!result.ok) {
+      return c.json({}, 500)
+    }
+    return c.json(toPasskeyMeta(updatedPasskey), 200)
   })
   .delete('/passkey/:id', async (c) => {
     const kv = c.get('kv')
