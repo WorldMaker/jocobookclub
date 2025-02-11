@@ -10,7 +10,7 @@ import {
   getPasskeysForUser,
   getUserRegistrationChallenge,
   type Passkey,
-  PasskeyMeta,
+  type PasskeyMeta,
   storeUserRegistrationChallenge,
   toPasskeyMeta,
   updatePasskey,

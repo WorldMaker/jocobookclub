@@ -9,7 +9,7 @@ import {
   ObservableEvent,
 } from '@worldmaker/butterfloat'
 import { PasskeyVm } from './vm.ts'
-import { map, NEVER } from 'rxjs'
+import { map } from 'rxjs'
 import { takeUntil } from 'rxjs'
 import { filter } from 'rxjs'
 
