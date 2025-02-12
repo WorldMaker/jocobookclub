@@ -2,8 +2,7 @@ import { butterfly, StateSetter } from '@worldmaker/butterfloat'
 import { PasskeyMeta, Session } from '@worldmaker/jocobookclub-api/models'
 import {
   combineLatest,
-  concatMap,
-  count,
+  combineLatestAll,
   firstValueFrom,
   from,
   map,
@@ -12,7 +11,6 @@ import {
   switchMap,
 } from 'rxjs'
 import { apiClient } from '../client.ts'
-import { combineLatestAll } from 'rxjs'
 
 export class PasskeyVm {
   readonly #session: Session
