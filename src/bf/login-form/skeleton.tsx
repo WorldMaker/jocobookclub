@@ -17,7 +17,7 @@ export function Skeleton() {
       </div>
       <div class='field'>
         <div class='control'>
-          <button class='button is-primary is-skeleton'>
+          <button type='button' class='button is-primary is-skeleton'>
             <span class='icon'>
               <i class='fa-duotone fa-solid fa-key' />
             </span>

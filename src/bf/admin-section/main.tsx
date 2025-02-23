@@ -36,7 +36,11 @@ function AdminSection(
         eventually get recounted as people vote on the new ballot. However, if
         you need to force a recount here's the button to do it:
       </p>
-      <button class='button is-warning' events={{ click: events.recount }}>
+      <button
+        type='button'
+        class='button is-warning'
+        events={{ click: events.recount }}
+      >
         Recount All Ballots!
       </button>
     </section>
@@ -49,6 +53,7 @@ function AdminSectionLoader() {
       if (session && session.admin) {
         return () => <AdminSection vm={new AdminVm(session)} />
       }
+      // deno-lint-ignore jsx-no-useless-fragment
       return () => <></>
     }),
   )
