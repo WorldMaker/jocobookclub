@@ -25,7 +25,11 @@ export function ActivateButton(
   return (
     <p>
       Back from a break?{' '}
-      <button class='button is-small' events={{ click: events.click }}>
+      <button
+        type='button'
+        class='button is-small'
+        events={{ click: events.click }}
+      >
         <span class='icon'>
           <i className='fa-duotone fa-solid fa-check-to-slot'></i>
         </span>{' '}
@@ -43,7 +47,11 @@ export function DeactivateButton(
   return (
     <p>
       Going on a break?{' '}
-      <button class='button is-small' events={{ click: events.click }}>
+      <button
+        type='button'
+        class='button is-small'
+        events={{ click: events.click }}
+      >
         <span class='icon'>
           <i className='fa-duotone fa-solid fa-xmark-to-slot'></i>
         </span>{' '}
@@ -79,6 +87,7 @@ export function VoteButton(
       </div>
       <div class='block'>
         <button
+          type='button'
           class='button is-fullwidth'
           bind={{ disabled: vm.unsaved.pipe(map((unsaved) => !unsaved)) }}
           classBind={{ 'is-primary': vm.unsaved }}
@@ -102,6 +111,7 @@ export function VoteButton(
 
 function Voter() {
   const children = ballotManager.pipe(
+    // deno-lint-ignore jsx-no-useless-fragment
     map((vm) => vm ? () => <VoteButton vm={vm} /> : () => <></>),
   )
   return (

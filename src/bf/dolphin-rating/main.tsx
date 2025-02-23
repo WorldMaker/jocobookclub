@@ -16,6 +16,7 @@ interface DolphinRatingProps {
 function DolphinRating({ ltid }: DolphinRatingProps) {
   const vm = new DolphinsVm(ltid)
   const children = vm.hasBallot.pipe(
+    // deno-lint-ignore jsx-no-useless-fragment
     map((hasBallot) => hasBallot ? () => <Rater vm={vm} /> : () => <></>),
   )
   return (

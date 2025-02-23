@@ -25,5 +25,9 @@ export function Logout(
     }
   })
 
-  return <button class='button is-warning' events={{ click }}>Logout</button>
+  return (
+    <button type='button' class='button is-warning' events={{ click }}>
+      Logout
+    </button>
+  )
 }
