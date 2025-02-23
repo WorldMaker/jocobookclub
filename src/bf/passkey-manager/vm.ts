@@ -2,8 +2,7 @@ import { butterfly, StateSetter } from '@worldmaker/butterfloat'
 import { PasskeyMeta, Session } from '@worldmaker/jocobookclub-api/models'
 import {
   combineLatest,
-  concatMap,
-  count,
+  combineLatestAll,
   firstValueFrom,
   from,
   map,
@@ -128,16 +127,26 @@ export class PasskeysVm {
     this.#session = session
     ;[this.#passkeys, this.#setPasskeys] = butterfly<PasskeyVm[]>([])
     this.#lastKey = this.#passkeys.pipe(
-      switchMap((passkeys) => from(passkeys)),
-      concatMap((passkey) => firstValueFrom(passkey.deleted)),
-      count((deleted) => !deleted),
+      switchMap((passkeys) =>
+        from(passkeys.map((passkey) => passkey.deleted)).pipe(
+          combineLatestAll(),
+        )
+      ),
+      // count the number that are not deleted
+      map((deleted) => deleted.reduce((acc, d) => acc + (d ? 0 : 1), 0)),
       map((keys) => keys <= 1),
       shareReplay(1),
     )
     this.#lastAdminKey = this.#passkeys.pipe(
-      switchMap((passkeys) => from(passkeys)),
-      concatMap((passkey) => firstValueFrom(passkey.passkey)),
-      count((passkey) => Boolean(passkey.admin)),
+      switchMap((passkeys) =>
+        from(passkeys.map((passkey) => passkey.passkey)).pipe(
+          combineLatestAll(),
+        )
+      ),
+      // count the number that are admin
+      map((passkeys) =>
+        passkeys.reduce((acc, p) => acc + (p.admin ? 1 : 0), 0)
+      ),
       map((keys) => keys <= 1),
       shareReplay(1),
     )

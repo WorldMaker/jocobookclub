@@ -32,6 +32,7 @@ export function SortButton(
   )
   return (
     <button
+      type='button'
       class='button'
       title={`Sort by ${name}`}
       classBind={{ 'is-info': isSorted, 'is-selected': isSorted }}

@@ -79,6 +79,7 @@ function AdminButton(
     bindEffect(events.adminToggled, () => vm.toggleAdmin())
     return (
       <button
+        type='button'
         class='button is-small'
         classBind={{
           'is-danger': vm.passkey.pipe(
@@ -96,6 +97,7 @@ function AdminButton(
       />
     )
   }
+  // deno-lint-ignore jsx-no-useless-fragment
   return <></>
 }
 
@@ -150,6 +152,7 @@ export function Key(
         <div class='buttons'>
           <AdminButton vm={vm} />
           <button
+            type='button'
             class='button is-small'
             classBind={{ 'is-primary': vm.unsaved }}
             bind={{ disabled: vm.unsaved.pipe(map((unsaved) => !unsaved)) }}
@@ -161,6 +164,7 @@ export function Key(
       </div>
       <div class='media-right'>
         <button
+          type='button'
           class='button is-small is-danger'
           bind={{ disabled: vm.lastKey }}
           events={{ click: events.delete }}

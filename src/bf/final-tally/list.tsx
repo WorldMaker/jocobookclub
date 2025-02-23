@@ -1,3 +1,4 @@
+// deno-lint-ignore-file jsx-curly-braces
 import { jsx } from '@worldmaker/butterfloat'
 import { BookInfo, Ranking } from './vm.ts'
 
@@ -17,7 +18,7 @@ function Row({ ltid, books }: RowProps) {
         <a href={book.url}>{book.title}</a>{' '}
         [<a href={`https://www.librarything.com/work/${ltid}`}>LT</a>]
       </span>
-      <span>{' '}by{' '}</span>
+      <span>{' by '}</span>
       <span>{book.author}</span>
     </li>
   )
