@@ -4,6 +4,7 @@ import { Session, Suggestion } from '@worldmaker/jocobookclub-api/models'
 import { firstValueFrom, map, Observable, shareReplay } from 'rxjs'
 import { SafeParseReturnType } from 'zod'
 import { apiClient } from '../client.ts'
+import sessionManager from '../vm/session-manager.ts'
 
 export class SuggestionEditorVm {
   readonly #session: Session
@@ -79,9 +80,11 @@ export class SuggestionEditorVm {
   }
 
   new() {
+    const id = ulid()
+    localStorage.setItem('suggestion-id', id)
     this.#savedSuggestion = null
     this.#updateSuggestion({
-      id: ulid(),
+      id: id,
       userId: this.#session.userId,
       title: '',
       author: '',
@@ -146,6 +149,7 @@ export class SuggestionEditorVm {
   }
 
   edit(suggestion: Suggestion, draft = false) {
+    localStorage.setItem('suggestion-id', suggestion.id)
     if (draft) {
       this.#savedSuggestion = null
     } else {
@@ -172,11 +176,9 @@ export class SuggestionEditorVm {
       json: suggestion,
     }, { headers: { Authorization: `Bearer ${this.#session.token}` } })
     if (result.ok) {
-      this.#savedSuggestion = structuredClone(suggestion)
-      localStorage.setItem(
-        `saved/suggestion/${suggestion.id}`,
-        JSON.stringify(suggestion),
-      )
+      localStorage.removeItem(`suggestion/${suggestion.id}`)
+      localStorage.removeItem(`saved/suggestion/${suggestion.id}`)
+      this.new()
     }
   }
 
@@ -196,3 +198,10 @@ export class SuggestionEditorVm {
     this.#updateSuggestion((s) => ({ ...s, cw }))
   }
 }
+
+const suggestionEditorVm = sessionManager.session.pipe(
+  map((session) => new SuggestionEditorVm(session)),
+  shareReplay(1),
+)
+
+export default suggestionEditorVm
