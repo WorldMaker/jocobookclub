@@ -43,6 +43,9 @@ export class SuggestionEditorVm {
         if (suggestion.author !== this.#savedSuggestion.author) {
           return true
         }
+        if (suggestion.ltid !== this.#savedSuggestion.ltid) {
+          return true
+        }
         if (suggestion.whyBlurb !== this.#savedSuggestion.whyBlurb) {
           return true
         }
@@ -64,12 +67,12 @@ export class SuggestionEditorVm {
 
   #updateSuggestion(suggestion: StateSetter<Suggestion>) {
     this.#setSuggestion((existing) => {
-      if (!existing) {
+      const newSuggestion = typeof suggestion === 'function'
+        ? (existing ? suggestion(existing) : null)
+        : suggestion
+      if (!newSuggestion) {
         return null
       }
-      const newSuggestion = typeof suggestion === 'function'
-        ? suggestion(existing)
-        : suggestion
       localStorage.setItem('suggestion-id', newSuggestion.id)
       localStorage.setItem(
         `suggestion/${newSuggestion.id}`,
@@ -190,6 +193,10 @@ export class SuggestionEditorVm {
     this.#updateSuggestion((s) => ({ ...s, author }))
   }
 
+  ltidChanged(ltid: string) {
+    this.#updateSuggestion((s) => ({ ...s, ltid }))
+  }
+
   whyBlurbChanged(whyBlurb: string) {
     this.#updateSuggestion((s) => ({ ...s, whyBlurb }))
   }
@@ -200,7 +207,7 @@ export class SuggestionEditorVm {
 }
 
 const suggestionEditorVm = sessionManager.session.pipe(
-  map((session) => new SuggestionEditorVm(session)),
+  map((session) => session ? new SuggestionEditorVm(session) : null),
   shareReplay(1),
 )
 

@@ -17,9 +17,7 @@ import {
   updatePasskey,
 } from './models/passkey.ts'
 import { origin, rpId, rpName } from './models/rp.ts'
-import {
-  deleteSession,
-} from './models/session.ts'
+import { deleteSession } from './models/session.ts'
 import { getFinalTally } from './models/tally.ts'
 import { getUserById } from './models/user.ts'
 import { queueVoted } from './models/voting.ts'
