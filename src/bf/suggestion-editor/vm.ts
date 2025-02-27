@@ -1,7 +1,7 @@
 import { ulid } from '@std/ulid'
 import { butterfly, StateSetter } from '@worldmaker/butterfloat'
 import { Session, Suggestion } from '@worldmaker/jocobookclub-api/models'
-import { firstValueFrom, map, Observable, shareReplay } from 'rxjs'
+import { firstValueFrom, map, Observable, shareReplay, Subject } from 'rxjs'
 import { SafeParseReturnType } from 'zod'
 import { apiClient } from '../client.ts'
 import sessionManager from '../vm/session-manager.ts'
@@ -17,6 +17,10 @@ export class SuggestionEditorVm {
   }
   readonly #setSuggestion: (setter: StateSetter<Suggestion | null>) => void
   #savedSuggestion: Suggestion | null = null
+  readonly #suggestionSaved = new Subject<Suggestion | null>()
+  get suggestionSaved() {
+    return this.#suggestionSaved.asObservable()
+  }
   readonly #unsaved: Observable<boolean>
   get unsaved() {
     return this.#unsaved
@@ -182,6 +186,8 @@ export class SuggestionEditorVm {
       json: suggestion,
     }, { headers: { Authorization: `Bearer ${this.#session.token}` } })
     if (result.ok) {
+      const savedSuggestion = await result.json()
+      this.#suggestionSaved.next(savedSuggestion)
       localStorage.removeItem(`suggestion/${suggestion.id}`)
       localStorage.removeItem(`saved/suggestion/${suggestion.id}`)
       this.new()
