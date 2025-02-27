@@ -8,6 +8,9 @@ import sessionManager from '../vm/session-manager.ts'
 
 export class SuggestionEditorVm {
   readonly #session: Session
+  get session() {
+    return this.#session
+  }
   readonly #suggestion: Observable<Suggestion | null>
   get suggestion() {
     return this.#suggestion
