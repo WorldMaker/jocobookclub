@@ -1,7 +1,7 @@
 import { jsx, run } from '@worldmaker/butterfloat'
 import finalTallyVm from './vm.ts'
 import { map, of, Subscription, switchMap } from 'rxjs'
-import { Login } from './login.tsx'
+import { LoginTop5 } from './login.tsx'
 import { Top5List } from './list.tsx'
 
 function FinalTally() {
@@ -17,7 +17,7 @@ function FinalTally() {
               )
           ),
         )
-        : of(Login)
+        : of(LoginTop5)
     ),
   )
   return (
