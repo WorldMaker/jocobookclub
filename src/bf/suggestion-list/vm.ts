@@ -6,7 +6,6 @@ import {
   map,
   Observable,
   shareReplay,
-  Subject,
   switchMap,
 } from 'rxjs'
 import { Suggestion } from '../../api/models/suggestion.ts'
