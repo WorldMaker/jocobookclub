@@ -1,5 +1,5 @@
 import { butterfly, StateSetter } from '@worldmaker/butterfloat'
-import { filter, firstValueFrom, map, Observable, shareReplay } from 'rxjs'
+import { filter, firstValueFrom, map, Observable, shareReplay, Subject } from 'rxjs'
 import { Suggestion } from '../../api/models/suggestion.ts'
 import { apiClient } from '../client.ts'
 import { SuggestionEditorVm } from '../suggestion-editor/vm.ts'
@@ -102,12 +102,77 @@ export class SuggestionVm {
 export class SuggestionListVm {
   readonly #suggestionEditor: SuggestionEditorVm
 
-  readonly #suggestions: Observable<SuggestionVm>
+  readonly #ids = new Set<string>()
+
+  readonly #suggestions = new Subject<SuggestionVm>()
   get suggestions() {
-    return this.#suggestions
+    return this.#suggestions.asObservable()
   }
 
   constructor(suggestionEditor: SuggestionEditorVm) {
     this.#suggestionEditor = suggestionEditor
+
+    this.load()
+  }
+
+  async load() {
+    // drafts
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i)
+      if (!key?.startsWith('suggestion/')) {
+        continue
+      }
+      const suggestion = localStorage.getItem(key)
+      if (!suggestion) {
+        continue
+      }
+      const parsed = Suggestion.safeParse(JSON.parse(suggestion))
+      if (!parsed.success) {
+        continue
+      }
+      if (this.#ids.has(parsed.data.id)) {
+        continue
+      }
+      const suggestionVm = new SuggestionVm(
+        this.#suggestionEditor,
+        parsed.data,
+        true)
+      this.#ids.add(parsed.data.id)
+      this.#suggestions.next(suggestionVm)
+    }
+
+    // api
+    const result = await apiClient.suggestion.$get({}, {
+      headers: {
+        Authorization: `Bearer ${this.#suggestionEditor.session.token}`,
+      },
+    })
+    if (!result.ok) {
+      return
+    }
+    const { suggestions } = await result.json()
+    for (const suggestion of suggestions) {
+      if (this.#ids.has(suggestion.id)) {
+        continue
+      }
+      const suggestionVm = new SuggestionVm(
+        this.#suggestionEditor,
+        suggestion,
+        false)
+      this.#ids.add(suggestion.id)
+      this.#suggestions.next(suggestionVm)
+    }
+  }
+
+  suggestionSaved(suggestion: Suggestion) {
+    if (this.#ids.has(suggestion.id)) {
+      return
+    }
+    const suggestionVm = new SuggestionVm(
+      this.#suggestionEditor,
+      suggestion,
+      false)
+    this.#ids.add(suggestion.id)
+    this.#suggestions.next(suggestionVm)
   }
 }
