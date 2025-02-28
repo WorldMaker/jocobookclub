@@ -16,7 +16,7 @@ export function SuggestionList(
 
   return (
     <div
-      class='grid is-column-min-18'
+      class='grid is-col-min-18'
       childrenBind={children}
       childrenBindMode='append'
     />
