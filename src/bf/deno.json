@@ -7,7 +7,7 @@
     "@simplewebauthn/browser": "npm:@simplewebauthn/browser@^13.1.0",
     "@std/assert": "jsr:@std/assert@1",
     "@std/ulid": "jsr:@std/ulid@^1.0.0",
-    "@worldmaker/butterfloat": "jsr:@worldmaker/butterfloat@^1.5.2",
+    "@worldmaker/butterfloat": "jsr:@worldmaker/butterfloat@^1.5.3",
     "esbuild": "npm:esbuild@^0.24.2",
     "hono": "npm:hono@^4.6.16",
     "jsdom": "npm:jsdom@^26.0.0",

@@ -1,8 +1,19 @@
 import { butterfly, StateSetter } from '@worldmaker/butterfloat'
-import { filter, firstValueFrom, map, Observable, shareReplay, Subject } from 'rxjs'
+import {
+  EMPTY,
+  filter,
+  firstValueFrom,
+  map,
+  Observable,
+  shareReplay,
+  Subject,
+  switchMap,
+} from 'rxjs'
 import { Suggestion } from '../../api/models/suggestion.ts'
 import { apiClient } from '../client.ts'
 import { SuggestionEditorVm } from '../suggestion-editor/vm.ts'
+import { merge } from 'rxjs'
+import { of } from 'rxjs'
 
 function isMySuggestion(
   suggestion: Suggestion | null,
@@ -76,6 +87,16 @@ export class SuggestionVm {
   }
 
   async delete() {
+    const draft = await firstValueFrom(this.draft)
+    if (draft) {
+      const saved = localStorage.getItem(`saved/suggestion/${this.#id}`)
+      // local only draft
+      if (!saved) {
+        localStorage.removeItem(`suggestion/${this.#id}`)
+        this.#setDeleted(true)
+        return
+      }
+    }
     const result = await apiClient.suggestion[':id'].$delete(
       {
         param: {
@@ -89,6 +110,8 @@ export class SuggestionVm {
       },
     )
     if (result.ok) {
+      localStorage.removeItem(`suggestion/${this.#id}`)
+      localStorage.removeItem(`saved/suggestion/${this.#id}`)
       this.#setDeleted(true)
     }
   }
@@ -101,21 +124,40 @@ export class SuggestionVm {
 
 export class SuggestionListVm {
   readonly #suggestionEditor: SuggestionEditorVm
+  get suggestionEditor() {
+    return this.#suggestionEditor
+  }
 
   readonly #ids = new Set<string>()
 
-  readonly #suggestions = new Subject<SuggestionVm>()
+  readonly #suggestions: Observable<SuggestionVm>
   get suggestions() {
-    return this.#suggestions.asObservable()
+    return this.#suggestions
   }
 
   constructor(suggestionEditor: SuggestionEditorVm) {
     this.#suggestionEditor = suggestionEditor
 
-    this.load()
+    this.#suggestions = merge(
+      this.#suggestionEditor.suggestionSaved.pipe(
+        switchMap((suggestion) => this.suggestionSaved(suggestion)),
+      ),
+      new Observable<SuggestionVm>((observer) => {
+        let stop = false
+        ;(async () => {
+          for await (const suggestion of this.load()) {
+            if (stop) {
+              break
+            }
+            observer.next(suggestion)
+          }
+        })()
+        return () => stop = true
+      }),
+    )
   }
 
-  async load() {
+  async *load() {
     // drafts
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i)
@@ -136,9 +178,10 @@ export class SuggestionListVm {
       const suggestionVm = new SuggestionVm(
         this.#suggestionEditor,
         parsed.data,
-        true)
+        true,
+      )
       this.#ids.add(parsed.data.id)
-      this.#suggestions.next(suggestionVm)
+      yield suggestionVm
     }
 
     // api
@@ -158,21 +201,23 @@ export class SuggestionListVm {
       const suggestionVm = new SuggestionVm(
         this.#suggestionEditor,
         suggestion,
-        false)
+        false,
+      )
       this.#ids.add(suggestion.id)
-      this.#suggestions.next(suggestionVm)
+      yield suggestionVm
     }
   }
 
   suggestionSaved(suggestion: Suggestion) {
     if (this.#ids.has(suggestion.id)) {
-      return
+      return EMPTY
     }
     const suggestionVm = new SuggestionVm(
       this.#suggestionEditor,
       suggestion,
-      false)
+      false,
+    )
     this.#ids.add(suggestion.id)
-    this.#suggestions.next(suggestionVm)
+    return of(suggestionVm)
   }
 }

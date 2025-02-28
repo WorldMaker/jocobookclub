@@ -17,7 +17,7 @@ export class SuggestionEditorVm {
   }
   readonly #setSuggestion: (setter: StateSetter<Suggestion | null>) => void
   #savedSuggestion: Suggestion | null = null
-  readonly #suggestionSaved = new Subject<Suggestion | null>()
+  readonly #suggestionSaved = new Subject<Suggestion>()
   get suggestionSaved() {
     return this.#suggestionSaved.asObservable()
   }
