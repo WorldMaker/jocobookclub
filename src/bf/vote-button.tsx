@@ -1,5 +1,6 @@
 import {
   ComponentContext,
+  Empty,
   Fragment,
   jsx,
   ObservableEvent,
@@ -111,8 +112,7 @@ export function VoteButton(
 
 function Voter() {
   const children = ballotManager.pipe(
-    // deno-lint-ignore jsx-no-useless-fragment
-    map((vm) => vm ? () => <VoteButton vm={vm} /> : () => <></>),
+    map((vm) => vm ? () => <VoteButton vm={vm} /> : Empty),
   )
   return (
     <Fragment childrenBind={children} childrenBindMode='replace'></Fragment>
