@@ -1,5 +1,6 @@
 import {
   ComponentContext,
+  Empty,
   Fragment,
   jsx,
   ObservableEvent,
@@ -53,8 +54,7 @@ function AdminSectionLoader() {
       if (session && session.admin) {
         return () => <AdminSection vm={new AdminVm(session)} />
       }
-      // deno-lint-ignore jsx-no-useless-fragment
-      return () => <></>
+      return Empty
     }),
   )
   return (

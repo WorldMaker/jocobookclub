@@ -1,5 +1,6 @@
 import {
   ComponentDescription,
+  Empty,
   Fragment,
   jsx,
   runStamps,
@@ -16,8 +17,7 @@ interface DolphinRatingProps {
 function DolphinRating({ ltid }: DolphinRatingProps) {
   const vm = new DolphinsVm(ltid)
   const children = vm.hasBallot.pipe(
-    // deno-lint-ignore jsx-no-useless-fragment
-    map((hasBallot) => hasBallot ? () => <Rater vm={vm} /> : () => <></>),
+    map((hasBallot) => hasBallot ? () => <Rater vm={vm} /> : Empty),
   )
   return (
     <Fragment childrenBind={children} childrenBindMode='replace'></Fragment>

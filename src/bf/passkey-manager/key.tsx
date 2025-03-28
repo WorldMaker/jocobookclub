@@ -4,7 +4,7 @@ import {
 } from '@simplewebauthn/browser'
 import {
   ComponentContext,
-  Fragment,
+  Empty,
   jsx,
   ObservableEvent,
 } from '@worldmaker/butterfloat'
@@ -97,8 +97,7 @@ function AdminButton(
       />
     )
   }
-  // deno-lint-ignore jsx-no-useless-fragment
-  return <></>
+  return <Empty />
 }
 
 export function Key(
