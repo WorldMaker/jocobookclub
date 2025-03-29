@@ -15,6 +15,10 @@
       "description": "Create a new registration invite",
       "command": "deno run -A --env-file --unstable-kv ./scripts/create-invite.ts"
     },
+    "save-tally": {
+      "description": "Save a tally to disk",
+      "command": "deno run -A --env-file --unstable-kv --unstable-temporal ./scripts/save-tally.ts"
+    },
     "upgrade-session": {
       "description": "Upgrade a session to admin session",
       "command": "deno run -A --env-file --unstable-kv ./scripts/upgrade-session.ts"
