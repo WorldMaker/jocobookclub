@@ -1,3 +1,4 @@
+import { parseArgs } from 'jsr:@std/cli'
 import { getFinalTally } from '../src/api/models/tally.ts'
 
 // Save the final tally to disk
@@ -13,6 +14,10 @@ if (!hasKvAccess || !clubUrl) {
   )
   Deno.exit(1)
 }
+
+const args = parseArgs(Deno.args, {
+  boolean: ['force'],
+})
 
 const kv = await Deno.openKv(clubUrl)
 
@@ -31,6 +36,7 @@ const now = Temporal.Now.zonedDateTimeISO('America/New_York')
 console.info(updated)
 
 if (
+  !args.force &&
   Temporal.ZonedDateTime.compare(updated.startOfDay(), now.startOfDay()) !== 0
 ) {
   console.log('Final tally is not from today')
