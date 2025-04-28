@@ -3,7 +3,7 @@ id: 01JP3WVT7G2J0MC7042G1KH8FP
 userId: 01JMT7410J2ZV5QA3FFNRXZ579
 ltid: "26196827"
 title: Nettle and Bone
-author: T. Kinfisher
+author: T. Kingfisher
 whyBlurb: >-
   2023 Best Novel Hugo.  Excerpt from a libraryThing reviewer who is much more
   eloquent than me.
