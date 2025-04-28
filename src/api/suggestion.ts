@@ -29,10 +29,10 @@ const app = new Hono<{ Variables: SessionVariables }>()
     }
     const existingSuggestion = await getSuggestion(kv, id)
     const session = c.get('session')
-    if (
-      existingSuggestion && existingSuggestion.success &&
-      (existingSuggestion.data.userId !== session.userId || !session.admin)
-    ) {
+    if (!existingSuggestion || !existingSuggestion.success) {
+      return c.json({ error: 'Suggestion not found' }, 404)
+    }
+    if (existingSuggestion.data.userId !== session.userId && !session.admin) {
       return c.json({ error: 'Unauthorized' }, 403)
     }
     const updatedSuggestion = {
@@ -50,7 +50,7 @@ const app = new Hono<{ Variables: SessionVariables }>()
       return c.json({ error: 'Suggestion not found' }, 404)
     }
     const session = c.get('session')
-    if (existingSuggestion.data.userId !== session.userId || !session.admin) {
+    if (existingSuggestion.data.userId !== session.userId && !session.admin) {
       return c.json({ error: 'Unauthorized' }, 403)
     }
     await deleteSuggestion(kv, id)
