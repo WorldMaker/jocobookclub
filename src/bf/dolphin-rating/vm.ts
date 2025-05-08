@@ -23,7 +23,9 @@ export class DolphinsVm {
     return this.#hoverRating
   }
 
-  readonly #bothRatings: Observable<[hoverRating: number, currentRating: number]>
+  readonly #bothRatings: Observable<
+    [hoverRating: number, currentRating: number]
+  >
   get bothRatings() {
     return this.#bothRatings
   }
@@ -46,9 +48,10 @@ export class DolphinsVm {
       shareReplay(1),
     )
     ;[this.#hoverRating, this.#setHoverRating] = butterfly(0)
-    this.#bothRatings = combineLatest([this.#hoverRating, this.#currentRating]).pipe(
-      shareReplay(1),
-    )
+    this.#bothRatings = combineLatest([this.#hoverRating, this.#currentRating])
+      .pipe(
+        shareReplay(1),
+      )
   }
 
   updateHoverRating(rating: number) {

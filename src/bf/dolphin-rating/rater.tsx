@@ -62,9 +62,7 @@ export function Rater(
   bindImmediateEffect(events.leave, (_) => vm.updateHoverRating(0))
   return (
     <div events={{ mouseout: events.leave }}>
-      { [1, 2, 3, 4, 5].map((rank) => (
-        <Dolphin rank={rank} vm={vm} />
-      )) }
+      {[1, 2, 3, 4, 5].map((rank) => <Dolphin rank={rank} vm={vm} />)}
     </div>
   )
 }
