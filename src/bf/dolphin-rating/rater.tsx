@@ -1,6 +1,6 @@
 import { ComponentContext, jsx, ObservableEvent } from '@worldmaker/butterfloat'
 import { DolphinsVm } from './vm.ts'
-import { combineLatest, map, shareReplay } from 'rxjs'
+import { map } from 'rxjs'
 
 interface DolphinProps {
   rank: number
