@@ -2,6 +2,7 @@ import { filter, map, Observable, of, shareReplay, switchMap } from 'rxjs'
 import ballotManager from '../vm/ballot-manager.ts'
 import { butterfly } from '@worldmaker/butterfloat'
 import { firstValueFrom } from 'rxjs'
+import { combineLatest } from 'rxjs'
 
 export class DolphinsVm {
   readonly #ltid: string
@@ -22,6 +23,13 @@ export class DolphinsVm {
     return this.#hoverRating
   }
 
+  readonly #bothRatings: Observable<
+    [hoverRating: number, currentRating: number]
+  >
+  get bothRatings() {
+    return this.#bothRatings
+  }
+
   constructor(ltid: string) {
     this.#ltid = ltid
 
@@ -40,6 +48,10 @@ export class DolphinsVm {
       shareReplay(1),
     )
     ;[this.#hoverRating, this.#setHoverRating] = butterfly(0)
+    this.#bothRatings = combineLatest([this.#hoverRating, this.#currentRating])
+      .pipe(
+        shareReplay(1),
+      )
   }
 
   updateHoverRating(rating: number) {

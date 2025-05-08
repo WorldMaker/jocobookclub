@@ -1,6 +1,6 @@
 import { ComponentContext, jsx, ObservableEvent } from '@worldmaker/butterfloat'
 import { DolphinsVm } from './vm.ts'
-import { combineLatest, map, shareReplay } from 'rxjs'
+import { map } from 'rxjs'
 
 interface DolphinProps {
   rank: number
@@ -18,19 +18,18 @@ export function Dolphin(
 ) {
   bindImmediateEffect(events.hover, (_) => vm.updateHoverRating(rank))
   bindImmediateEffect(events.click, (_) => vm.saveRating(rank))
-  const bothRatings = combineLatest([vm.hoverRating, vm.currentRating]).pipe(
-    shareReplay(1),
-  )
   return (
-    <span
-      class='icon is-large is-clickable'
+    <button
+      type='button'
+      title='Dolphin'
+      class='icon is-large'
       classBind={{
-        'has-text-info': bothRatings.pipe(
+        'has-text-info': vm.bothRatings.pipe(
           map(([rating, current]) =>
             current >= rank && (rating === 0 || rating >= current)
           ),
         ),
-        'has-text-link': bothRatings.pipe(
+        'has-text-link': vm.bothRatings.pipe(
           map(([rating, current]) => rating >= rank && rating !== current),
         ),
       }}
@@ -44,7 +43,7 @@ export function Dolphin(
           ),
         }}
       />
-    </span>
+    </button>
   )
 }
 
@@ -63,11 +62,7 @@ export function Rater(
   bindImmediateEffect(events.leave, (_) => vm.updateHoverRating(0))
   return (
     <div events={{ mouseout: events.leave }}>
-      <Dolphin rank={1} vm={vm} />
-      <Dolphin rank={2} vm={vm} />
-      <Dolphin rank={3} vm={vm} />
-      <Dolphin rank={4} vm={vm} />
-      <Dolphin rank={5} vm={vm} />
+      {[1, 2, 3, 4, 5].map((rank) => <Dolphin rank={rank} vm={vm} />)}
     </div>
   )
 }

@@ -4,6 +4,11 @@
     "singleQuote": true,
     "exclude": ["dist"]
   },
+  "lint": {
+    "rules": {
+      "exclude": ["jsx-key"]
+    }
+  },
   "workspace": ["./src/api", "./src/bf", "./src/site"],
   "compilerOptions": {
     "jsx": "react",
