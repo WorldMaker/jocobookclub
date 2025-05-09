@@ -8,6 +8,7 @@ const site = lume({
 
 site.use(basePath())
 
+site.copy('assets')
 site.copy('bf')
 
 site.addEventListener('beforeBuild', async () => {
