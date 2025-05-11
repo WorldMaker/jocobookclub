@@ -52,7 +52,7 @@ for await (const maybeBallot of kv.list({ prefix: ['ballot'] })) {
     if (bookRank === ranks.max) {
       // console.info(ltid, 'highest rank')
       books.set(ltid, { ...count, high: count.high + 1 })
-    } else if (bookRank === ranks.min) {
+    } else if (bookRank <= ranks.min) {
       // console.info(ltid, 'lowest rank')
       books.set(ltid, { ...count, low: count.low + 1 })
     } else {
