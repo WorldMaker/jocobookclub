@@ -20,7 +20,9 @@ const args = parseArgs(Deno.args, {
   collect: 'ltid',
 })
 
-const books = new Map(args.ltid.map((ltid) => [ltid as string, { high: 0, low: 0 }]))
+const books = new Map(
+  args.ltid.map((ltid) => [ltid as string, { high: 0, low: 0 }]),
+)
 
 if (books.size === 0) {
   console.error('You need to specify a list of LTIDs')
@@ -37,8 +39,14 @@ for await (const maybeBallot of kv.list({ prefix: ['ballot'] })) {
   }
 
   const ranks = Object.values(ballot.data.books)
-    .reduce((acc, cur) => ({ min: Math.min(acc.min, cur), max: Math.max(acc.max, cur )}), { min: 5, max: 1 })
-  
+    .reduce(
+      (acc, cur) => ({
+        min: Math.min(acc.min, cur),
+        max: Math.max(acc.max, cur),
+      }),
+      { min: 5, max: 1 },
+    )
+
   for (const [ltid, count] of books) {
     const bookRank = ballot.data.books[ltid] ?? 1
     if (bookRank === ranks.max) {
