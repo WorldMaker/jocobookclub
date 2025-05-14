@@ -2,6 +2,7 @@
 title: The Princess Bride
 author: William Goldman
 ltid: "4936"
+scheduled: true
 ---
 
 Blurb from a JoCoNaut:
