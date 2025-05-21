@@ -1,7 +1,7 @@
 import { zValidator } from '@hono/zod-validator'
 import { generateRegistrationOptions } from '@simplewebauthn/server'
 import { Hono } from 'hono'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { getInviteById } from './models/invite.ts'
 import {
   getPasskeysForUser,

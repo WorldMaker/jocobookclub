@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { UserId } from './user.ts'
 
 export const Suggestion = z.object({
