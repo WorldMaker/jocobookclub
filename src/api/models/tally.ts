@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { Ballot } from './ballot.ts'
 import type { UserId } from './user.ts'
 import { reverseUlid } from '../util/reverse.ts'
