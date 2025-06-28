@@ -1,5 +1,5 @@
 import {
-butterfly,
+  butterfly,
   ComponentDescription,
   Fragment,
   jsx,
