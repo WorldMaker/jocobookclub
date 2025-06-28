@@ -23,6 +23,7 @@ function LoginButton({ loginUrl, passkeyUrl, active }: LoginButtonProps) {
       email={sessionManager.email}
       session={sessionManager.session}
       url={passkeyUrl}
+      active={active}
     />
   )
   const login = <Login url={loginUrl} active={active} />
