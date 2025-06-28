@@ -16,7 +16,7 @@ export default function User({ email, session, url, active }: UserProps) {
     <a
       class='navbar-item icon-text'
       href={url ?? '/passkey'}
-      classBind={{ 
+      classBind={{
         'has-text-info': active,
         'has-background-dark': active,
       }}
