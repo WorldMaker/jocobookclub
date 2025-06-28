@@ -12,9 +12,10 @@ import User from './user.tsx'
 interface LoginButtonProps {
   loginUrl: string | null
   passkeyUrl: string | null
+  active: boolean
 }
 
-function LoginButton({ loginUrl, passkeyUrl }: LoginButtonProps) {
+function LoginButton({ loginUrl, passkeyUrl, active }: LoginButtonProps) {
   const user = (
     <User
       email={sessionManager.email}
@@ -22,7 +23,7 @@ function LoginButton({ loginUrl, passkeyUrl }: LoginButtonProps) {
       url={passkeyUrl}
     />
   )
-  const login = <Login url={loginUrl} />
+  const login = <Login url={loginUrl} active={active} />
   const children = sessionManager.session.pipe(
     map((session) => {
       if (session) {
@@ -43,12 +44,14 @@ class LoginButtonComponent extends HTMLElement {
     this.innerHTML = ''
     const loginUrl = this.getAttribute('login')
     const passkeyUrl = this.getAttribute('passkey')
+    const active = this.getAttribute('active') === 'true' ? true : false
     this.#subscription = run(
       this,
       (
         <LoginButton
           loginUrl={loginUrl}
           passkeyUrl={passkeyUrl}
+          active={active}
         />
       ) as ComponentDescription,
     )
