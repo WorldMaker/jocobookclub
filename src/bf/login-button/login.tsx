@@ -1,17 +1,20 @@
 import { jsx } from '@worldmaker/butterfloat'
+import type { Observable } from 'rxjs'
 
 interface LoginProps {
   url: string | null
-  active: boolean
+  active: Observable<boolean>
 }
 
 export default function Login({ url, active }: LoginProps) {
   return (
     <a
-      class={active
-        ? 'navbar-item icon-text has-background-dark has-text-info'
-        : 'navbar-item icon-text'}
+      class='navbar-item icon-text'
       href={url ?? '/login'}
+      classBind={{
+        'has-text-info': active,
+        'has-background-dark': active,
+      }}
     >
       <span class='icon'>
         <i class='fa-duotone fa-solid fa-ferry' />
