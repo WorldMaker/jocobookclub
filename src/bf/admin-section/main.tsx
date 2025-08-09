@@ -7,7 +7,7 @@ import {
   run,
 } from '@worldmaker/butterfloat'
 import { Invite } from '@worldmaker/jocobookclub-api/models'
-import { map, Subscription } from 'rxjs'
+import { map, Subscription, takeUntil } from 'rxjs'
 import sessionManager from '../vm/session-manager.ts'
 import { AdminVm } from './vm.ts'
 
@@ -22,13 +22,32 @@ interface AdminEvents {
   recount: ObservableEvent<MouseEvent>
 }
 
-function InviteView({ invite }: { invite: Invite }) {
+interface InviteViewProps {
+  invite: Invite
+}
+
+interface InviteEvents {
+  close: ObservableEvent<MouseEvent>
+}
+
+function InviteView(
+  { invite }: InviteViewProps,
+  { bindEffect, events }: ComponentContext<InviteEvents>,
+) {
   const inviteUrl =
     `https://worldmaker.net/jocobookclub/invite-register/#${invite.id}`
 
+  bindEffect(events.close.pipe(takeUntil(events.close)), () => {})
+
   if (invite.type === 'specific-email') {
     return (
-      <p class='block'>
+      <div class='block notification is-primary'>
+        <button
+          type='button'
+          class='delete'
+          title='Close'
+          events={{ click: events.close }}
+        />
         Created invite link:{' '}
         <a href={inviteUrl}>
           <code>{inviteUrl}</code>
@@ -37,18 +56,24 @@ function InviteView({ invite }: { invite: Invite }) {
         <a href={`mailto:${invite.email}`}>
           <code>{invite.email}</code>
         </a>
-      </p>
+      </div>
     )
   }
 
   return (
-    <p class='block'>
+    <div class='block notification is-primary'>
+      <button
+        type='button'
+        class='delete'
+        title='Close'
+        events={{ click: events.close }}
+      />
       Created invite link:{' '}
       <a href={inviteUrl}>
         <code>{inviteUrl}</code>
       </a>{' '}
       for open enrollment.
-    </p>
+    </div>
   )
 }
 
@@ -82,7 +107,7 @@ function AdminSection(
         </span>{' '}
         Administration
       </h1>
-      <div childrenBind={inviteView} childrenBindMode='replace' />
+      <div childrenBind={inviteView} childrenBindMode='append' />
       <p class='block'>
         An open invitation allows any email to be registered while it is valid
         (roughly 48 hours).
