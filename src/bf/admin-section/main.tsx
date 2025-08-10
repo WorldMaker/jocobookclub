@@ -92,12 +92,7 @@ function AdminSection(
   })
   bindEffect(events.recount, () => vm.recount())
   const inviteView = vm.invite.pipe(
-    map((invite) => {
-      if (!invite) {
-        return Empty
-      }
-      return () => <InviteView invite={invite} />
-    }),
+    map((invite) => () => <InviteView invite={invite} />),
   )
   return (
     <section class='section'>
