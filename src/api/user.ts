@@ -213,8 +213,18 @@ const app = new Hono<{ Variables: SessionVariables }>()
     if (!existingUser.success) {
       return c.json({}, 404)
     }
-    const { email, canEmail, preferredName, canDiscordDm, discordHandle } = existingUser.data
-    return c.json({ email, canEmail, preferredName, canDiscordDm, discordHandle } satisfies UserInfo, 200)
+    const { email, canEmail, preferredName, canDiscordDm, discordHandle } =
+      existingUser.data
+    return c.json(
+      {
+        email,
+        canEmail,
+        preferredName,
+        canDiscordDm,
+        discordHandle,
+      } satisfies UserInfo,
+      200,
+    )
   })
   .patch('/', zValidator('json', userPatch), async (c) => {
     const kv = c.get('kv')
