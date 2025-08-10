@@ -19,6 +19,7 @@ interface AdminEvents {
   createEmailInvite: ObservableEvent<SubmitEvent>
   createOpenInvite: ObservableEvent<MouseEvent>
   emailChanged: ObservableEvent<KeyboardEvent>
+  getOptInEmails: ObservableEvent<MouseEvent>
   recount: ObservableEvent<MouseEvent>
 }
 
@@ -90,9 +91,25 @@ function AdminSection(
     const email = (event.target as HTMLInputElement).value
     vm.emailChanged(email)
   })
+  bindEffect(events.getOptInEmails, () => vm.getOptInEmails())
   bindEffect(events.recount, () => vm.recount())
   const inviteView = vm.invite.pipe(
     map((invite) => () => <InviteView invite={invite} />),
+  )
+  const emailsView = vm.optInEmails.pipe(
+    map((emails) => {
+      if (!emails) {
+        return Empty
+      }
+      return () => (
+        <div class='field'>
+          <label class='label'>Opt-In Emails</label>
+          <textarea class='textarea' placeholder='Emails' readOnly>
+            {emails}
+          </textarea>
+        </div>
+      )
+    }),
   )
   return (
     <section class='section'>
@@ -138,6 +155,17 @@ function AdminSection(
         </div>
       </form>
       <p class='block'>
+        Some JoCoNauts may have opted in to receive emails about the book club.
+      </p>
+      <div childrenBind={emailsView} childrenBindMode='replace' />
+      <button
+        type='button'
+        class='block button is-info'
+        events={{ click: events.getOptInEmails }}
+      >
+        Get Opt-In Emails
+      </button>
+      <p class='block'>
         When changes are made to the ballot (a new book is added, an existing
         book was moved to "Held", things like that) the ballots will all
         eventually get recounted as people vote on the new ballot. However, if
@@ -145,7 +173,7 @@ function AdminSection(
       </p>
       <button
         type='button'
-        class='button is-warning'
+        class='block button is-warning'
         events={{ click: events.recount }}
       >
         Recount All Ballots!
