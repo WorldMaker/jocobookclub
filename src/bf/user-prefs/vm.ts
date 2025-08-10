@@ -145,7 +145,8 @@ export class UserPrefsManager {
     if (!updated.ok) {
       return
     }
-    this.#updateLastPrefs(valid.data)
+    this.#updateLastPrefs(prefs)
+    this.#updatePrefs(prefs)
   }
 
   #updatePrefs(prefs: StateSetter<UserInfo | null>) {
