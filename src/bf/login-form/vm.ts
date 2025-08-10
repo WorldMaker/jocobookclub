@@ -50,7 +50,7 @@ export class LoginFormVm {
       resp = await $get({
         query: { email },
       }, {
-        init: { signal: AbortSignal.timeout(10000) }
+        init: { signal: AbortSignal.timeout(10000) },
       })
     } catch (error) {
       console.error(error)

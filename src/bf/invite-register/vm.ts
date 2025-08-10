@@ -101,9 +101,8 @@ export class RegistrationVm {
       resp = await $get({
         param: { invite: inviteCode },
         query: { providedEmail: email, sessionKey },
-      },
-      {
-        init: { signal: AbortSignal.timeout(10000) }
+      }, {
+        init: { signal: AbortSignal.timeout(10000) },
       })
     } catch (error) {
       console.error(error)
