@@ -19,7 +19,7 @@ import {
 import { origin, rpId, rpName } from './models/rp.ts'
 import { deleteSession } from './models/session.ts'
 import { getFinalTally } from './models/tally.ts'
-import { getUserById } from './models/user.ts'
+import { getUserById, updateUser, User, UserInfo } from './models/user.ts'
 import { queueVoted } from './models/voting.ts'
 import { sessionToken, type SessionVariables } from './session-token.ts'
 import * as z from 'zod'
@@ -27,6 +27,11 @@ import * as z from 'zod'
 const passkeyPatch = z.object({
   admin: z.boolean().optional(),
   nickname: z.string().optional(),
+})
+
+const userPatch = z.object({
+  canEmail: z.boolean().optional(),
+  preferredName: z.string().optional(),
 })
 
 const app = new Hono<{ Variables: SessionVariables }>()
@@ -197,6 +202,27 @@ const app = new Hono<{ Variables: SessionVariables }>()
       return c.json({ error: 'Cannot delete admin passkey' }, 403)
     }
     await kv.delete(['passkey', session.userId, c.req.param('id')])
+    return c.body(null, 204)
+  })
+  .get('/', async (c) => {
+    const kv = c.get('kv')
+    const session = c.get('session')
+    const existingUser = await getUserById(kv, session.userId)
+    if (!existingUser.success) {
+      return c.json({}, 404)
+    }
+    const { email, canEmail, preferredName } = existingUser.data
+    return c.json({ email, canEmail, preferredName } satisfies UserInfo, 200)
+  })
+  .patch('/', zValidator('json', userPatch), async (c) => {
+    const kv = c.get('kv')
+    const session = c.get('session')
+    const existingUser = await getUserById(kv, session.userId)
+    if (!existingUser.success) {
+      return c.json({}, 404)
+    }
+    const user = c.req.valid('json')
+    await updateUser(kv, { ...existingUser.data, ...user })
     return c.body(null, 204)
   })
 

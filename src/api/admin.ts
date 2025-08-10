@@ -1,18 +1,24 @@
+import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
+import * as z from 'zod'
+import { Invite, updateInvite } from './models/invite.ts'
+import { getAllUserPreferredEmails } from './models/user.ts'
 import { queueRecountRequested } from './models/voting.ts'
 import { adminToken, type SessionVariables } from './session-token.ts'
-import { zValidator } from '@hono/zod-validator'
-import { Invite, updateInvite } from './models/invite.ts'
-import * as z from 'zod'
 
 const app = new Hono<{ Variables: SessionVariables }>()
   .use('/*', adminToken)
+  .get('/emails', async (c) => {
+    const kv = c.get('kv')
+    const emails = await getAllUserPreferredEmails(kv)
+    return c.json({ emails }, 200)
+  })
   .put(
     '/invite/:inviteId',
     zValidator(
       'param',
       z.object({
-        inviteId: z.string().ulid(),
+        inviteId: z.ulid(),
       }),
     ),
     zValidator('json', Invite),
