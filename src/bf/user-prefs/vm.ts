@@ -1,7 +1,8 @@
 import { butterfly, StateSetter } from '@worldmaker/butterfloat'
-import { Session, UserInfo } from '@worldmaker/jocobookclub-api/models'
-import { map, Observable, shareReplay } from 'rxjs'
+import { getUserPreferredEmail, Session, UserInfo } from '@worldmaker/jocobookclub-api/models'
+import { firstValueFrom, map, Observable, shareReplay } from 'rxjs'
 import { apiClient } from '../client.ts'
+import { ZodSafeParseResult } from 'zod'
 
 export class UserPrefsManager {
   readonly #session: Session
@@ -12,9 +13,18 @@ export class UserPrefsManager {
     return this.#prefs
   }
 
+  readonly #previewEmail: Observable<string | null>
+  get previewEmail() {
+    return this.#previewEmail
+  }
+
   readonly #unsaved: Observable<boolean>
   get unsaved() {
     return this.#unsaved
+  }
+  readonly #valid: Observable<ZodSafeParseResult<UserInfo>>
+  get valid() {
+    return this.#valid
   }
 
   // for 3-way merge, the last known saved prefs
@@ -24,6 +34,16 @@ export class UserPrefsManager {
     this.#session = session
 
     ;[this.#prefs, this.#setPrefs] = butterfly<UserInfo | null>(null)
+
+    this.#previewEmail = this.#prefs.pipe(
+      map((prefs) => {
+        if (!prefs || !prefs.canEmail) {
+          return null
+        }
+        return getUserPreferredEmail(prefs)
+      }),
+      shareReplay(1),
+    )
 
     this.#unsaved = this.#prefs.pipe(
       map((prefs) => {
@@ -38,6 +58,11 @@ export class UserPrefsManager {
           || prefs.canDiscordDm !== this.#lastPrefs.canDiscordDm
           || prefs.discordHandle !== this.#lastPrefs.discordHandle
       }),
+      shareReplay(1),
+    )
+
+    this.#valid = this.#prefs.pipe(
+      map((prefs) => UserInfo.safeParse(prefs)),
       shareReplay(1),
     )
 
@@ -88,6 +113,28 @@ export class UserPrefsManager {
     }
   }
 
+  async save() {
+    const prefs = await firstValueFrom(this.#prefs)
+    if (!prefs) {
+      return
+    }
+    const valid = UserInfo.safeParse(prefs)
+    if (!valid.success) {
+      return
+    }
+    const updated = await apiClient.user.$patch({
+      json: valid.data
+    }, {
+      headers: {
+        Authorization: `Bearer ${this.#session.token}`
+      }
+    })
+    if (!updated.ok) {
+      return
+    }
+    this.#updateLastPrefs(valid.data)
+  }
+
   #updatePrefs(prefs: StateSetter<UserInfo | null>) {
     this.#setPrefs((currentPrefs) => {
       const updatedPrefs = typeof prefs === 'function' ? prefs(currentPrefs) : prefs
@@ -99,5 +146,41 @@ export class UserPrefsManager {
   #updateLastPrefs(prefs: UserInfo) {
     this.#lastPrefs = structuredClone(prefs)
     localStorage.setItem(`saved/user-prefs/${this.#session.userId}`, JSON.stringify(prefs))
+  }
+
+  canEmailChanged(canEmail: boolean) {
+    this.#updatePrefs((currentPrefs) => {
+      if (!currentPrefs) {
+        return null
+      }
+      return { ...currentPrefs, canEmail }
+    })
+  }
+
+  preferredNameChanged(preferredName: string) {
+    this.#updatePrefs((currentPrefs) => {
+      if (!currentPrefs) {
+        return null
+      }
+      return { ...currentPrefs, preferredName }
+    })
+  }
+
+  canDiscordDmChanged(canDiscordDm: boolean) {
+    this.#updatePrefs((currentPrefs) => {
+      if (!currentPrefs) {
+        return null
+      }
+      return { ...currentPrefs, canDiscordDm }
+    })
+  }
+
+  discordHandleChanged(discordHandle: string) {
+    this.#updatePrefs((currentPrefs) => {
+      if (!currentPrefs) {
+        return null
+      }
+      return { ...currentPrefs, discordHandle }
+    })
   }
 }

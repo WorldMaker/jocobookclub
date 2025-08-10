@@ -45,9 +45,11 @@ export async function getUserByEmail(kv: Deno.Kv, email: string) {
   return await getUserById(kv, userId.data)
 }
 
-export function getUserPreferredEmail(user: User) {
+export function getUserPreferredEmail(user: User | UserInfo) {
   // JSON stringify seems a close enough approximation for "Quoted Printable" encoding among friends
-  return user.preferredName ? `${JSON.stringify(user.preferredName)} <${user.email}>` : user.email
+  return user.preferredName && user.preferredName.length
+    ? `${JSON.stringify(user.preferredName)} <${user.email}>`
+    : user.email
 }
 
 export async function getAllUserPreferredEmails(kv: Deno.Kv) {
