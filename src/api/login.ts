@@ -9,7 +9,7 @@ import {
   verifyRegistrationResponse,
 } from '@simplewebauthn/server'
 import { zValidator } from '@hono/zod-validator'
-import { z } from 'zod'
+import * as z from 'zod'
 import { origin, rpId } from './models/rp.ts'
 import { getUserByEmail, updateUser, type User } from './models/user.ts'
 import {

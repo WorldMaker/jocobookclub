@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import * as z from 'zod'
 import { UserId } from './user.ts'
 
 export const Session = z.object({
