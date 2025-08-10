@@ -44,9 +44,19 @@ export class LoginFormVm {
 
   async loginWithEmail(email: string) {
     this.#setState({ type: 'busy' })
-    const resp = await apiClient.login['auth-options'].$get({
-      query: { email },
-    })
+    const $get = apiClient.login['auth-options'].$get
+    let resp: Awaited<ReturnType<typeof $get>> | null = null
+    try {
+      resp = await $get({
+        query: { email },
+      }, {
+        init: { signal: AbortSignal.timeout(10000) },
+      })
+    } catch (error) {
+      console.error(error)
+      this.#setState({ type: 'error' })
+      return
+    }
     if (!resp.ok) {
       this.#setState({ type: 'error' })
       return
