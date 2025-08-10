@@ -95,11 +95,22 @@ export class RegistrationVm {
     this.#setState({ type: 'busy' })
     const email = await firstValueFrom(this.#email)
     const sessionKey = createSessionToken()
-    const resp = await apiClient.invite[':invite']['register-options'].$get({
-      param: { invite: inviteCode },
-      query: { providedEmail: email, sessionKey },
-    })
-    if (!resp.ok) {
+    const $get = apiClient.invite[':invite']['register-options'].$get
+    let resp: Awaited<ReturnType<typeof $get>> | null = null
+    try {
+      resp = await $get({
+        param: { invite: inviteCode },
+        query: { providedEmail: email, sessionKey },
+      },
+      {
+        init: { signal: AbortSignal.timeout(10000) }
+      })
+    } catch (error) {
+      console.error(error)
+      this.#setState({ type: 'session-error' })
+      return
+    }
+    if (!resp?.ok) {
       this.#setState({ type: 'session-error' })
       return
     }
