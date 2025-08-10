@@ -19,7 +19,7 @@ import {
 import { origin, rpId, rpName } from './models/rp.ts'
 import { deleteSession } from './models/session.ts'
 import { getFinalTally } from './models/tally.ts'
-import { getUserById, updateUser, User, UserInfo } from './models/user.ts'
+import { getUserById, updateUser, type UserInfo } from './models/user.ts'
 import { queueVoted } from './models/voting.ts'
 import { sessionToken, type SessionVariables } from './session-token.ts'
 import * as z from 'zod'
@@ -32,6 +32,8 @@ const passkeyPatch = z.object({
 const userPatch = z.object({
   canEmail: z.boolean().optional(),
   preferredName: z.string().optional(),
+  canDiscordDm: z.boolean().optional(),
+  discordHandle: z.string().optional(),
 })
 
 const app = new Hono<{ Variables: SessionVariables }>()
@@ -211,8 +213,8 @@ const app = new Hono<{ Variables: SessionVariables }>()
     if (!existingUser.success) {
       return c.json({}, 404)
     }
-    const { email, canEmail, preferredName } = existingUser.data
-    return c.json({ email, canEmail, preferredName } satisfies UserInfo, 200)
+    const { email, canEmail, preferredName, canDiscordDm, discordHandle } = existingUser.data
+    return c.json({ email, canEmail, preferredName, canDiscordDm, discordHandle } satisfies UserInfo, 200)
   })
   .patch('/', zValidator('json', userPatch), async (c) => {
     const kv = c.get('kv')

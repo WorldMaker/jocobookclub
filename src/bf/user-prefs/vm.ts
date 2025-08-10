@@ -35,6 +35,8 @@ export class UserPrefsManager {
         }
         return prefs.canEmail !== this.#lastPrefs.canEmail
           || prefs.preferredName !== this.#lastPrefs.preferredName
+          || prefs.canDiscordDm !== this.#lastPrefs.canDiscordDm
+          || prefs.discordHandle !== this.#lastPrefs.discordHandle
       }),
       shareReplay(1),
     )
@@ -72,6 +74,12 @@ export class UserPrefsManager {
           }
           if (localPrefs.preferredName !== this.#lastPrefs.preferredName) {
             newPrefs.preferredName = localPrefs.preferredName
+          }
+          if (localPrefs.canDiscordDm !== this.#lastPrefs.canDiscordDm) {
+            newPrefs.canDiscordDm = localPrefs.canDiscordDm
+          }
+          if (localPrefs.discordHandle !== this.#lastPrefs.discordHandle) {
+            newPrefs.discordHandle = localPrefs.discordHandle
           }
         }
         return newPrefs

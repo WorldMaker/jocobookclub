@@ -9,7 +9,9 @@ export const User = z.object({
   email: z.email(),
   active: z.boolean(),
   canEmail: z.optional(z.boolean()),
-  preferredName: z.optional(z.string())
+  preferredName: z.optional(z.string()),
+  canDiscordDm: z.optional(z.boolean()),
+  discordHandle: z.optional(z.string())
 })
 
 export type User = z.infer<typeof User>
@@ -17,7 +19,9 @@ export type User = z.infer<typeof User>
 export const UserInfo = z.object({
   email: z.email(),
   canEmail: z.optional(z.boolean()),
-  preferredName: z.optional(z.string())
+  preferredName: z.optional(z.string()),
+  canDiscordDm: z.optional(z.boolean()),
+  discordHandle: z.optional(z.string())
 })
 
 export type UserInfo = z.infer<typeof UserInfo>
