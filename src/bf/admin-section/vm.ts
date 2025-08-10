@@ -1,14 +1,16 @@
 import { Invite, Session } from '@worldmaker/jocobookclub-api/models'
 import { apiClient } from '../client.ts'
 import { ulid } from '@std/ulid'
-import { firstValueFrom, Observable } from 'rxjs'
+import { firstValueFrom, Observable, Subject } from 'rxjs'
 import { butterfly, StateSetter } from '@worldmaker/butterfloat'
 
 export class AdminVm {
   readonly #session: Session
 
-  readonly #invite: Observable<Invite | null>
-  readonly #setInvite: (url: StateSetter<Invite | null>) => void
+  readonly #invite = new Subject<Invite>()
+  #setInvite(invite: Invite) {
+    this.#invite.next(invite)
+  }
   get invite() {
     return this.#invite
   }
@@ -21,7 +23,6 @@ export class AdminVm {
 
   constructor(session: Session) {
     this.#session = session
-    ;[this.#invite, this.#setInvite] = butterfly<Invite | null>(null)
     ;[this.#inviteRequestEmail, this.#setInviteRequestEmail] = butterfly<
       string | null
     >(null)
@@ -44,8 +45,6 @@ export class AdminVm {
       this.#setInvite(
         resultInvite,
       )
-    } else {
-      this.#setInvite(null)
     }
   }
 
@@ -71,8 +70,6 @@ export class AdminVm {
       this.#setInvite(
         resultInvite,
       )
-    } else {
-      this.#setInvite(null)
     }
   }
 
