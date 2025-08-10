@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import * as z from 'zod'
 import { UserId } from './user.ts'
 import { Bucket } from './tally.ts'
 

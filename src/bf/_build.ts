@@ -18,6 +18,8 @@ await esbuild.build({
     { out: 'suggestions-page', in: './pages/suggestions.ts' },
   ],
   outdir: '../site/bf/',
+  metafile: true,
+  logLevel: 'info',
   bundle: true,
   splitting: true,
   target: 'es2022',

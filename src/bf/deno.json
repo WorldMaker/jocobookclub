@@ -12,6 +12,6 @@
     "hono": "npm:hono@^4.6.16",
     "jsdom": "npm:jsdom@^26.0.0",
     "rxjs": "npm:rxjs@^7.8.1",
-    "zod": "npm:zod@^3.24.1"
+    "zod": "npm:zod@4"
   }
 }

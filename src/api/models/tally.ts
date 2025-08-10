@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import * as z from 'zod'
 import { Ballot } from './ballot.ts'
 import type { UserId } from './user.ts'
 import { reverseUlid } from '../util/reverse.ts'
@@ -14,7 +14,7 @@ export type EligibleBooks = z.infer<typeof EligibleBooks>
  */
 export const Tally = z.object({
   count: z.number().int().gte(0),
-  updated: z.string().datetime({ offset: true }),
+  updated: z.iso.datetime({ offset: true }),
   books: EligibleBooks,
   matrix: z.array(z.array(z.number().int().gte(0))),
 })
@@ -80,7 +80,7 @@ export function addTally(tally1: Tally, tally2: Tally): Tally {
  */
 export const FinalTally = z.object({
   count: z.number().int().gte(0),
-  updated: z.string().datetime({ offset: true }),
+  updated: z.iso.datetime({ offset: true }),
   books: EligibleBooks,
   matrix: z.array(z.array(z.number().int().gte(0))),
   ranking: z.array(z.string()),

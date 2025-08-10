@@ -22,7 +22,7 @@ import { getFinalTally } from './models/tally.ts'
 import { getUserById } from './models/user.ts'
 import { queueVoted } from './models/voting.ts'
 import { sessionToken, type SessionVariables } from './session-token.ts'
-import { z } from 'zod'
+import * as z from 'zod'
 
 const passkeyPatch = z.object({
   admin: z.boolean().optional(),

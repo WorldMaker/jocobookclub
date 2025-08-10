@@ -3,7 +3,7 @@ import { queueRecountRequested } from './models/voting.ts'
 import { adminToken, type SessionVariables } from './session-token.ts'
 import { zValidator } from '@hono/zod-validator'
 import { Invite, updateInvite } from './models/invite.ts'
-import z from 'zod'
+import * as z from 'zod'
 
 const app = new Hono<{ Variables: SessionVariables }>()
   .use('/*', adminToken)

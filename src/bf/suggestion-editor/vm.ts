@@ -2,7 +2,7 @@ import { ulid } from '@std/ulid'
 import { butterfly, StateSetter } from '@worldmaker/butterfloat'
 import { Session, Suggestion } from '@worldmaker/jocobookclub-api/models'
 import { firstValueFrom, map, Observable, shareReplay, Subject } from 'rxjs'
-import { SafeParseReturnType } from 'zod'
+import { ZodSafeParseResult } from 'zod'
 import { apiClient } from '../client.ts'
 import sessionManager from '../vm/session-manager.ts'
 
@@ -25,7 +25,7 @@ export class SuggestionEditorVm {
   get unsaved() {
     return this.#unsaved
   }
-  readonly #valid: Observable<SafeParseReturnType<unknown, Suggestion>>
+  readonly #valid: Observable<ZodSafeParseResult<Suggestion>>
   get valid() {
     return this.#valid
   }

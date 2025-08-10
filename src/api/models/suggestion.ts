@@ -1,15 +1,15 @@
-import { z } from 'zod'
+import * as z from 'zod'
 import { UserId } from './user.ts'
 
 export const Suggestion = z.object({
-  id: z.string().ulid(),
+  id: z.ulid(),
   userId: UserId,
   ltid: z.string().optional(),
   title: z.string().nonempty(),
   author: z.string().nonempty(),
   whyBlurb: z.string().nonempty(),
   cw: z.string().optional(),
-  updated: z.string().datetime({ offset: true }),
+  updated: z.iso.datetime({ offset: true }),
 })
 export type Suggestion = z.infer<typeof Suggestion>
 
