@@ -39,6 +39,11 @@ export class LoginFormVm {
   async login() {
     this.#setState({ type: 'busy' })
     const email = await firstValueFrom(this.email)
+    this.loginWithEmail(email)
+  }
+
+  async loginWithEmail(email: string) {
+    this.#setState({ type: 'busy' })
     const resp = await apiClient.login['auth-options'].$get({
       query: { email },
     })
