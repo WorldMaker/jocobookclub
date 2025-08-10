@@ -19,12 +19,21 @@ export class AdminVm {
     return this.#inviteRequestEmail
   }
 
+  readonly #optInEmails: Observable<string | null>
+  readonly #setOptInEmails: (emails: StateSetter<string | null>) => void
+  get optInEmails() {
+    return this.#optInEmails
+  }
+
   constructor(session: Session) {
     this.#session = session
     ;[this.#invite, this.#setInvite] = butterfly<Invite | null>(null)
     ;[this.#inviteRequestEmail, this.#setInviteRequestEmail] = butterfly<
       string | null
     >(null)
+    ;[this.#optInEmails, this.#setOptInEmails] = butterfly<string | null>(
+      null,
+    )
   }
 
   async createOpenInvite() {
@@ -78,6 +87,18 @@ export class AdminVm {
 
   emailChanged(email: string) {
     this.#setInviteRequestEmail(email)
+  }
+
+  async getOptInEmails() {
+    const result = await apiClient.admin.emails.$get({}, {
+      headers: { Authorization: `Bearer ${this.#session.token}` },
+    })
+    if (result.ok) {
+      const emails = await result.json()
+      this.#setOptInEmails(emails.emails.join('; '))
+    } else {
+      this.#setOptInEmails(null)
+    }
   }
 
   async recount() {
