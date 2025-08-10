@@ -1,12 +1,12 @@
-import { z } from 'zod/v4'
+import { z } from 'zod'
 
-export const UserId = z.string().ulid()
+export const UserId = z.ulid()
 
 export type UserId = z.infer<typeof UserId>
 
 export const User = z.object({
   id: UserId,
-  email: z.string().email(),
+  email: z.email(),
   active: z.boolean(),
 })
 

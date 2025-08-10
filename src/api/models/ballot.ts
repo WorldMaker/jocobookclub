@@ -1,12 +1,12 @@
-import { z } from 'zod/v4'
+import { z } from 'zod'
 import { UserId } from './user.ts'
 import { reverseUlid } from '../util/reverse.ts'
 
 export const Ballot = z.object({
   userId: UserId,
   active: z.boolean(),
-  books: z.record(z.number().int().gte(1).lte(5)),
-  updated: z.string().datetime({ offset: true }),
+  books: z.record(z.string(), z.number().int().gte(1).lte(5)),
+  updated: z.iso.datetime({ offset: true }),
 })
 
 export type Ballot = z.infer<typeof Ballot>

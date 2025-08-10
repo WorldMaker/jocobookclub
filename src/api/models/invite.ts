@@ -1,4 +1,4 @@
-import { z } from 'zod/v4'
+import { z } from 'zod'
 
 export const Invite = z.discriminatedUnion('type', [
   z.object({
@@ -8,7 +8,7 @@ export const Invite = z.discriminatedUnion('type', [
   z.object({
     id: z.string(),
     type: z.literal('specific-email'),
-    email: z.string().email(),
+    email: z.email(),
   }),
 ])
 

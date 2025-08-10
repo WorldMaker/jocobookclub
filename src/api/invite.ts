@@ -1,7 +1,7 @@
 import { zValidator } from '@hono/zod-validator'
 import { generateRegistrationOptions } from '@simplewebauthn/server'
 import { Hono } from 'hono'
-import { z } from 'zod/v4'
+import { z } from 'zod'
 import { getInviteById } from './models/invite.ts'
 import {
   getPasskeysForUser,
@@ -13,7 +13,7 @@ import { getUserByEmail } from './models/user.ts'
 import type { KvProvidedVariables } from './kv.ts'
 
 const registerOptionsQuerySchema = z.object({
-  providedEmail: z.optional(z.string().email()),
+  providedEmail: z.optional(z.email()),
   sessionKey: z.string(),
 })
 
