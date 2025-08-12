@@ -1,9 +1,4 @@
-import {
-  ComponentContext,
-  Empty,
-  jsx,
-  ObservableEvent,
-} from '@worldmaker/butterfloat'
+import { ComponentContext, jsx, ObservableEvent } from '@worldmaker/butterfloat'
 import { UserPrefsManager } from './vm.ts'
 import { combineLatest, map, shareReplay } from 'rxjs'
 

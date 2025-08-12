@@ -6,7 +6,6 @@ import { UserPrefsManager } from './vm.ts'
 import {
   Fragment,
   jsx,
-  run,
   runStamps,
   StampCollection,
 } from '@worldmaker/butterfloat'
