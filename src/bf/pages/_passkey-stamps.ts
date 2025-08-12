@@ -12,6 +12,8 @@ import { Success } from '../add-passkey/success.tsx'
 import { VerificationError } from '../add-passkey/verification-error.tsx'
 import { Logout, LogoutEvents } from '../logout-button/logout.tsx'
 import { Login } from '../logout-button/login.tsx'
+import { Form } from '../user-prefs/form.tsx'
+import { UserPrefsManager } from '../user-prefs/vm.ts'
 
 export async function buildPasskeyStamps(document: Document) {
   // paths are relative to the project root
@@ -96,6 +98,28 @@ export async function buildPasskeyStamps(document: Document) {
   await Deno.writeTextFile(
     '../site/_includes/bf/passkey-page.html',
     loginNoticeStamp.outerHTML,
+    { append: true },
+  )
+
+  // *** User Prefs Form ***
+  const { context: userPrefsContext } = makeTestComponentContext({
+    save: makeTestEvent(NEVER),
+    canEmailChanged: makeTestEvent(NEVER),
+    preferredNameChanged: makeTestEvent(NEVER),
+    canDiscordDmChanged: makeTestEvent(NEVER),
+    discordHandleChanged: makeTestEvent(NEVER),
+  })
+  const prefsVm = new UserPrefsManager({
+    expiresAt: new Date(),
+    token: 'FAKE',
+    userId: 'FAKE',
+  })
+  const userPrefsForm = Form({ vm: prefsVm }, userPrefsContext)
+  const userPrefsStamp = buildStamp(userPrefsForm, document)
+  userPrefsStamp.id = 'user-prefs-form'
+  await Deno.writeTextFile(
+    '../site/_includes/bf/passkey-page.html',
+    userPrefsStamp.outerHTML,
     { append: true },
   )
 }

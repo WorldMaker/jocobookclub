@@ -49,28 +49,19 @@ export function Form(
   const canEmail = vm.prefs.pipe(
     map((prefs) => prefs?.canEmail ?? false),
   )
+  const canNotEmail = vm.prefs.pipe(
+    map((prefs) => !prefs?.canEmail),
+  )
 
   const preferredName = vm.prefs.pipe(
     map((prefs) => prefs?.preferredName ?? ''),
   )
 
-  const previewEmail = vm.previewEmail.pipe(
-    map((email) =>
-      email
-        ? () => (
-          <div class='field'>
-            <label class='label'>Email Preview</label>
-            <div class='field-body'>
-              <code>{email}</code>
-            </div>
-          </div>
-        )
-        : Empty
-    ),
-  )
-
   const canDiscordDm = vm.prefs.pipe(
     map((prefs) => prefs?.canDiscordDm ?? false),
+  )
+  const canNotDiscordDm = vm.prefs.pipe(
+    map((prefs) => !prefs?.canDiscordDm),
   )
 
   const discordHandle = vm.prefs.pipe(
@@ -110,7 +101,7 @@ export function Form(
           </p>
         </div>
       </div>
-      <div class='field'>
+      <div class='field' classBind={{ 'is-hidden': canNotEmail }}>
         <label for='preferred-name' class='label'>
           Preferred Name
         </label>
@@ -128,7 +119,22 @@ export function Form(
           </p>
         </div>
       </div>
-      <div childrenBind={previewEmail} childrenBindMode='replace' />
+      <div
+        class='field'
+        classBind={{
+          'is-hidden': vm.previewEmail.pipe(map((email) => !email)),
+        }}
+      >
+        <label class='label'>Email Preview</label>
+        <div class='field-body'>
+          <code
+            bind={{
+              innerText: vm.previewEmail.pipe(map((email) => email ?? '')),
+            }}
+          >
+          </code>
+        </div>
+      </div>
       <div class='field'>
         <div class='control'>
           <label for='can-discord-dm' class='checkbox'>
@@ -147,12 +153,15 @@ export function Form(
           </p>
         </div>
       </div>
-      <div class='field'>
+      <div class='field' classBind={{ 'is-hidden': canNotDiscordDm }}>
         <label for='discord-handle' class='label'>
           Discord Handle
         </label>
       </div>
-      <div class='field has-addons'>
+      <div
+        class='field has-addons'
+        classBind={{ 'is-hidden': canNotDiscordDm }}
+      >
         <div class='control'>
           <a class='button is-static'>@</a>
         </div>
