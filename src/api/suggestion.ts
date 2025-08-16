@@ -32,7 +32,10 @@ const app = new Hono<{ Variables: SessionVariables }>()
       return c.json({ error: 'Unauthorized' }, 403)
     }
     const existingSuggestion = await getSuggestion(kv, id)
-    if (existingSuggestion && existingSuggestion.success && existingSuggestion.data.userId !== session.userId && !session.admin) {
+    if (
+      existingSuggestion && existingSuggestion.success &&
+      existingSuggestion.data.userId !== session.userId && !session.admin
+    ) {
       return c.json({ error: 'Unauthorized' }, 403)
     }
     const updatedSuggestion = {
