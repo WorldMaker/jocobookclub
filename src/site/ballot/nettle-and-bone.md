@@ -23,6 +23,7 @@ whyBlurb: >-
   it’s all the same to you.”
 cw: 'domestic abuse, miscarriage'
 updated: '2025-03-12T00:58:59.915Z'
+tags: [fantasy, horror]
 ---
 
 Blurb from a JoCoNaut:

@@ -2,6 +2,7 @@
 title: The End of Everything (Astrophysically Speaking)
 author: Katie Mack
 ltid: "24122920"
+tags: [non-fiction]
 ---
 
 Blurb from a JoCoNaut:
