@@ -11,6 +11,7 @@ whyBlurb: >-
   good time for a re-read.
 cw: 'Body horror, body dysmorphia, fascism, genocide'
 updated: '2025-02-28T18:36:54.572Z'
+tags: [scifi, young-adult, short]
 ---
 
 Blurb from a JoCoNaut:
