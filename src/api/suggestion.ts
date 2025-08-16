@@ -27,12 +27,12 @@ const app = new Hono<{ Variables: SessionVariables }>()
     if (suggestion.id !== id) {
       return c.json({ error: 'Suggestion IDs do not match' }, 400)
     }
-    const existingSuggestion = await getSuggestion(kv, id)
     const session = c.get('session')
-    if (!existingSuggestion || !existingSuggestion.success) {
-      return c.json({ error: 'Suggestion not found' }, 404)
+    if (suggestion.userId !== session.userId && !session.admin) {
+      return c.json({ error: 'Unauthorized' }, 403)
     }
-    if (existingSuggestion.data.userId !== session.userId && !session.admin) {
+    const existingSuggestion = await getSuggestion(kv, id)
+    if (existingSuggestion && existingSuggestion.success && existingSuggestion.data.userId !== session.userId && !session.admin) {
       return c.json({ error: 'Unauthorized' }, 403)
     }
     const updatedSuggestion = {
@@ -60,27 +60,6 @@ const app = new Hono<{ Variables: SessionVariables }>()
     const kv = c.get('kv')
     const suggestions = await listSuggestions(kv)
     return c.json({ suggestions })
-  })
-  .post('/', zValidator('json', Suggestion), async (c) => {
-    const kv = c.get('kv')
-    const session = c.get('session')
-    const suggestion = c.req.valid('json')
-    const existingSuggestion = await getSuggestion(kv, suggestion.id)
-    if (existingSuggestion) {
-      return c.json({ error: 'Suggestion already exists' }, 409)
-    }
-    const newSuggestion = {
-      ...suggestion,
-      userId: session.userId,
-      updated: new Date().toISOString(),
-    }
-    await updateSuggestion(kv, newSuggestion)
-    return c.json(newSuggestion, 201, {
-      Location: new URL(
-        `${suggestion.id}`,
-        c.req.url.endsWith('/') ? c.req.url : `${c.req.url}/`,
-      ).toString(),
-    })
   })
 
 export default app
