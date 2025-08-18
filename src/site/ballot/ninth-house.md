@@ -2,6 +2,7 @@
 title: Ninth House
 author: Leigh Bardugo
 ltid: "18592605"
+tags: [fantasy]
 ---
 
 Blurb from a JoCoNaut:

@@ -2,6 +2,7 @@
 title: The Invisible Life of Addie LaRue
 author: V. E. Schwab
 ltid: "27450296"
+tags: [fantasy]
 ---
 
 Blurb from a JoCoNaut:

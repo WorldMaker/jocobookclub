@@ -2,6 +2,7 @@
 title: Lost Ark Dreaming
 author: Suyi Davies Okungbowa
 ltid: "31363262"
+tags: [scifi]
 ---
 
 Blurb from a JoCoNaut:

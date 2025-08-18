@@ -2,6 +2,7 @@
 title: A Marvellous Light
 author: Freya Marske
 ltid: "24656599"
+tags: [fantasy, romance]
 ---
 
 A Blurb from a JoCoNaut:

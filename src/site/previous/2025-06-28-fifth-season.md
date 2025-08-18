@@ -2,7 +2,7 @@
 title: The Fifth Season
 author: N. K. Jemisin
 ltid: "14231634"
-scheduled: true
+tags: [boat, scifi]
 ---
 
 Blurb from a JoCoNaut:

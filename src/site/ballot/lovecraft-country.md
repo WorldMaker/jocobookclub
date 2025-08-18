@@ -2,6 +2,7 @@
 title: Lovecraft Country
 author: Matt Ruff
 ltid: "15800813"
+tags: [horror]
 ---
 
 Blurb from a JoCoNaut:

@@ -2,6 +2,7 @@
 title: Light from Uncommon Stars
 author: Ryka Aoki
 ltid: "25821771"
+tags: [boat, scifi, fantasy]
 ---
 
 Blurbs from JoCoNauts:

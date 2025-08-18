@@ -2,6 +2,7 @@
 title: Sunshine
 author: Robin McKinley
 ltid: "10635"
+tags: [fantasy]
 ---
 
 Blurb from a JoCoNaut:

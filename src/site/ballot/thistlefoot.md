@@ -2,6 +2,7 @@
 title: Thistlefoot
 author: GennaRose Nethercott
 ltid: "27998898"
+tags: [fantasy]
 ---
 
 Blurb from a JoCoNaut:

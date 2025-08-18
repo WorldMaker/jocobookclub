@@ -2,6 +2,7 @@
 title: Ancillary Justice
 author: Ann Leckie
 ltid: "14046991"
+tags: [scifi]
 ---
 
 Blurb from a JoCoNaut:
