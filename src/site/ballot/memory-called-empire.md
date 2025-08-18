@@ -2,6 +2,7 @@
 title: A Memory Called Empire
 author: Arkady Martine
 ltid: "21852517"
+tags: [scifi]
 ---
 
 Blurb from a JoCoNaut:

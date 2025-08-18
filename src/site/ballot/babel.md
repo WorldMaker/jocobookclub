@@ -2,6 +2,7 @@
 title: "Babel: Or the Necessity of Violence: An Arcane History of the Oxford Translators' Revolution"
 author: R. F. Kuang
 ltid: "27418541"
+tags: [fantasy]
 ---
 
 Blurb from a JoCoNaut:

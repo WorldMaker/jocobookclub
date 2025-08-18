@@ -2,6 +2,7 @@
 title: Harrow the Ninth
 author: Tamsyn Muir
 ltid: "23694338"
+tags: [fantasy, horror]
 ---
 
 Blurb from a JoCoNaut:

@@ -2,6 +2,7 @@
 title: Every Heart a Doorway
 author: Seanan McGuire
 ltid: "15998723"
+tags: [fantasy]
 ---
 
 Blurb from a JoCoNaut:

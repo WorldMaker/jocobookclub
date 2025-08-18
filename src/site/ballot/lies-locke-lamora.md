@@ -2,6 +2,7 @@
 title: The Lies of Locke Lamora
 author: Scott Lynch
 ltid: "797435"
+tags: [fantasy]
 ---
 
 Blurb from a JoCoNaut:

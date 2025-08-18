@@ -2,6 +2,7 @@
 title: The Martian
 author: Andy Weir
 ltid: "13265773"
+tags: [scifi]
 ---
 
 Blurb from a JoCoNaut:

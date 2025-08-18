@@ -2,6 +2,7 @@
 title: Hellspark
 author: Janet Kagan
 ltid: "42793"
+tags: [scifi, horror, mystery]
 ---
 
 Blurb from a JoCoNaut:

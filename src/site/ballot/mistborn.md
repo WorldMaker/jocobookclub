@@ -2,6 +2,7 @@
 title: "Mistborn: The Final Empire"
 author: Brandon Sanderson
 ltid: "1287660"
+tags: [fantasy]
 ---
 
 Blurb from a JoCoNaut:

@@ -2,6 +2,7 @@
 title: Clean Sweep
 author: Ilona Andrews
 ltid: "13177969"
+tags: [scifi, fantasy]
 ---
 
 Blurb from a JoCoNaut:
