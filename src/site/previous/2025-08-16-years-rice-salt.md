@@ -2,6 +2,7 @@
 title: The Years of Rice and Salt
 author: Kim Stanley Robinson
 ltid: "23185"
+tags: [fantasy]
 ---
 
 Blurb from a JoCoNaut:
