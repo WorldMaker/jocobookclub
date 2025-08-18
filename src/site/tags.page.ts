@@ -8,8 +8,8 @@ interface TagInfo {
 export const genreTags: TagInfo[] = [
   {
     iconClass: 'has-text-info',
-    icon: "fa-ship-large",
-    title: "Authors of the Cruise",
+    icon: 'fa-ship-large',
+    title: 'Authors of the Cruise',
     tag: 'boat',
   },
   {
