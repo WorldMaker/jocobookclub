@@ -55,7 +55,7 @@ export default function* tagsPages({}: Lume.Data) {
     yield {
       ...tag,
       layout: 'tag.vto',
-      url: `/tags/${tag.tag}`,
+      url: `/tags/${tag.tag}/`,
     }
   }
 }
