@@ -1,5 +1,6 @@
 import { Fragment, jsx, NodeDescription } from '@worldmaker/butterfloat'
 import { Ranking } from './vm.ts'
+import { GenreTags } from '../genre-tags/index.tsx'
 
 interface InterestProps {
   ltid: string
@@ -64,7 +65,7 @@ function Row({ idx, ltid, ranking }: RowProps) {
     return (
       <tr>
         <th>{idx}</th>
-        <td colSpan={2}>Missing information</td>
+        <td colSpan={3}>Missing information</td>
       </tr>
     )
   }
@@ -76,6 +77,9 @@ function Row({ idx, ltid, ranking }: RowProps) {
         [<a href={`https://www.librarything.com/work/${ltid}`}>LT</a>]
       </td>
       <td>{book.author}</td>
+      <td>
+        <GenreTags tags={book.tags} />
+      </td>
     </tr>
   )
 }
@@ -101,6 +105,7 @@ export function Table({ ranking }: TableProps) {
             <th>Rank</th>
             <th>Title</th>
             <th>Author</th>
+            <th>Tags</th>
           </tr>
         </thead>
         {/* The list is reversed because sorted in ascending order */}
@@ -110,7 +115,7 @@ export function Table({ ranking }: TableProps) {
               <Row idx={idx + 1} ltid={ltid} ranking={ranking} />
               <tr>
                 <td></td>
-                <td colSpan={3}>
+                <td colSpan={4}>
                   <Interest ltid={ltid} ranking={ranking} />
                 </td>
               </tr>
