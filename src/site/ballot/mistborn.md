@@ -1,7 +1,7 @@
 ---
-title: "Mistborn: The Final Empire"
+title: 'Mistborn: The Final Empire'
 author: Brandon Sanderson
-ltid: "1287660"
+ltid: '1287660'
 tags: [fantasy]
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: The Lies of Locke Lamora
 author: Scott Lynch
-ltid: "797435"
+ltid: '797435'
 tags: [fantasy]
 ---
 

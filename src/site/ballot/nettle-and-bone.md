@@ -1,7 +1,7 @@
 ---
 id: 01JP3WVT7G2J0MC7042G1KH8FP
 userId: 01JMT7410J2ZV5QA3FFNRXZ579
-ltid: "26196827"
+ltid: '26196827'
 title: Nettle and Bone
 author: T. Kingfisher
 whyBlurb: >-

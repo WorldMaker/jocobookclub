@@ -1,7 +1,7 @@
 ---
-title: "Good Omens: The Nice and Accurate Prophecies of Agnes Nutter, Witch"
+title: 'Good Omens: The Nice and Accurate Prophecies of Agnes Nutter, Witch'
 author: Neil Gaiman and Terry Pratchett
-ltid: "5794"
+ltid: '5794'
 tags: [fantasy]
 ---
 

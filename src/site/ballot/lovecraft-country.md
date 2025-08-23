@@ -1,7 +1,7 @@
 ---
 title: Lovecraft Country
 author: Matt Ruff
-ltid: "15800813"
+ltid: '15800813'
 tags: [horror]
 ---
 

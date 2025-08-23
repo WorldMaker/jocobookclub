@@ -1,7 +1,7 @@
 ---
 title: The Princess Bride
 author: William Goldman
-ltid: "4936"
+ltid: '4936'
 tags: [fantasy]
 scheduled: true
 ---

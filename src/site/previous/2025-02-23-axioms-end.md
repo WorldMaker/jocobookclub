@@ -1,7 +1,7 @@
 ---
 title: "Axiom's End"
 author: Lindsay Ellis
-ltid: "23821128"
+ltid: '23821128'
 tags: [scifi]
 ---
 

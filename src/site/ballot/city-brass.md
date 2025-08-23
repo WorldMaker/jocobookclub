@@ -1,7 +1,7 @@
 ---
 title: The City of Brass
 author: S. A. Chakraborty
-ltid: "19640942"
+ltid: '19640942'
 tags: [fantasy]
 ---
 

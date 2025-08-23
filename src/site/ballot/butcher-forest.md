@@ -1,7 +1,7 @@
 ---
 title: The Butcher of the Forest
 author: Premee Mohamed
-ltid: "30442305"
+ltid: '30442305'
 tags: [fantasy]
 ---
 

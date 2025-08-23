@@ -1,7 +1,7 @@
 ---
 title: The Overstory
 author: Richard Powers
-ltid: "20296983"
+ltid: '20296983'
 ---
 
 Blurb from a JoCoNaut:

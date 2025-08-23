@@ -1,7 +1,7 @@
 ---
 title: A Marvellous Light
 author: Freya Marske
-ltid: "24656599"
+ltid: '24656599'
 tags: [fantasy, romance]
 ---
 

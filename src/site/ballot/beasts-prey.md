@@ -1,7 +1,7 @@
 ---
 title: Beasts of Prey
 author: Ayana Gray
-ltid: "25813695"
+ltid: '25813695'
 tags: [fantasy]
 ---
 

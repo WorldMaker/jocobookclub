@@ -8,7 +8,7 @@ layout: main.vto
         <span>{{title}}</span>
     </h1>
     <div class="grid is-col-min-18">
-        {{ for book of search.pages("ballot " + tag) }}
+        {{ for book of search.pages(`ballot ${tag}`) }}
         {{ include "book-card.vto" { ...book, currentBallot: true } }}
         {{ /for }}
     </div>
@@ -20,7 +20,7 @@ layout: main.vto
         <span>Previous {{title}} Books</span>
     </h1>
     <div class="grid is-col-min-18">
-        {{ for book of search.pages("previous " + tag) }}
+        {{ for book of search.pages(`previous ${tag}`) }}
         {{ include "book-card.vto" { ...book, showExcerpt: true } }}
         {{ /for }}
     </div>

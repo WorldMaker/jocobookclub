@@ -1,7 +1,7 @@
 ---
 title: The Adventures of Amina al-Sirafi
 author: Shannon Chakraborty
-ltid: "28346417"
+ltid: '28346417'
 tags: [fantasy]
 ---
 

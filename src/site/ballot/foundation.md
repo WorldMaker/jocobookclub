@@ -1,7 +1,7 @@
 ---
 title: Foundation
 author: Isaac Asimov
-ltid: "3116747"
+ltid: '3116747'
 tags: [scifi]
 ---
 

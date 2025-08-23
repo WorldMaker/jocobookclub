@@ -1,7 +1,7 @@
 ---
 title: The Goblin Emperor
 author: Katherine Addison
-ltid: "14133665"
+ltid: '14133665'
 tags: [fantasy]
 ---
 
