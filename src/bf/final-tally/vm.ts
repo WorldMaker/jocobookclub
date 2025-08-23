@@ -12,6 +12,7 @@ export interface BookInfo {
   author: string
   ltid: string
   url: string
+  tags: string[]
 }
 
 export interface Ranking {
