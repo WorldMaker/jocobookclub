@@ -1,7 +1,7 @@
 ---
 title: Every Heart a Doorway
 author: Seanan McGuire
-ltid: "15998723"
+ltid: '15998723'
 tags: [fantasy]
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: The First Fifteen Lives of Harry August
 author: Claire North
-ltid: "14297982"
+ltid: '14297982'
 tags: [romance, scifi]
 ---
 

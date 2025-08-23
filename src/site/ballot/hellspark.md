@@ -1,7 +1,7 @@
 ---
 title: Hellspark
 author: Janet Kagan
-ltid: "42793"
+ltid: '42793'
 tags: [scifi, horror, mystery]
 ---
 

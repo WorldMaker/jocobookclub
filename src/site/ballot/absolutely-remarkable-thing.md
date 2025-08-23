@@ -1,7 +1,7 @@
 ---
 title: An Absolutely Remarkable Thing
 author: Hank Green
-ltid: "20576228"
+ltid: '20576228'
 tags: [boat]
 ---
 

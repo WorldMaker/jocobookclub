@@ -7,62 +7,16 @@
                 <p class="subtitle is-6">{{ author }}</p>
                 
                 <div class="tags">
-                    {{ if tags.includes('boat') }}
-                    <a class="tag is-info" href="/tags/boat">
-                        <span class="icon-text">
-                            <span class="icon"><i class="fa-duotone fa-solid fa-ship-large"></i></span>
-                            <span>Boat</span>
-                        </span>
-                    </a>
-                    {{ /if }}
-                    {{ if tags.includes('scifi') }}
-                    <a class="tag is-danger" href="/tags/scifi">
-                        <span class="icon-text">
-                            <span class="icon"><i class="fa-duotone fa-solid fa-rocket-launch"></i></span>
-                            <span>Science Fiction</span>
-                        </span>
-                    </a>
-                    {{ /if }}
-                    {{ if tags.includes('fantasy') }}
-                    <a class="tag is-primary" href="/tags/fantasy">
-                        <span class="icon-text">
-                            <span class="icon"><i class="fa-duotone fa-solid fa-dragon"></i></span>
-                            <span>Fantasy</span>
-                        </span>
-                    </a>
-                    {{ /if }}
-                    {{ if tags.includes('mystery') }}
-                    <a class="tag is-link" href="/tags/mystery">
-                        <span class="icon-text">
-                            <span class="icon"><i class="fa-duotone fa-solid fa-user-hat-tie-magnifying-glass"></i></span>
-                            <span>Mystery</span>
-                        </span>
-                    </a>
-                    {{ /if }}
-                    {{ if tags.includes('horror') }}
-                    <a class="tag is-black" href="/tags/horror">
-                        <span class="icon-text">
-                            <span class="icon"><i class="fa-duotone fa-solid fa-skull"></i></span>
-                            <span>Horror</span>
-                        </span>
-                    </a>
-                    {{ /if }}
-                    {{ if tags.includes('romance') }}
-                    <a class="tag is-white" href="/tags/romance">
-                        <span class="icon-link">
-                            <span class="icon has-text-danger"><i class="fa-duotone fa-solid fa-hearts"></i></span>
-                            <span>Romance</span>
-                        </span>
-                    </a>
-                    {{ /if }}
-                    {{ if tags.includes('non-fiction') }}
-                    <a class="tag is-dark" href="/tags/non-fiction">
-                        <span class="icon-text">
-                            <span class="icon has-text-info"><i class="fa-duotone fa-solid fa-globe-stand"></i></span>
-                            <span>Non-Fiction</span>
-                        </span>
-                    </a>
-                    {{ /if }}
+                    {{ for tag of tags }}
+                        {{ if genre.tags[tag] }}
+                            <a class="tag {{ genre.tags[tag].tagClass }}" href="/tags/{{ tag }}">
+                                <span class="icon-text">
+                                    <span class="icon {{ genre.tags[tag].tagIconClass }}"><i class="fa-duotone fa-solid {{ genre.tags[tag].icon }}"></i></span>
+                                    <span>{{ genre.tags[tag].name ?? genre.tags[tag].title }}</span>
+                                </span>
+                            </a>
+                        {{ /if }}
+                    {{ /for }}
                 </div>
             </div>
         </div>

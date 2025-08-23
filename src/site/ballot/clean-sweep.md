@@ -1,7 +1,7 @@
 ---
 title: Clean Sweep
 author: Ilona Andrews
-ltid: "13177969"
+ltid: '13177969'
 tags: [scifi, fantasy]
 ---
 

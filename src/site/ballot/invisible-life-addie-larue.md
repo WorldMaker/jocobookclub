@@ -1,7 +1,7 @@
 ---
 title: The Invisible Life of Addie LaRue
 author: V. E. Schwab
-ltid: "27450296"
+ltid: '27450296'
 tags: [fantasy]
 ---
 
