@@ -32,9 +32,8 @@ export function Top5List({ ranking }: ListProps) {
   const { finalTally, books } = ranking
   return (
     <ol type='1'>
-      {finalTally.ranking.toReversed().filter((ltid) => Boolean(books[ltid])).toSpliced(5).map((ltid) => (
-        <Row ltid={ltid} books={books} />
-      ))}
+      {finalTally.ranking.toReversed().filter((ltid) => Boolean(books[ltid]))
+        .toSpliced(5).map((ltid) => <Row ltid={ltid} books={books} />)}
     </ol>
   )
 }

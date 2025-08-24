@@ -1,6 +1,13 @@
 import { butterfly, jsx, run, StateSetter } from '@worldmaker/butterfloat'
 import finalTallyVm, { FinalTallyVm, StaticApiBase } from './vm.ts'
-import { BehaviorSubject, map, Observable, of, Subscription, switchMap } from 'rxjs'
+import {
+  BehaviorSubject,
+  map,
+  Observable,
+  of,
+  Subscription,
+  switchMap,
+} from 'rxjs'
 import { LoginTop5 } from './login.tsx'
 import { Top5List } from './list.tsx'
 import sessionManager from '../vm/session-manager.ts'
@@ -52,9 +59,11 @@ function TagTally({ tag }: TagTallyProps) {
     switchMap((session) =>
       session
         ? tag.pipe(
-          map((tag) => new FinalTallyVm(session, `${StaticApiBase}/tags/${tag}.json`)),
-          switchMap(vm => vm.finalTally),
-          map(ft =>
+          map((tag) =>
+            new FinalTallyVm(session, `${StaticApiBase}/tags/${tag}.json`)
+          ),
+          switchMap((vm) => vm.finalTally),
+          map((ft) =>
             ft
               ? () => <Top5List ranking={ft} />
               : () => (
@@ -86,7 +95,11 @@ export class TagTallyComponent extends HTMLElement {
     this.#tag.next(value)
   }
 
-  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+  attributeChangedCallback(
+    name: string,
+    oldValue: string | null,
+    newValue: string | null,
+  ) {
     if (name === 'tag' && oldValue !== newValue) {
       this.tag = newValue ?? ''
     }
