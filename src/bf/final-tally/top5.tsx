@@ -1,5 +1,4 @@
-import { butterfly, jsx, run, StateSetter } from '@worldmaker/butterfloat'
-import finalTallyVm, { FinalTallyVm, StaticApiBase } from './vm.ts'
+import { jsx, run } from '@worldmaker/butterfloat'
 import {
   BehaviorSubject,
   map,
@@ -8,10 +7,10 @@ import {
   Subscription,
   switchMap,
 } from 'rxjs'
-import { LoginTop5 } from './login.tsx'
-import { Top5List } from './list.tsx'
 import sessionManager from '../vm/session-manager.ts'
-import { custom } from 'zod'
+import { Top5List } from './list.tsx'
+import { LoginTop5 } from './login.tsx'
+import finalTallyVm, { FinalTallyVm, StaticApiBase } from './vm.ts'
 
 function FinalTally() {
   const children = finalTallyVm.pipe(
