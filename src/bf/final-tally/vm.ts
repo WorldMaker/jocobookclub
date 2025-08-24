@@ -4,8 +4,9 @@ import { map, Observable, shareReplay } from 'rxjs'
 import { apiClient } from '../client.ts'
 import sessionManager from '../vm/session-manager.ts'
 
-const ActiveBallotUrl =
-  'https://worldmaker.net/jocobookclub/static-api/ballot.json'
+export const StaticApiBase = 'https://worldmaker.net/jocobookclub/static-api'
+
+const ActiveBallotUrl = `${StaticApiBase}/ballot.json`
 
 export interface BookInfo {
   title: string
@@ -22,6 +23,7 @@ export interface Ranking {
 
 export class FinalTallyVm {
   readonly #session: Session
+  readonly #bookUrl: string
 
   readonly #finalTally: Observable<Ranking | null>
   readonly #setFinalTally: (finalTally: Ranking | null) => void
@@ -29,14 +31,15 @@ export class FinalTallyVm {
     return this.#finalTally
   }
 
-  constructor(session: Session) {
+  constructor(session: Session, bookUrl: string) {
     this.#session = session
+    this.#bookUrl = bookUrl
     ;[this.#finalTally, this.#setFinalTally] = butterfly<Ranking | null>(null)
     this.load()
   }
 
   async load() {
-    const staticResp = await fetch(ActiveBallotUrl)
+    const staticResp = await fetch(this.#bookUrl)
     if (!staticResp.ok) {
       return
     }
@@ -58,7 +61,7 @@ export class FinalTallyVm {
 
 // convenient singleton instance
 const finalTallyVm = sessionManager.session.pipe(
-  map((session) => session ? new FinalTallyVm(session) : null),
+  map((session) => session ? new FinalTallyVm(session, ActiveBallotUrl) : null),
   shareReplay(1),
 )
 export default finalTallyVm

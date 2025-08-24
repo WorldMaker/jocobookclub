@@ -1,5 +1,6 @@
 ---
 layout: main.vto
+bfscript: /bf/tag-page.js
 ---
 
 <section class="section">
@@ -7,11 +8,24 @@ layout: main.vto
         <span class="icon {{iconClass}}"><i class="fa-duotone fa-solid {{icon}}"></i></span>
         <span>{{title}}</span>
     </h1>
-    <div class="grid is-col-min-18">
+    <tag-tally-top5 tag="{{tag}}">
+        <p>You will need to have JS enabled and to login to see the current rankings.</p>
+    </tag-tally-top5>
+
+    <hr />
+    
+    <sort-picker></sort-picker>
+    <hr />
+
+    <book-sorter class="grid is-col-min-18">
         {{ for book of search.pages(`ballot ${tag}`) }}
         {{ include "book-card.vto" { ...book, currentBallot: true } }}
         {{ /for }}
-    </div>
+    </book-sorter>
+
+    <sort-picker></sort-picker>
+    <hr />
+    <vote-button></vote-button>
 </section>
 
 <section class="section">
@@ -25,3 +39,5 @@ layout: main.vto
         {{ /for }}
     </div>
 </section>
+
+{{ include "bf/tag-page.html" }}

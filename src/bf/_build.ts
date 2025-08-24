@@ -16,6 +16,7 @@ await esbuild.build({
     { out: 'login-form', in: './login-form/main.tsx' },
     { out: 'passkey-page', in: './pages/passkey.ts' },
     { out: 'suggestions-page', in: './pages/suggestions.ts' },
+    { out: 'tag-page', in: './pages/tag.ts' },
   ],
   outdir: '../site/bf/',
   metafile: true,
@@ -53,3 +54,6 @@ await buildPasskeyStamps(document)
 
 const { buildSuggestionStamps } = await import('./pages/_suggestions-stamps.ts')
 await buildSuggestionStamps(document)
+
+const { buildTagPageStamps } = await import('./pages/_tag-stamps.ts')
+await buildTagPageStamps(document)
