@@ -1,8 +1,14 @@
-import { ComponentContext, jsx, ObservableEvent } from '@worldmaker/butterfloat'
+import {
+  ComponentContext,
+  Fragment,
+  jsx,
+  ObservableEvent,
+} from '@worldmaker/butterfloat'
 import { SuggestionVm } from './vm.ts'
 import { map, takeUntil } from 'rxjs'
 import { filter } from 'rxjs'
 import { shareReplay } from 'rxjs'
+import { GenreTag, genreTags } from '../genre-tags/index.tsx'
 
 export interface SuggestionCardProps {
   vm: SuggestionVm
@@ -33,7 +39,10 @@ export function SuggestionCard(
 ) {
   const { vm } = props
 
-  bindEffect(vm.mySuggestionSaved, vm.suggestionSaved)
+  bindEffect(
+    vm.mySuggestionSaved,
+    (suggestion) => vm.suggestionSaved(suggestion),
+  )
   bindImmediateEffect(events.edit, () => vm.edit())
   // complete on delete to remove the card
   bindImmediateEffect(
@@ -52,18 +61,40 @@ export function SuggestionCard(
 
   const cannotEdit = vm.canEdit.pipe(map((canEdit) => !canEdit), shareReplay(1))
 
+  const tags = vm.suggestion.pipe(
+    map((suggestion) => () => (
+      <>
+        {(suggestion.tags ?? []).map((tag) => (
+          <GenreTag tag={tag} info={genreTags[tag]} />
+        ))}
+      </>
+    )),
+  )
+
   return (
     <div class='card'>
       <div class='card-content'>
         <div class='media'>
           <div class='media-content'>
-            <span
-              class='tag'
-              classBind={{ 'is-info': vm.draft }}
-              bind={{
-                innerText: vm.draft.pipe(map((draft) => draft ? 'Draft' : '')),
-              }}
-            />
+            <div class='tags'>
+              <span
+                class='tag'
+                classBind={{
+                  'is-info': vm.draft,
+                  'is-hidden': vm.draft.pipe(map((d) => !d)),
+                }}
+                bind={{
+                  innerText: vm.draft.pipe(
+                    map((draft) => draft ? 'Draft' : ''),
+                  ),
+                }}
+              />
+              <span
+                style='display: contents;'
+                childrenBind={tags}
+                childrenBindMode='replace'
+              />
+            </div>
             <p class='title is-4' bind={{ innerText: title }} />
             <p class='subtitle is-6' bind={{ innerText: author }} />
           </div>
