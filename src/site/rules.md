@@ -1,6 +1,7 @@
 ---
 title: Club Rules
 layout: page.vto
+tags: [rules]
 ---
 
 - One vote per round per person.

@@ -4,7 +4,8 @@ interface TagInfo {
   iconClass: string
   icon: string
   title: string
-  tag: string
+  name?: string
+  description?: string
 }
 
 export default function* tagsPages({}: Lume.Data) {
@@ -12,6 +13,7 @@ export default function* tagsPages({}: Lume.Data) {
     yield {
       ...info as TagInfo,
       tag,
+      tags: ['tag', tag],
       layout: 'tag.vto',
       url: `/tags/${tag}/`,
     }
