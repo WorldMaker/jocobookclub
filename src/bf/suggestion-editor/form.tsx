@@ -309,7 +309,9 @@ export function Form(
         <p class='help'>
           Optionally select all relevant genres for this suggestion. "Boat"
           means the author has attended at least one JoCo Cruise. For the rest,
-          use your best judgment, because the definitions are subjective
+          use your best judgment, because the definitions are subjective, and
+          "Common Fiction" is useful for anything that isn't more strongly the
+          other genres
         </p>
       </div>
       <div class='field is-grouped'>
