@@ -2,6 +2,13 @@
     style="view-transition-name: book-card-{{ ltid }};">
     <div class="card-content">
         <div class="media">
+            {{ if olid }}
+            <figure class="media-left">
+                <a href="https://openlibrary.org/works/{{ olid }}" class="image is-64x64">
+                    <img src="https://covers.openlibrary.org/b/olid/{{ olid }}-S.jpg" alt="Thumbnail of cover of {{ title }} by {{ author }} from Open Library">
+                </a>
+            </figure>
+            {{ /if }}
             <div class="media-content">
                 <p class="title is-4">{{ title }}</p>
                 <p class="subtitle is-6">{{ author }}</p>
