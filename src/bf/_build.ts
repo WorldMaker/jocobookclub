@@ -9,11 +9,8 @@ await esbuild.build({
     { out: 'book-page', in: './pages/book.ts' },
     { out: 'final-tally', in: './final-tally/main.tsx' },
     { out: 'invite-register', in: './invite-register/main.tsx' },
-    {
-      out: 'login-button',
-      in: './login-button/main.tsx',
-    },
     { out: 'login-form', in: './login-form/main.tsx' },
+    { out: 'nav-menu', in: './nav-menu.ts' },
     { out: 'passkey-page', in: './pages/passkey.ts' },
     { out: 'suggestions-page', in: './pages/suggestions.ts' },
     { out: 'tag-page', in: './pages/tag.ts' },

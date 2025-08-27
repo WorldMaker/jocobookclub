@@ -10,37 +10,87 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
         <link rel="stylesheet" href="{{ "/assets/bookclub.css" |> url }}">
         <script src="https://kit.fontawesome.com/3b41ac7e32.js" crossorigin="anonymous"></script>
-        <script type="module" src="/bf/login-button.js"></script>
+        <script type="module" src="/bf/nav-menu.js"></script>
         {{ if bfscript }}
         <script type="module" src="{{ bfscript }}"></script>
         {{ /if }}
     </head>
 
     <body>
-        <nav class="navbar is-info" role="navigation" aria-label="main navigation">
+        <nav-menu class="navbar is-info" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
                 <!-- .is-active doesn't currently work under .navbar.is-info -->
                 <a class="navbar-item {{- if tags?.includes('main') }} has-background-dark has-text-info{{ /if }}" title="JoCo Book Club" href="/">
                     <i class="fa-duotone fa-solid fa-book-open-cover fa-2x"></i>
                 </a>
-                <a class="navbar-item" title="Upcoming Books" href="/#upcoming">
-                    <i class="fa-duotone fa-solid fa-book-sparkles"></i>
+                
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
                 </a>
-                <a class="navbar-item" title="Current Ballot" href="/#ballot">
-                    <i class="fa-duotone fa-solid fa-box-ballot"></i>
-                </a>
-                <a class="navbar-item {{ if tags?.includes('previous') }} has-background-dark has-text-info{{ /if }}" title="Previous Books" href="/previous">
-                    <i class="fa-duotone fa-solid fa-books"></i>
-                </a>
-                <a class="navbar-item {{ if tags?.includes('ranking') }} has-background-dark has-text-info{{ /if }}" title="Current Rankings" href="/ranking">
-                    <i class="fa-duotone fa-solid fa-ballot"></i>
-                </a>
-                <a class="navbar-item {{ if tags?.includes('suggestion') }} has-background-dark has-text-info{{ /if }}" title="Suggestions" href="/suggestions">
-                    <i class="fa-duotone fa-solid fa-lightbulb"></i>
-                </a>
-                <login-button login="{{ "/login" |> url }}" passkey="{{ "/passkey" |> url }}" active="{{ if tags?.includes('login') }}true{{ else }}false{{ /if }}" style="display: contents;"></login-button>
             </div>
-        </nav>
+            <div class="navbar-menu">
+                <div class="navbar-start">
+                    <a class="navbar-item" title="Upcoming Books" href="/#upcoming">
+                        <i class="fa-duotone fa-solid fa-book-sparkles"></i>
+                        <span class="is-hidden-desktop">Upcoming Books</span>
+                    </a>
+                    <a class="navbar-item" title="Current Ballot" href="/#ballot">
+                        <i class="fa-duotone fa-solid fa-box-ballot"></i>
+                        <span class="is-hidden-desktop">Current Ballot</span>
+                    </a>
+                    <a class="navbar-item {{ if tags?.includes('previous') }} has-background-dark has-text-info{{ /if }}" title="Previous Books" href="/previous">
+                        <i class="fa-duotone fa-solid fa-books"></i>
+                        <span>Previous Books</span>
+                    </a>
+                    <a class="navbar-item {{ if tags?.includes('ranking') }} has-background-dark has-text-info{{ /if }}" title="Current Rankings" href="/ranking">
+                        <i class="fa-duotone fa-solid fa-ballot"></i>
+                        <span>Current Rankings</span>
+                    </a>
+                    <a class="navbar-item {{ if tags?.includes('suggestion') }} has-background-dark has-text-info{{ /if }}" title="Suggestions" href="/suggestions">
+                        <i class="fa-duotone fa-solid fa-lightbulb"></i>
+                        <span>Suggestions</span>
+                    </a>
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link">
+                            <i class="fa-duotone fa-solid fa-tag"></i>
+                            Tags
+                        </a>
+
+                        <div class="navbar-dropdown">
+                            {{ for tag of Object.keys(genre.tags) }}
+                                <a class="navbar-item {{ if tags?.includes(tag) }} has-background-dark has-text-info{{ /if }}" href="/tags/{{ tag }}" title="{{ genre.tags[tag].title }}">
+                                    <span class="icon {{ genre.tags[tag].iconClass }}"><i class="fa-duotone fa-solid {{ genre.tags[tag].icon }}"></i></span>
+                                    {{ genre.tags[tag].name ?? genre.tags[tag].title }}
+                                </a>
+                            {{ /for }}
+                        </div>
+                    </div>
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link">
+                            <i class="fa-duotone fa-solid fa-ellipsis-vertical"></i>
+                            More
+                        </a>
+
+                        <div class="navbar-dropdown">        
+                            <a class="navbar-item {{ if tags?.includes('rules') }} has-background-dark has-text-info{{ /if }}" title="Club Rules" href="/rules">
+                                <i class="fa-duotone fa-solid fa-scale-balanced"></i>
+                                <span>Club Rules</span>
+                            </a>
+                            <a class="navbar-item" href="https://github.com/WorldMaker/jocobookclub/" title="Contact">
+                                <i class="fa-duotone fa-solid fa-code-branch"></i>
+                                <span>Source Code</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="navbar-end">
+                    <login-button login="{{ "/login" |> url }}" passkey="{{ "/passkey" |> url }}" active="{{ if tags?.includes('login') }}true{{ else }}false{{ /if }}" style="display: contents;"></login-button>
+                </div>
+            </div>
+        </nav-menu>
 
         {{ content }}
     </body>
