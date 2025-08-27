@@ -1,6 +1,7 @@
 import { ComponentContext, jsx, ObservableEvent } from '@worldmaker/butterfloat'
 import { SuggestionEditorVm } from './vm.ts'
 import { combineLatest, map, shareReplay } from 'rxjs'
+import { GenreTagCheckboxes } from '../genre-tags/index.tsx'
 
 export interface SuggestionEditorFormProps {
   vm: SuggestionEditorVm
@@ -251,6 +252,14 @@ export function Form(
         <p class='help'>
           Optionally provide content warnings/content notes for the book that
           you think the club should especially pay attention to
+        </p>
+      </div>
+      <div class='field'>
+        <GenreTagCheckboxes vm={vm} />
+        <p class='help'>
+          Optionally select all relevant genres for this suggestion. "Boat"
+          means the author has attended at least one JoCo Cruise. For the
+          rest, use your best judgment, because the definitions are subjective
         </p>
       </div>
       <div class='field is-grouped'>

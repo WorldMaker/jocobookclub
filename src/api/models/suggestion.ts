@@ -9,6 +9,7 @@ export const Suggestion = z.object({
   author: z.string().nonempty(),
   whyBlurb: z.string().nonempty(),
   cw: z.string().optional(),
+  tags: z.array(z.string()).optional(),
   updated: z.iso.datetime({ offset: true }),
 })
 export type Suggestion = z.infer<typeof Suggestion>

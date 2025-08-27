@@ -1,12 +1,20 @@
 import { ulid } from '@std/ulid'
 import { butterfly, StateSetter } from '@worldmaker/butterfloat'
 import { Session, Suggestion } from '@worldmaker/jocobookclub-api/models'
-import { firstValueFrom, map, Observable, shareReplay, Subject } from 'rxjs'
+import {
+  distinctUntilChanged,
+  firstValueFrom,
+  map,
+  Observable,
+  shareReplay,
+  Subject,
+} from 'rxjs'
 import { ZodSafeParseResult } from 'zod'
 import { apiClient } from '../client.ts'
 import sessionManager from '../vm/session-manager.ts'
+import { GenreTagCheckboxVm } from '../genre-tags/index.tsx'
 
-export class SuggestionEditorVm {
+export class SuggestionEditorVm implements GenreTagCheckboxVm {
   readonly #session: Session
   get session() {
     return this.#session
@@ -57,6 +65,11 @@ export class SuggestionEditorVm {
           return true
         }
         if (suggestion.cw !== this.#savedSuggestion.cw) {
+          return true
+        }
+        const tags = new Set(suggestion.tags ?? [])
+        const savedTags = new Set(this.#savedSuggestion.tags ?? [])
+        if (tags.symmetricDifference(savedTags).size != 0) {
           return true
         }
         return false
@@ -212,6 +225,25 @@ export class SuggestionEditorVm {
 
   cwChanged(cw: string | undefined) {
     this.#updateSuggestion((s) => ({ ...s, cw }))
+  }
+
+  genreChanged(tag: string, checked: boolean) {
+    this.#updateSuggestion((s) => {
+      const genres = new Set(s.tags)
+      if (checked) {
+        genres.add(tag)
+      } else {
+        genres.delete(tag)
+      }
+      return { ...s, tags: Array.from(genres) }
+    })
+  }
+
+  genreChecked(tag: string): Observable<boolean> {
+    return this.suggestion.pipe(
+      map((s) => Boolean(s?.tags?.includes(tag))),
+      distinctUntilChanged(),
+    )
   }
 }
 
