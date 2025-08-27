@@ -8,6 +8,9 @@ bfscript: /bf/tag-page.js
         <span class="icon {{iconClass}}"><i class="fa-duotone fa-solid {{icon}}"></i></span>
         <span>{{title}}</span>
     </h1>
+    {{ if description }}
+    <h2 class="subtitle">{{description}}</h2>
+    {{ /if }}
     <tag-tally-top5 tag="{{tag}}">
         <p>You will need to have JS enabled and to login to see the current rankings.</p>
     </tag-tally-top5>

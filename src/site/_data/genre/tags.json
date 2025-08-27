@@ -3,6 +3,7 @@
     "iconClass": "has-text-info",
     "icon": "fa-ship-large",
     "title": "Authors of the Cruise",
+    "description": "Books by authors who have sailed with JoCo Cruise at least once",
     "name": "Boat",
     "tagClass": "is-info",
     "tagIconClass": ""
@@ -48,5 +49,13 @@
     "title": "Non-Fiction",
     "tagClass": "is-dark",
     "tagIconClass": "has-text-info"
+  },
+  "common": {
+    "iconClass": "has-text-warning",
+    "icon": "fa-book-section",
+    "title": "Common Fiction",
+    "description": "Books generally outside of the other main genres, often with a mainstream appeal.",
+    "tagClass": "is-warning",
+    "tagIconClass": ""
   }
 }
