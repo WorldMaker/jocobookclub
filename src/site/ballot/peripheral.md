@@ -2,6 +2,7 @@
 title: The Peripheral
 author: William Gibson
 ltid: '14850872'
+olid: OL27176668M
 tags: [scifi]
 ---
 

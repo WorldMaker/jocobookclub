@@ -2,7 +2,7 @@
 title: The Princess Bride
 author: William Goldman
 ltid: '4936'
-olid: OL486967W
+olid: OL3704385M
 tags: [fantasy]
 scheduled: true
 ---

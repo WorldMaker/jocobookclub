@@ -2,6 +2,7 @@
 id: 01JN6XPPDXEPMQNYNWQPSDKJ3Z
 userId: 01JJ2XCD6C339ZW7CBC4Y8HSAK
 ltid: '149937'
+olid: OL8195581M
 title: Night's Master
 author: Tanith Lee
 whyBlurb: >-

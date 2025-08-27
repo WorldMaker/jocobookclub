@@ -2,6 +2,7 @@
 title: Children of Time
 author: Adrian Tchaikovsky
 ltid: '16049191'
+olid: OL27322146M
 tags: [scifi]
 ---
 
