@@ -2,6 +2,7 @@
 title: Foundation
 author: Isaac Asimov
 ltid: '3116747'
+olid: OL51566464M
 tags: [scifi]
 ---
 

@@ -2,6 +2,7 @@
 title: Ring Shout
 author: P. Djèlí Clark
 ltid: '24213124'
+olid: OL34085306M
 tags: [fantasy]
 ---
 

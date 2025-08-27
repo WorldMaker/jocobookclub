@@ -2,6 +2,7 @@
 title: The Atrocity Archives
 author: Charles Stross
 ltid: '23298'
+olid: OL3679911M
 tags: [scifi, horror]
 ---
 

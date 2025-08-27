@@ -2,6 +2,7 @@
 title: 'Mistborn: The Final Empire'
 author: Brandon Sanderson
 ltid: '1287660'
+olid: OL27959083M
 tags: [fantasy]
 ---
 

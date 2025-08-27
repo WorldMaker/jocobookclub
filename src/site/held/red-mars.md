@@ -2,6 +2,7 @@
 title: Red Mars
 author: Kim Stanley Robinson
 ltid: '17666'
+olid: OL21441703M
 tags: [scifi]
 ---
 
