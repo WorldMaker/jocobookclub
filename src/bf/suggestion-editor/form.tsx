@@ -13,6 +13,7 @@ export interface SuggestionEditorFormEvents {
   titleChanged: ObservableEvent<InputEvent>
   authorChanged: ObservableEvent<InputEvent>
   ltidChanged: ObservableEvent<InputEvent>
+  olidChanged: ObservableEvent<InputEvent>
   whyBlurbChanged: ObservableEvent<InputEvent>
   cwChanged: ObservableEvent<InputEvent>
 }
@@ -40,6 +41,10 @@ export function Form(
   bindImmediateEffect(
     events.ltidChanged,
     (e) => vm.ltidChanged((e.target as HTMLInputElement).value),
+  )
+  bindImmediateEffect(
+    events.olidChanged,
+    (e) => vm.olidChanged((e.target as HTMLInputElement).value),
   )
   bindImmediateEffect(
     events.whyBlurbChanged,
@@ -97,6 +102,22 @@ export function Form(
       valid.success
         ? ''
         : valid.error.issues.find((issue) => issue.path[0] === 'ltid')
+          ?.message ?? ''
+    ),
+  )
+  const olid = vm.suggestion.pipe(map((suggestion) => suggestion?.olid ?? ''))
+  const olidInvalid = vm.valid.pipe(
+    map((valid) =>
+      !valid.success &&
+      valid.error.issues.some((issue) => issue.path[0] === 'olid')
+    ),
+    shareReplay(1),
+  )
+  const olidError = vm.valid.pipe(
+    map((valid) =>
+      valid.success
+        ? ''
+        : valid.error.issues.find((issue) => issue.path[0] === 'olid')
           ?.message ?? ''
     ),
   )
@@ -212,6 +233,35 @@ export function Form(
         <p class='help'>
           Optionally provide the LibraryThing Work ID to help make sure we find
           the right book
+        </p>
+      </div>
+      <div class='field'>
+        <label htmlFor='olid' class='label'>Open Library ID</label>
+        <div class='field'>
+          <div class='control'>
+            <input
+              id='olid'
+              class='input'
+              type='text'
+              placeholder='Open Library ID'
+              immediateBind={{ value: olid }}
+              events={{ change: events.olidChanged }}
+              classBind={{ 'is-danger': olidInvalid }}
+            />
+          </div>
+        </div>
+        <p
+          class='help'
+          classBind={{ 'is-danger': olidInvalid }}
+          bind={{ innerText: olidError }}
+        />
+        <p class='help'>
+          Optionally provide the Open Library ID to help display the cover of
+          the book. To find the Open Library ID, you can search for the book on
+          the{' '}
+          <a href='https://openlibrary.org/'>Open Library website</a>. Scroll
+          down to "Edition Identifiers" and copy the ID that should start with
+          an OL and end with an M, for example <code>OL1234567M</code>.
         </p>
       </div>
       <div class='field'>

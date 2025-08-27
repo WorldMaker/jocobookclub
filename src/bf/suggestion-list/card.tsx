@@ -59,6 +59,22 @@ export function SuggestionCard(
     map((suggestion) => () => <LibraryThingLink ltid={suggestion.ltid} />),
   )
 
+  const olidSrc = vm.suggestion.pipe(
+    map((suggestion) =>
+      suggestion.olid
+        ? `https://covers.openlibrary.org/b/olid/${suggestion.olid}-S.jpg`
+        : 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='
+    ),
+  )
+  const olidUrl = vm.suggestion.pipe(
+    map((suggestion) =>
+      suggestion.olid
+        ? `https://openlibrary.org/books/${suggestion.olid}`
+        : 'about:blank'
+    ),
+  )
+  const noOlid = vm.suggestion.pipe(map((suggestion) => !suggestion.olid))
+
   const cannotEdit = vm.canEdit.pipe(map((canEdit) => !canEdit), shareReplay(1))
 
   const tags = vm.suggestion.pipe(
@@ -75,6 +91,14 @@ export function SuggestionCard(
     <div class='card'>
       <div class='card-content'>
         <div class='media'>
+          <div class='media-left' classBind={{ 'is-hidden': noOlid }}>
+            <a class='image is-64x64' bind={{ href: olidUrl }}>
+              <img
+                bind={{ src: olidSrc }}
+                alt='Cover image'
+              />
+            </a>
+          </div>
           <div class='media-content'>
             <div class='tags'>
               <span
