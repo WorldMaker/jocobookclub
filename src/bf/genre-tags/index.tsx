@@ -69,15 +69,15 @@ export function GenreTagCheckbox(
   return (
     <label for={tag} class={`tag ${info.tagClass}`}>
       <span class='icon-text'>
-      <input
-        id={tag}
-        name={tag}
-        type='checkbox'
-        class='checkbox icon'
-        value={tag}
-        events={{ change }}
-        immediateBind={{ checked }}
-      />
+        <input
+          id={tag}
+          name={tag}
+          type='checkbox'
+          class='checkbox icon'
+          value={tag}
+          events={{ change }}
+          immediateBind={{ checked }}
+        />
         <span class={`icon ${info.tagIconClass}`}>
           <i class={`fa-duotone fa-solid ${info.icon}`}></i>
         </span>

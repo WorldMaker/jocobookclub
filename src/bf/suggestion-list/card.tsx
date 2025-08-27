@@ -1,4 +1,9 @@
-import { ComponentContext, jsx, Fragment, ObservableEvent } from '@worldmaker/butterfloat'
+import {
+  ComponentContext,
+  Fragment,
+  jsx,
+  ObservableEvent,
+} from '@worldmaker/butterfloat'
 import { SuggestionVm } from './vm.ts'
 import { map, takeUntil } from 'rxjs'
 import { filter } from 'rxjs'
@@ -34,7 +39,10 @@ export function SuggestionCard(
 ) {
   const { vm } = props
 
-  bindEffect(vm.mySuggestionSaved, (suggestion) => vm.suggestionSaved(suggestion))
+  bindEffect(
+    vm.mySuggestionSaved,
+    (suggestion) => vm.suggestionSaved(suggestion),
+  )
   bindImmediateEffect(events.edit, () => vm.edit())
   // complete on delete to remove the card
   bindImmediateEffect(
@@ -56,7 +64,9 @@ export function SuggestionCard(
   const tags = vm.suggestion.pipe(
     map((suggestion) => () => (
       <>
-        {(suggestion.tags ?? []).map((tag) => <GenreTag tag={tag} info={genreTags[tag]} />)}
+        {(suggestion.tags ?? []).map((tag) => (
+          <GenreTag tag={tag} info={genreTags[tag]} />
+        ))}
       </>
     )),
   )
@@ -69,12 +79,21 @@ export function SuggestionCard(
             <div class='tags'>
               <span
                 class='tag'
-                classBind={{ 'is-info': vm.draft, 'is-hidden': vm.draft.pipe(map((d) => !d)) }}
+                classBind={{
+                  'is-info': vm.draft,
+                  'is-hidden': vm.draft.pipe(map((d) => !d)),
+                }}
                 bind={{
-                  innerText: vm.draft.pipe(map((draft) => draft ? 'Draft' : '')),
+                  innerText: vm.draft.pipe(
+                    map((draft) => draft ? 'Draft' : ''),
+                  ),
                 }}
               />
-              <span style='display: contents;' childrenBind={tags} childrenBindMode='replace' />
+              <span
+                style='display: contents;'
+                childrenBind={tags}
+                childrenBindMode='replace'
+              />
             </div>
             <p class='title is-4' bind={{ innerText: title }} />
             <p class='subtitle is-6' bind={{ innerText: author }} />

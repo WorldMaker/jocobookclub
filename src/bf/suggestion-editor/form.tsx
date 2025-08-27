@@ -258,8 +258,8 @@ export function Form(
         <GenreTagCheckboxes vm={vm} />
         <p class='help'>
           Optionally select all relevant genres for this suggestion. "Boat"
-          means the author has attended at least one JoCo Cruise. For the
-          rest, use your best judgment, because the definitions are subjective
+          means the author has attended at least one JoCo Cruise. For the rest,
+          use your best judgment, because the definitions are subjective
         </p>
       </div>
       <div class='field is-grouped'>
