@@ -61,6 +61,9 @@ export class SuggestionEditorVm implements GenreTagCheckboxVm {
         if (suggestion.ltid !== this.#savedSuggestion.ltid) {
           return true
         }
+        if (suggestion.olid !== this.#savedSuggestion.olid) {
+          return true
+        }
         if (suggestion.whyBlurb !== this.#savedSuggestion.whyBlurb) {
           return true
         }
@@ -217,6 +220,10 @@ export class SuggestionEditorVm implements GenreTagCheckboxVm {
 
   ltidChanged(ltid: string) {
     this.#updateSuggestion((s) => ({ ...s, ltid }))
+  }
+
+  olidChanged(olid: string) {
+    this.#updateSuggestion((s) => ({ ...s, olid }))
   }
 
   whyBlurbChanged(whyBlurb: string) {

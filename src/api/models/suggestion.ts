@@ -5,6 +5,7 @@ export const Suggestion = z.object({
   id: z.ulid(),
   userId: UserId,
   ltid: z.string().optional(),
+  olid: z.string().optional(),
   title: z.string().nonempty(),
   author: z.string().nonempty(),
   whyBlurb: z.string().nonempty(),
