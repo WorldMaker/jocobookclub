@@ -3,7 +3,7 @@ title: The Book of the Unnamed Midwife
 author: Meg Elison
 ltid: '15096895'
 olid: OL26970943M
-tags: [boat]
+tags: [boat, scifi]
 ---
 
 Blurb from a JoCoNaut:
