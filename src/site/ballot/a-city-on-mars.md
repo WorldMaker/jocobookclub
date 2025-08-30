@@ -22,7 +22,7 @@ updated: '2025-08-27T11:27:52.596Z'
 
 Blurb from a JoCoNaut:
 
-> [Nonfiction] "Can we settle space, should we settle space, and have we really
+> "Can we settle space, should we settle space, and have we really
 > thought this through?" The authors did a remarkably thorough job of
 > interviewing experts and digging into primary sources to figure out what
 > challenges we'd need to solve before we can colonize space. They went into the

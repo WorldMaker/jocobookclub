@@ -1,7 +1,7 @@
 ---
 id: 01K3QD3T0SHNZC6DHJNEEJZ1NS
 userId: 01JMT6D04E9P6965SSB9XS16H2
-ltid: 'https://www.librarything.com/work/24129531/t/Strange-Love'
+ltid: '24129531'
 olid: OL28362555M
 title: Strange Love
 author: Ann Aguirre
@@ -12,6 +12,7 @@ whyBlurb: >-
 cw: sexual content
 tags:
   - romance
+  - scifi
 updated: '2025-08-28T04:12:40.147Z'
 ---
 

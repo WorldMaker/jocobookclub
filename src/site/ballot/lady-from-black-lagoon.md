@@ -1,8 +1,7 @@
 ---
 id: 01K3SR2Y397NTYXMAJMNCST07T
 userId: 01JMT6X25YPKTXY464444R7ZZH
-ltid: >-
-  22422342/t/The-Lady-from-the-Black-Lagoon-Hollywood-Monsters-and-the-Lost-Legacy-of-Milicent-Patrick
+ltid: '22422342'
 title: >-
   The Lady from the Black Lagoon: Hollywood Monsters and the Lost Legacy of
   Milicent Patrick
@@ -27,6 +26,8 @@ Blurb from a JoCoNaut:
 > Monster from the Black Lagoon, Part memoir of Mallory O'Meara's quest to find
 > information about Milicent Patrick who was effectively erased from history
 
-Content warnings include Graphic: Sexism, Misogyny, Suicide Moderate: Domestic
-abuse, Child abuse, Sexual harassment Minor: Infertility, Infidelity, Death of a
-Parent,
+Content warnings include Graphic: Sexism, Misogyny, Suicide
+
+Moderate: Domestic abuse, Child abuse, Sexual harassment
+
+Minor: Infertility, Infidelity, Death of a Parent

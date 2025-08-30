@@ -2,6 +2,7 @@
 id: 01K2T8WRC2H9GDQTYQ78DCEHE3
 userId: 01JK1T6D0BZ2SRGTTBCTVXB09E
 ltid: '22948884'
+olid: OL28209600M
 title: Catfishing on Catnet
 author: Naomi Kritzer
 whyBlurb: >-
@@ -34,7 +35,7 @@ Blurb from a JoCoNaut:
 > in just how many ways your online footprint can come back to bite you. (It
 > might officially be YA?)
 
-Steph and her mom move from city to city all the time: so often that her only
+> Steph and her mom move from city to city all the time: so often that her only
 friends are from an online forum site. Unbeknownst to the world, the site's
 moderator is a sentient AI who loves cat pictures and finding subtle ways of
 helping people. The story becomes a near-future YA thriller when a threat from

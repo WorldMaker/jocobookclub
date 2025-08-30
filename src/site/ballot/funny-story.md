@@ -2,6 +2,7 @@
 id: 01K2V1KZC80DW74K7CS42X4RE9
 userId: 01JYVVYCEPXVQH06ZZQS0GH6YJ
 ltid: '30677740'
+olid: OL57586063M
 title: Funny Story
 author: Emily Henry
 whyBlurb: >-
@@ -27,6 +28,7 @@ cw: |
   Moderate: Infidelity, Toxic relationship, Alcohol
 
   Minor: Drug use, mention of verbal Child abuse, Vomit
+tags: [romance]
 updated: '2025-08-17T03:47:57.467Z'
 ---
 

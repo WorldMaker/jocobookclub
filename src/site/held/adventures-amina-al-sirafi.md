@@ -6,4 +6,4 @@ olid: OL38927230M
 tags: [fantasy]
 ---
 
-Held due to having another of her book's already on the list
+Held due to having another of her books already on the list

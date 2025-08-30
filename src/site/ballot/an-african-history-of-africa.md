@@ -35,11 +35,11 @@ Blurb from a JoCoNaut:
 
 > Non-Fiction! 15 hour audiobook
 
-The blurb sez: For too long, Africa’s history has been dominated by western
+> The blurb sez: For too long, Africa’s history has been dominated by western
 narratives of slavery and colonialism, or simply ignored. Now, Zeinab Badawi
 sets the record straight.
 
-In this fascinating book, Badawi guides us through Africa’s spectacular
+> In this fascinating book, Badawi guides us through Africa’s spectacular
 history—from the very origins of our species, through ancient civilizations and
 medieval empires with remarkable queens and kings, to the miseries of conquest
 and the elation of independence. Visiting more than thirty African countries to
@@ -47,6 +47,6 @@ interview countless historians, anthropologists, archaeologists and local
 storytellers, she unearths buried histories from across the continent and gives
 Africa its rightful place in our global story.
 
-I've not yet read it, but am intrigued by it.
+> I've not yet read it, but am intrigued by it.
 
-Content warnings include
+Content warnings include imperialism, colonialism, slavery

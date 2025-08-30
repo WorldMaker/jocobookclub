@@ -2,6 +2,7 @@
 id: 01K2WS00YBBKWDCGRN3JQDJGJ6
 userId: 01JMT7GVFK73Y0Q89C55221011
 ltid: '9191913'
+olid: OL56976455M
 title: 'The New Jim Crow: Mass Incarceration in the Age of Colorblindness'
 author: Michelle Alexander
 whyBlurb: >-
@@ -21,4 +22,4 @@ Blurb from a JoCoNaut:
 > important for us to understand if we are to have a better understanding of the
 > country we live in.
 
-Content warnings include undefined
+Content warnings include prison, racism, prison-industrial complex

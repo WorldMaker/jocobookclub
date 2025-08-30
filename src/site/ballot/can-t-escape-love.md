@@ -2,6 +2,7 @@
 id: 01K2V28CXCQM531C6JRJPB9F3S
 userId: 01JYVVYCEPXVQH06ZZQS0GH6YJ
 ltid: '22914795'
+olid: OL27325730M
 title: Can't Escape Love
 author: Alyssa Cole
 whyBlurb: >-
@@ -13,6 +14,7 @@ cw: |-
   Moderate: Cursing, Sexism, Toxic relationship
 
   Minor: Chronic illness, Pregnancy, Gaslighting
+tags: [romance]
 updated: '2025-08-17T03:54:24.282Z'
 ---
 

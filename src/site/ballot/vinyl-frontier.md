@@ -2,6 +2,7 @@
 id: 01K2TATX11V1QGGGPZYYP0N8HE
 userId: 01JMT7GVFK73Y0Q89C55221011
 ltid: '22616169'
+olid: OL27342636M
 title: The Vinyl Frontier
 author: Jonathan Scott
 whyBlurb: >-
@@ -22,4 +23,4 @@ Blurb from a JoCoNaut:
 > stories on why some things made it on the record and some things didn't, and
 > what was chosen to introduce humanity to anyone who might pick it up.
 
-Content warnings include
+Content warnings include humanity
