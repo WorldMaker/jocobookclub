@@ -22,7 +22,7 @@ interface GenreTagProps {
 
 export function GenreTag({ tag, info }: GenreTagProps) {
   return (
-    <a class={`tag ${info.tagClass}`} href={`${baseUrl}/tag/${tag}`}>
+    <a class={`tag ${info.tagClass}`} href={`${baseUrl}/tags/${tag}`}>
       <span class='icon-text'>
         <span class={`icon ${info.tagIconClass}`}>
           <i class={`fa-duotone fa-solid ${info.icon}`}></i>
