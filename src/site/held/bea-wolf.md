@@ -2,6 +2,7 @@
 id: 01K2TPXDP2KAP48HY22570H3BK
 userId: 01JK1T6D0BZ2SRGTTBCTVXB09E
 ltid: '29045682'
+olid: OL38058419M
 title: Bea Wolf
 author: Zach Weinersmith and (illustrator) Boulet
 whyBlurb: >-
@@ -23,6 +24,7 @@ cw: >-
   Construction and electrical wiring dangerously not up to code. Grave danger of
   the risk of abrupt loss of childlike wonder and freedom. Excessive sugar after
   bedtime.
+tags: [fantasy]
 updated: '2025-08-27T11:27:29.327Z'
 ---
 
@@ -46,3 +48,6 @@ Blurb from a JoCoNaut:
 Content warnings include Construction and electrical wiring dangerously not up
 to code. Grave danger of the risk of abrupt loss of childlike wonder and
 freedom. Excessive sugar after bedtime.
+
+Held for Kelly and Zach Weinersmith's "A City On Mars" moving to the main
+ballot.
