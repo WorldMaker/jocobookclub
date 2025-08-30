@@ -12,19 +12,11 @@ whyBlurb: >-
 cw: >-
   There is at least one sexual encounter in the course of getting to the
   happily-ever-after.
-
   Graphic Warning
-
   Sexual content, Violence, Stalking
-
-
   Moderate
-
   War, Death, Toxic relationship
-
-
   Minor
-
   Death of parent, Blood, Abandonment
 tags: [scifi, romance]
 updated: '2025-08-17T03:36:48.227Z'

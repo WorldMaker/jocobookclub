@@ -6,15 +6,10 @@ title: 'The Hidden Life of Cecily Larson: A Novel'
 author: Ellen Baker
 whyBlurb: >-
   Fiction that is NOT Science Fiction:
-
   14 hr audiobook
-
-
   In 1924, four-year-old Cecily Larson’s mother reluctantly drops her off at an
   orphanage in Chicago, promising to be back once she’s made enough money to
   support both Cecily and herself. But she never returns....
-
-
   I read it and thoroughly enjoyed it
 tags:
   - common
