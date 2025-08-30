@@ -10,9 +10,7 @@ whyBlurb: >-
   fandom.  One of my favorite books from this author.
 cw: |-
   Graphic: Sexual content, Ableism, Medical content
-
   Moderate: Cursing, Sexism, Toxic relationship
-
   Minor: Chronic illness, Pregnancy, Gaslighting
 tags: [romance]
 updated: '2025-08-17T03:54:24.282Z'

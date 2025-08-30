@@ -10,9 +10,7 @@ whyBlurb: >-
   show and one of the wildly optimistic producers for the show.
 cw: |-
   Graphic: Mental illness, Panic attacks/disorders, Homophobia
-
   Moderate: Sexual content, Biphobia, Vomit
-
   Minor: Alcohol, Bullying, Alcoholism
 tags:
   - romance

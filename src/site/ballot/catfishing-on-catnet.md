@@ -12,8 +12,6 @@ whyBlurb: >-
   Government-Approved Sex Ed Teaching Computer gone wrong, stay for the lessons
   in just how many ways your online footprint can come back to bite you. (It
   might officially be YA?)
-
-
   Steph and her mom move from city to city all the time: so often that her only
   friends are from an online forum site. Unbeknownst to the world, the site's
   moderator is a sentient AI who loves cat pictures and finding subtle ways of
