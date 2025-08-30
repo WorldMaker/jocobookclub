@@ -36,10 +36,10 @@ Blurb from a JoCoNaut:
 > might officially be YA?)
 
 > Steph and her mom move from city to city all the time: so often that her only
-friends are from an online forum site. Unbeknownst to the world, the site's
-moderator is a sentient AI who loves cat pictures and finding subtle ways of
-helping people. The story becomes a near-future YA thriller when a threat from
-Steph's past shows up to endanger them all. (This is the AI from the lovely
-short story "Cat Pictures Please", by the way.)
+> friends are from an online forum site. Unbeknownst to the world, the site's
+> moderator is a sentient AI who loves cat pictures and finding subtle ways of
+> helping people. The story becomes a near-future YA thriller when a threat from
+> Steph's past shows up to endanger them all. (This is the AI from the lovely
+> short story "Cat Pictures Please", by the way.)
 
 Content warnings include Teenagers in danger. Stalking. Psychological abuse.

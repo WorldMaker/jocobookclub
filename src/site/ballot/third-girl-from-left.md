@@ -31,15 +31,15 @@ Blurb from a JoCoNaut:
 
 > Non-Fiction Memoir 9+ hour audiobook
 
-> The blurb sez: A moving, real-life account of making it as a dancer in New York
-City, embracing the changing faces of love and family, and being at ground-zero
-for one of the most fatal epidemics of modern times.... Wanting to be a dancer
-while growing up in a large military family made Christine Barker somewhat of a
-black sheep, but she followed her dreams to New York City, where-in a moment of
-almost unbelievable good fortune-she was chosen for the London cast of A Chorus
-Line.
+> The blurb sez: A moving, real-life account of making it as a dancer in New
+> York City, embracing the changing faces of love and family, and being at
+> ground-zero for one of the most fatal epidemics of modern times.... Wanting to
+> be a dancer while growing up in a large military family made Christine Barker
+> somewhat of a black sheep, but she followed her dreams to New York City,
+> where-in a moment of almost unbelievable good fortune-she was chosen for the
+> London cast of A Chorus Line.
 
 > It was an account of the aids epidemic from a very personal viewpoint and seen
-from the gay community. I read it and recommend it
+> from the gay community. I read it and recommend it
 
 Content warnings include epidemics, AIDS

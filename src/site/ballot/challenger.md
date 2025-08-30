@@ -14,7 +14,7 @@ updated: '2025-08-27T02:57:48.467Z'
 
 Blurb from a JoCoNaut:
 
-> We all know *about* the Challenger disaster, but how much do each of us know
+> We all know _about_ the Challenger disaster, but how much do each of us know
 > about how it came to happen, and the stories of those involved?
 
 Content warnings include historical disaster

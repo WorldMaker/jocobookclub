@@ -16,8 +16,8 @@ updated: '2025-08-27T11:28:02.923Z'
 
 Blurb from a JoCoNaut:
 
-> Sounds like a fascinating if scary topic and a good entry point
-> to learning more about global health.
+> Sounds like a fascinating if scary topic and a good entry point to learning
+> more about global health.
 
 Content warnings include Sickness and death, I assume.
 
