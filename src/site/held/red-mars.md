@@ -14,3 +14,5 @@ Blurb from a JoCoNaut:
 
 Content Warnings include Sexism, Racism, Violence/War, Confinement, Toxic
 relationships, Murder
+
+Held because "The Years of Rice and Salt" was recently read
