@@ -20,5 +20,3 @@ Blurb from a JoCoNaut:
 > more about global health.
 
 Content warnings include Sickness and death, I assume.
-
-Held because "An Absolutely Remarkable Thing" is currently on the ballot.
