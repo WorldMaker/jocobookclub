@@ -13,3 +13,5 @@ Blurb from a JoCoNaut:
 > (don't @ me bro)"
 
 Content Warnings include Violence, Death, Mental Health
+
+Held because "Project Hail Mary" by Andy Weir is already upcoming
