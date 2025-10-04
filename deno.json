@@ -16,6 +16,10 @@
     "jsxFragmentFactory": "Fragment"
   },
   "tasks": {
+    "get-discord-handles": {
+      "description": "Get all opt-in Discord handles from the database",
+      "command": "deno run -A --env-file --unstable-kv ./scripts/get-discord-handles.ts"
+    },
     "save-suggestions": {
       "description": "Save suggestions to disk",
       "command": "deno run -A --env-file --unstable-kv ./scripts/save-suggestions.ts"
