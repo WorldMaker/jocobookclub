@@ -5,7 +5,7 @@ export class LocalTimeComponent extends HTMLTimeElement {
       if (globalThis.Temporal) {
         const temporalDate = Temporal.ZonedDateTime.from(datetime)
         const localTemporalDate = temporalDate.withTimeZone(
-          Temporal.Now.zonedDateTimeISO(),
+          Temporal.Now.timeZoneId(),
         )
         this.textContent = localTemporalDate.toLocaleString(undefined, {
           dateStyle: 'full',
