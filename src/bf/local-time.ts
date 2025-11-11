@@ -4,8 +4,13 @@ export class LocalTimeComponent extends HTMLTimeElement {
     if (datetime) {
       if (globalThis.Temporal) {
         const temporalDate = Temporal.ZonedDateTime.from(datetime)
-        const localTemporalDate = temporalDate.withTimeZone(Temporal.Now.zonedDateTimeISO())
-        this.textContent = localTemporalDate.toLocaleString(undefined, { dateStyle: 'full', timeStyle: 'long' })
+        const localTemporalDate = temporalDate.withTimeZone(
+          Temporal.Now.zonedDateTimeISO(),
+        )
+        this.textContent = localTemporalDate.toLocaleString(undefined, {
+          dateStyle: 'full',
+          timeStyle: 'long',
+        })
         this.title = temporalDate.toLocaleString()
         this.classList.add('has-background-info-dark')
         return
@@ -13,7 +18,10 @@ export class LocalTimeComponent extends HTMLTimeElement {
       const splitDatetime = datetime.split('[')
       const date = new Date(splitDatetime[0])
       if (date && !isNaN(date.getTime())) {
-        this.textContent = date.toLocaleString(undefined, { dateStyle: 'full', timeStyle: 'long' })
+        this.textContent = date.toLocaleString(undefined, {
+          dateStyle: 'full',
+          timeStyle: 'long',
+        })
         this.title = datetime
         this.classList.add('has-background-info-dark')
       }
