@@ -36,7 +36,13 @@
         <dolphin-rating ltid="{{ ltid }}"></dolphin-rating>
         {{ /if }}
         {{ if scheduled }}
-        <time datetime="{{ date.toISOString() }}">{{ date.toLocaleString('en-us', { dateStyle: 'medium' }) }}</time>
+            {{ if time }}
+                {{> const plainDate = Temporal.PlainDate.from({ year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, day: date.getUTCDate() }) }}
+                {{> const zonedDateTime = plainDate.toPlainDateTime(time).toZonedDateTime(timezone ?? 'UTC') }}
+                <time is="local-time" datetime="{{ zonedDateTime.toString() }}">{{ zonedDateTime.toLocaleString('en-us', { dateStyle: 'full', timeStyle: 'long' }) }}</time>
+            {{ else }}
+                <time datetime="{{ date.toISOString() }}">{{ date.toLocaleString('en-us', { dateStyle: 'medium' }) }}</time>
+            {{ /if }}
         {{ /if }}
     </div>
     <footer class="card-footer">
