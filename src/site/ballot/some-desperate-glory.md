@@ -3,6 +3,7 @@ title: Some Desperate Glory
 author: Emily Tesh
 ltid: '26911573'
 olid: OL51158440M
+tsgid: c6402cfc-fff1-4b40-a30b-7ebe32871b68
 tags: [scifi]
 ---
 

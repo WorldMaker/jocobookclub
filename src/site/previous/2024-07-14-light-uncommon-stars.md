@@ -3,6 +3,7 @@ title: Light from Uncommon Stars
 author: Ryka Aoki
 ltid: '25821771'
 olid: OL34158509M
+tsgid: 35fdf605-50d4-467a-93fd-a255f2cb24ae
 tags: [boat, scifi, fantasy]
 ---
 

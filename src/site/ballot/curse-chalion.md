@@ -3,6 +3,7 @@ title: The Curse of Chalion
 author: Lois McMaster Bujold
 ltid: '7337'
 olid: OL47129749M
+tsgid: 4250b146-7540-46a7-b2b4-41ccfb57bc38
 tags: [fantasy]
 ---
 
