@@ -3,6 +3,7 @@ title: Ring Shout
 author: P. Djèlí Clark
 ltid: '24213124'
 olid: OL34085306M
+tsgid: 367bcd99-cc75-4f49-94eb-4e1f27bff536
 tags: [horror, fantasy]
 ---
 

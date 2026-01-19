@@ -3,6 +3,7 @@ id: 01K2TATX11V1QGGGPZYYP0N8HE
 userId: 01JMT7GVFK73Y0Q89C55221011
 ltid: '22616169'
 olid: OL27342636M
+tsgid: 9f5a2ffb-8de2-455b-9fd0-8a8b00da4c26
 title: The Vinyl Frontier
 author: Jonathan Scott
 whyBlurb: >-

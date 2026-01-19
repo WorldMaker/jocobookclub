@@ -3,6 +3,7 @@ title: The Hands of the Emperor
 author: Victoria Goddard
 ltid: '23023728'
 olid: OL27771338M
+tsgid: 2b1c3268-5abe-4e82-85e5-c2e98b4450a5
 tags: [fantasy]
 ---
 

@@ -3,6 +3,7 @@ title: The Lies of Locke Lamora
 author: Scott Lynch
 ltid: '797435'
 olid: OL15987639M
+tsgid: 3cfd6c5b-5ae5-44a5-a1a2-b14023f9b554
 tags: [fantasy]
 ---
 

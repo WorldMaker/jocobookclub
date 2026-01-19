@@ -46,11 +46,16 @@
         {{ /if }}
     </div>
     <footer class="card-footer">
+        <a href="{{ url }}" class="card-footer-item"><span><i class="fa-duotone fa-solid fa-comments"></i> Club Thoughts</span></a>
         {{ if ltid }}
-        <p class="card-footer-item">
-            <span>View on <a href="https://www.librarything.com/work/{{ ltid }}">LibraryThing</a></span>
-        </p>
+        <a href="https://www.librarything.com/work/{{ ltid }}" target="_blank" class="card-footer-item">
+            <span>LibraryThing <i class="fa-duotone fa-solid fa-arrow-up-right-from-square"></i></span>
+        </a>
         {{ /if }}
-        <p class="card-footer-item"><span>Club Thoughts on <a href="{{ url }}">{{ title }}</a></span></p>
+        {{ if tsgid }}
+        <a href="https://app.thestorygraph.com/books/{{ tsgid }}" target="_blank" class="card-footer-item">
+            <span>The Story Graph <i class="fa-duotone fa-solid fa-arrow-up-right-from-square"></i></span>
+        </a>
+        {{ /if }}
     </footer>
 </div>

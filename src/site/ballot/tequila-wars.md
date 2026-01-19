@@ -2,6 +2,7 @@
 id: 01K3JDFZHNP3QBH29CBCQH4BGS
 userId: 01JJ2XCD6C339ZW7CBC4Y8HSAK
 ltid: '33499900'
+tsgid: 92be0017-3d7e-4c2d-a422-3abec13a2244
 title: 'Tequila Wars: José Cuervo and the Bloody Struggle for the Spirit of Mexico'
 author: Ted Genoways
 whyBlurb: >-
