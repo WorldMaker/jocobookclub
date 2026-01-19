@@ -18,7 +18,9 @@
     "jsr:@std/fmt@0.225.6": "0.225.6",
     "jsr:@std/fmt@^1.0.0-rc.1": "1.0.4",
     "jsr:@std/fmt@~0.225.4": "0.225.6",
+    "jsr:@std/front-matter@*": "0.224.3",
     "jsr:@std/front-matter@0.224.3": "0.224.3",
+    "jsr:@std/fs@*": "1.0.9",
     "jsr:@std/fs@0.229.3": "0.229.3",
     "jsr:@std/fs@^1.0.0-rc.5": "1.0.9",
     "jsr:@std/html@1.0.0": "1.0.0",
@@ -33,6 +35,7 @@
     "jsr:@std/path@1.0.0-rc.1": "1.0.0-rc.1",
     "jsr:@std/path@1.0.0-rc.2": "1.0.0-rc.2",
     "jsr:@std/path@^1.0.6": "1.1.0",
+    "jsr:@std/path@^1.0.8": "1.1.0",
     "jsr:@std/streams@~0.224.5": "0.224.5",
     "jsr:@std/toml@1.0.0": "1.0.0",
     "jsr:@std/toml@^1.0.0-rc.3": "1.0.0",
@@ -56,6 +59,7 @@
     "npm:estree-walker@3.0.3": "3.0.3",
     "npm:hono@^4.6.16": "4.9.0",
     "npm:hono@latest": "4.9.0",
+    "npm:jsdom@*": "26.0.0",
     "npm:jsdom@26": "26.0.0",
     "npm:markdown-it-attrs@4.1.6": "4.1.6_markdown-it@14.1.0",
     "npm:markdown-it-deflist@3.0.0": "3.0.0",
@@ -139,7 +143,10 @@
       ]
     },
     "@std/fs@1.0.9": {
-      "integrity": "3eef7e3ed3d317b29432c7dcb3b20122820dbc574263f721cb0248ad91bad890"
+      "integrity": "3eef7e3ed3d317b29432c7dcb3b20122820dbc574263f721cb0248ad91bad890",
+      "dependencies": [
+        "jsr:@std/path@^1.0.8"
+      ]
     },
     "@std/html@1.0.0": {
       "integrity": "389f2b8b0021ee75966003b307b849813a300d1c554cef8d69aec2d5d3922ff9"
