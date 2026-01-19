@@ -1,0 +1,41 @@
+---
+layout: main.vto
+---
+<section class="section">
+    <div class="container">
+        <h1 class="title">{{ title }}</h1>
+
+        <div class="content">
+            {{ content }}
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2 class="title">Authors Currently On Hold</h2>
+
+        <div class="content">
+            {{> const lastYear = Temporal.Now.plainDateISO().subtract({ years: 1 }) }}
+            {{> const authors = new Map() }}
+            {{> for (book of search.pages('ballot')) {
+                authors.set(book.author, false)
+            } }}
+            {{> for (book of search.pages('previous')) {
+                const plain = book.date.toTemporalInstant().toZonedDateTimeISO('America/Los_Angeles').toPlainDate()
+                if (Temporal.PlainDate.compare(plain, lastYear) >= 0) {
+                    authors.set(book.author, plain)
+                }
+            } }}
+
+            {{ authors.size === 0 ? `<p>No authors are currently on hold.</p>` : `` }}
+
+            <ul>
+                {{ for author of [...authors.keys()].sort() }}
+                    {{> const date = authors.get(author) }}
+                    <li>{{author}} ({{ if date }}last read {{date.toLocaleString()}}{{ else }}active ballot{{ /if }})</li>
+                {{ /for }}
+            </ul>
+        </div>
+    </div>
+</section>
