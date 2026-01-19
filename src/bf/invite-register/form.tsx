@@ -36,8 +36,8 @@ export default function InviteRegistrationForm(
       </p>
 
       <p class='block'>
-        If arriving from Facebook on mobile, you may need to "Open in
-        External Browser" to be able to register successfully.
+        If arriving from Facebook on mobile, you may need to "Open in External
+        Browser" to be able to register successfully.
       </p>
 
       <form events={{ submit: events.submit }}>
