@@ -3,7 +3,7 @@ id: 01K2TJVFPCFBWG7DAV2F5C1X62
 userId: 01JMT7GVFK73Y0Q89C55221011
 ltid: '22702769'
 tsgid: b968ce9e-5c57-4bbc-86b9-cda55605bae0
-title: "Wordslut: A Feminist Guide to Taking Back the English Language"
+title: 'Wordslut: A Feminist Guide to Taking Back the English Language'
 author: Amanda Montell
 whyBlurb: >-
   An examination of how language has developed and how we use it via a feminist
