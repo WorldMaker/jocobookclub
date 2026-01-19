@@ -40,6 +40,10 @@ export function Form(
       <div class='grid'>
         <div class='cell'>
           <form events={{ submit: events.login }}>
+            <p class='block'>
+              If arriving from Facebook on mobile, you may need to "Open in
+              External Browser" to be able to login successfully.
+            </p>
             <div class='field'>
               <label class='label' for='email'>Email</label>
               <div class='control'>

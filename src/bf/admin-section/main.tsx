@@ -121,6 +121,12 @@ function AdminSection(
       </h1>
       <div childrenBind={inviteView} childrenBindMode='append' />
       <p class='block'>
+        <strong>Reminder:</strong>{' '}
+        When posting to Facebook you should remind people to find the "Open in
+        External Browser" option in the menu to be able to reliably register
+        using the invite link.
+      </p>
+      <p class='block'>
         An open invitation allows any email to be registered while it is valid
         (roughly 48 hours).
       </p>
