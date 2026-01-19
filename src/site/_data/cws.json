@@ -1,0 +1,424 @@
+{
+  "eb46fdaa-93ed-43cd-80d8-ea5a3bb6ea46": {
+    "Graphic": "Vomit, Medical content, Pregnancy",
+    "Moderate": "Mental illness, Suicidal thoughts, Cannibalism",
+    "Minor": "War, Animal death, Cursing"
+  },
+  "5e5cf4af-9ce8-458d-9a15-ae955cfed7a8": {
+    "Graphic": "Fire/Fire injury, Death, Violence",
+    "Moderate": "Biphobia, Gun violence, Injury/Injury detail",
+    "Minor": "Gore, Homophobia, Sexual content"
+  },
+  "a3626cac-d72b-438f-bcd3-a7a39877d125": {
+    "Graphic": "Racism, Slavery, Colonisation",
+    "Moderate": "Genocide, Violence, Rape",
+    "Minor": "Sexual violence, Torture, Trafficking"
+  },
+  "92b37194-21e3-494e-8f4d-11843d8331a0": {
+    "Graphic": "Colonisation, Gun violence, Death",
+    "Moderate": "Addiction, Genocide, Drug abuse",
+    "Minor": "Body horror, Vomit, Suicide"
+  },
+  "a471be89-aaae-42aa-ac3e-d5e4169ec71e": {
+    "Graphic": "Body horror, Violence, Death",
+    "Moderate": "Confinement, War, Injury/Injury detail",
+    "Minor": "Vomit, Child abuse, Death of parent"
+  },
+  "21db007d-d79d-4c13-b647-d26161a85728": {
+    "Graphic": "Body horror, Kidnapping, Murder",
+    "Moderate": "Violence, Torture, Genocide",
+    "Minor": "Rape, Confinement, Death"
+  },
+  "4932a31d-9ece-44a3-a9bf-0b0735976ced": {
+    "Graphic": "Xenophobia, War, Grief",
+    "Moderate": "Slavery, Death, Violence",
+    "Minor": "Rape, Deportation, Bullying"
+  },
+  "27d226e8-2dde-42a2-93d0-f4e523307e97": {
+    "Graphic": "Racism, Colonisation, Death",
+    "Moderate": "War, Slavery, Violence",
+    "Minor": "Drug use, Death of parent, Addiction"
+  },
+  "efd5f1fa-736a-4eaf-8bf0-0f8830cdd05c": {
+    "Graphic": "Death of parent, Death, Blood",
+    "Moderate": "Violence, Slavery, Drug use",
+    "Minor": "Animal cruelty, Animal death, Fire/Fire injury"
+  },
+  "728b0243-883f-4e8b-a664-e62b294a3431": {
+    "Graphic": "Rape, Sexual assault, Sexual violence",
+    "Moderate": "Suicide, Miscarriage, Trafficking",
+    "Minor": "Abortion, Homophobia, Adult/minor relationship"
+  },
+  "b766bb7e-9773-45f2-82f0-7bb692895cc7": {
+    "Graphic": "Dementia, Cancer, Abandonment",
+    "Moderate": "Child death, Miscarriage, Alcoholism",
+    "Minor": "Infidelity, Addiction, Pregnancy"
+  },
+  "af3dc749-3ae2-4188-b59a-0c9458293b8e": {
+    "Graphic": "Blood, Child death, Gore",
+    "Moderate": "Death of parent, War, Violence",
+    "Minor": "Sexual assault, Rape, Sexual violence"
+  },
+  "4ed8812e-623a-45ea-9446-2615b5ebaa64": {
+    "Graphic": "Sexual content, Ableism, Medical content",
+    "Moderate": "Cursing, Sexism, Toxic relationship",
+    "Minor": "Chronic illness, Pregnancy, Gaslighting"
+  },
+  "10d545cf-77f2-4f0e-a6a5-9a501ce38a2b": {
+    "Graphic": "Stalking, Domestic abuse, Kidnapping",
+    "Moderate": "Torture, Car accident, Physical abuse",
+    "Minor": "Gun violence, Suicide, Medical content"
+  },
+  "b7844bff-853d-4e9f-bda4-d41da4cffe10": {
+    "Graphic": "Death, Grief, Death of parent",
+    "Moderate": "Fire/Fire injury, Racism, Sexism",
+    "Minor": "Misogyny, Confinement, Cursing"
+  },
+  "6fbb2050-addf-4f45-9dbe-c51c26062b84": {
+    "Graphic": "Mental illness, Panic attacks/disorders, Homophobia",
+    "Moderate": "Sexual content, Vomit, Biphobia",
+    "Minor": "Alcohol, Bullying, Alcoholism"
+  },
+  "142bc3cb-3aac-49e5-8527-b3cc9675f158": {
+    "Graphic": "War, Death, Violence",
+    "Moderate": "Sexism, Xenophobia, Gun violence",
+    "Minor": "Genocide, Animal death, Confinement"
+  },
+  "d8950eb9-5b11-4b1e-990e-4f7a04cf9b0b": {
+    "Graphic": "Violence, Blood, Death",
+    "Moderate": "Slavery, War, Religious bigotry",
+    "Minor": "Rape, Torture"
+  },
+  "d65bf766-f6dd-47bc-9478-c592453c4316": {
+    "Graphic": "Animal death, Violence, Blood",
+    "Moderate": "Gore, Injury/Injury detail, Death",
+    "Minor": "War, Cannibalism, Death of parent"
+  },
+  "8640c452-90f0-4a24-abdc-9f15dde4e1d3": {
+    "Graphic": "Death, Violence, Animal death",
+    "Moderate": "Cannibalism, Colonisation, Excrement",
+    "Minor": "War, Racial slurs, Sexism"
+  },
+  "4250b146-7540-46a7-b2b4-41ccfb57bc38": {
+    "Graphic": "Animal death, Death, Slavery",
+    "Moderate": "Violence, Mental illness, Rape",
+    "Minor": "Sexual assault, Infertility, War"
+  },
+  "2f3d362f-1ff5-4361-bae4-24d518993f11": {
+    "Graphic": "Confinement",
+    "Moderate": "Medical content, Injury/Injury detail",
+    "Minor": "Addiction, Alcoholism, Chronic illness"
+  },
+  "072434cd-81e4-44ad-8faa-834f353da241": {
+    "Graphic": "Death, Murder, Gore",
+    "Moderate": "Transphobia, Bullying, Blood",
+    "Minor": "Eating disorder, Deadnaming, Acephobia/Arophobia"
+  },
+  "d4c50f68-8baf-4cd1-b436-51c095777765": {
+    "Graphic": "Medical content, Terminal illness, Death",
+    "Moderate": "Child death, Racism, Colonisation",
+    "Minor": "War, Cancer, Blood"
+  },
+  "056cb9c1-e798-439c-881f-b2cb276da574": {
+    "Graphic": "Fire/Fire injury, Death, Suicide attempt",
+    "Moderate": "War, Murder, Child death",
+    "Minor": "Abortion, Car accident, Suicide"
+  },
+  "8f59c0a4-9aab-463e-b916-56431f1ace96": {
+    "Graphic": "Torture, Suicide, Death",
+    "Moderate": "Rape, War, Murder",
+    "Minor": "Cancer, Child death, Addiction"
+  },
+  "e076391b-0215-46a0-826d-318918fef86e": {
+    "Graphic": "Suicide, Colonisation, Xenophobia",
+    "Moderate": "War, Violence, Misogyny",
+    "Minor": "Sexism, Racial slurs, Murder"
+  },
+  "10acce6a-fa33-4c05-a3b8-72f8fa3fda4d": {
+    "Graphic": "Sexual content, Abandonment, Emotional abuse",
+    "Moderate": "Infidelity, Toxic relationship, Alcohol",
+    "Minor": "Drug use, Child abuse, Vomit"
+  },
+  "3621c7b7-3189-4f69-89dc-df64e7cd20b1": {
+    "Graphic": "Death, Domestic abuse, Pandemic/Epidemic",
+    "Moderate": "Suicidal thoughts, Child death, Genocide",
+    "Minor": "Rape, Death of parent, Sexual content"
+  },
+  "2b1c3268-5abe-4e82-85e5-c2e98b4450a5": {
+    "Graphic": "Racism, Xenophobia, Classism",
+    "Moderate": "Colonisation, Death, Grief",
+    "Minor": "War, Cannibalism, Violence"
+  },
+  "646215bb-5b3c-48f2-9825-6b947f9a19d2": {
+    "Graphic": "Gore, Body horror, Death",
+    "Moderate": "Grief, Vomit, Mental illness",
+    "Minor": "Child death, Sexual content, Cannibalism"
+  },
+  "1044548a-92ad-452e-b914-211438e41e13": {
+    "Moderate": "Chronic illness, Car accident, Grief",
+    "Minor": "Violence, Genocide, Murder"
+  },
+  "f6136215-31fc-48c2-b25c-8e846faafaab": {
+    "Graphic": "Abandonment, Racism, Medical trauma",
+    "Moderate": "Miscarriage, Grief, Pregnancy",
+    "Minor": "Rape, Domestic abuse, Abortion"
+  },
+  "f6753343-c819-4a55-a31c-091efba5a1a8": {
+    "Graphic": "Suicidal thoughts, Suicide attempt, Death",
+    "Moderate": "Sexual content, Toxic relationship, Mental illness",
+    "Minor": "War, Death of parent, Drug use"
+  },
+  "b73fc242-7a76-4612-af35-39c18377cafc": {
+    "Graphic": "Sexism, Misogyny, Sexual harassment",
+    "Moderate": "Suicide, Child abuse, Domestic abuse",
+    "Minor": "Toxic relationship, Cancer, Body shaming"
+  },
+  "3cfd6c5b-5ae5-44a5-a1a2-b14023f9b554": {
+    "Graphic": "Violence, Torture, Death",
+    "Moderate": "Child death, Death of parent, Murder",
+    "Minor": "Sexual content, Alcohol, Vomit"
+  },
+  "b9c68267-ca7c-4710-afcb-d4f2a261b522": {
+    "Graphic": "Classism, Death, Confinement",
+    "Moderate": "Grief, Violence, Injury/Injury detail",
+    "Minor": "Police brutality, Slavery, Gun violence"
+  },
+  "a09a2d04-410a-4384-b4ac-d0f6676b5173": {
+    "Graphic": "Racism, Racial slurs, Police brutality",
+    "Moderate": "Violence, Blood, Hate crime",
+    "Minor": "Death of parent, Child death, Child abuse"
+  },
+  "9ae07ba5-fd85-44d6-ac5d-f9d45b3b21e7": {
+    "Graphic": "Sexual content, Bullying, Violence",
+    "Moderate": "Murder, Homophobia, Death",
+    "Minor": "Death of parent, Suicide, Racism"
+  },
+  "76f01d57-00fc-4570-9e71-ab622347c7ba": {
+    "Graphic": "Suicide, Death, Blood",
+    "Moderate": "Xenophobia, Murder, Medical content",
+    "Minor": "Alcohol, War, Violence"
+  },
+  "730af4eb-cce0-44e6-baee-3cd222b8d3d3": {
+    "Graphic": "Violence, Slavery, Death",
+    "Moderate": "Physical abuse, Torture, Child abuse",
+    "Minor": "Rape, Sexual assault, Death of parent"
+  },
+  "3f999764-5bf5-4ca6-aa20-de134a503449": {
+    "Graphic": "Domestic abuse, Pregnancy, Death",
+    "Moderate": "Child death, Miscarriage, Physical abuse",
+    "Minor": "Cannibalism, Animal death, Torture"
+  },
+  "98d62b0b-7b34-4b33-a498-faabb63988c2": {
+    "Graphic": "Racism, Police brutality, Slavery",
+    "Moderate": "Drug use, Violence, Racial slurs",
+    "Minor": "Addiction, Gun violence, Death"
+  },
+  "ab8c0f12-97df-43b7-98dc-0abd82ea1df4": {
+    "Graphic": "Rape, Sexual content, Sexual violence",
+    "Moderate": "Misogyny, Adult/minor relationship, Death",
+    "Minor": "Incest, Sexual assault, War"
+  },
+  "9ea03422-36c3-4489-b737-e41601d77877": {
+    "Graphic": "Sexual assault, Rape, Murder",
+    "Moderate": "Drug abuse, Drug use, Addiction",
+    "Minor": "Vomit"
+  },
+  "2348e75c-5a77-4dbe-9875-55e433994bbe": {
+    "Graphic": "Death, Police brutality, Suicide",
+    "Moderate": "Fire/Fire injury, Violence, Injury/Injury detail",
+    "Minor": "Dementia, Infertility, Drug use"
+  },
+  "92d28fae-1e3d-43ec-9702-15ee11ffc43d": {
+    "Graphic": "Murder, Kidnapping, Violence",
+    "Moderate": "Alcoholism, Gun violence, Cursing",
+    "Minor": "War, Death, Drug use"
+  },
+  "367bcd99-cc75-4f49-94eb-4e1f27bff536": {
+    "Graphic": "Racism, Body horror, Violence",
+    "Moderate": "Slavery, Racial slurs, Death of parent",
+    "Minor": "Sexual content, Animal death, War"
+  },
+  "c6402cfc-fff1-4b40-a30b-7ebe32871b68": {
+    "Graphic": "Suicide, Xenophobia, War",
+    "Moderate": "Homophobia, Rape, Sexual assault",
+    "Minor": "Pregnancy, Abortion, Racism"
+  },
+  "ac46da06-337c-4a3f-a54b-b421d1b6297c": {
+    "Graphic": "Sexual content, Violence, Death",
+    "Moderate": "Kidnapping, Murder, Classism",
+    "Minor": "Drug use, Infidelity, Animal cruelty"
+  },
+  "865a407d-cff7-4aea-9d78-451a23f3ba4a": {
+    "Graphic": "Blood, Gore, Kidnapping",
+    "Moderate": "Sexual content, Confinement, Violence",
+    "Minor": "War, Death, Drug abuse"
+  },
+  "92be0017-3d7e-4c2d-a422-3abec13a2244": {
+    "Moderate": "Death, Alcoholism, Murder"
+  },
+  "3ea7fe39-4115-44ab-89cc-b2f1e56096dc": {
+    "Graphic": "Ableism, Animal cruelty, Violence",
+    "Moderate": "Excrement, War, Injury/Injury detail",
+    "Minor": "Slavery, Genocide"
+  },
+  "e079c852-fdef-43e4-825a-f930540e082c": {
+    "Graphic": "Chronic illness, Death, Homophobia"
+  },
+  "6d11d234-1ab2-4391-80fe-9499545bbe1a": {
+    "Graphic": "Antisemitism, Child death, Genocide",
+    "Moderate": "Violence, Death, War",
+    "Minor": "Vomit, Fire/Fire injury, Alcohol"
+  },
+  "b3eedaf8-93ab-4d97-83c8-63c9e338bff4": {
+    "Graphic": "Death, Grief, Suicide",
+    "Moderate": "Child death, Death of parent, Murder",
+    "Minor": "Animal death, Panic attacks/disorders, Car accident"
+  },
+  "9f5a2ffb-8de2-455b-9fd0-8a8b00da4c26": {},
+  "b968ce9e-5c57-4bbc-86b9-cda55605bae0": {
+    "Graphic": "Cursing, Sexism, Misogyny",
+    "Moderate": "Sexual harassment, Homophobia, Racism",
+    "Minor": "Transphobia, Lesbophobia, Sexual content"
+  },
+  "b7e49888-6582-4d09-b330-1615ac1852b9": {
+    "Graphic": "Violence, Death, Gore",
+    "Moderate": "Alcohol, Torture, Body horror",
+    "Minor": "Slavery, Transphobia, Rape"
+  },
+  "7bfa83d6-1bd8-4846-832a-4a9b537f79ad": {
+    "Minor": "Bullying, Animal cruelty, Fire/Fire injury"
+  },
+  "5bbea49a-caf6-4de2-9e9b-8f34e89a46dd": {
+    "Graphic": "Sexual content, Violence, Stalking",
+    "Moderate": "War, Death, Toxic relationship",
+    "Minor": "Death of parent, Blood, Abandonment"
+  },
+  "c83664bb-15bf-4404-b896-af6bbb0cfc18": {
+    "Graphic": "Body horror, Death, Gore",
+    "Moderate": "War, Suicidal thoughts, Alcoholism",
+    "Minor": "Rape, Sexual assault, Sexual content"
+  },
+  "977e301d-c438-40f4-810b-25a96dbee03e": {
+    "Graphic": "Abandonment, Confinement, Cursing",
+    "Moderate": "Injury/Injury detail, Excrement, Blood",
+    "Minor": "Cannibalism, Suicidal thoughts, Medical content"
+  },
+  "cb1b7d81-9b5d-4e5c-9e00-b4a643988c6b": {
+    "Graphic": "Blood, Animal death, Fire/Fire injury",
+    "Moderate": "Death, Violence, Gore",
+    "Minor": "Sexual content, Grief, Animal cruelty"
+  },
+  "b4868836-7c8e-482e-b051-c2684ca7920f": {
+    "Graphic": "Death, Police brutality, Toxic friendship",
+    "Moderate": "War, Sexual content, Sexual violence",
+    "Minor": "Murder, Sexism, Religious bigotry"
+  },
+  "f0c78406-50a8-4edf-adb8-d6a1049cbabd": {
+    "Graphic": "Suicide, Death of parent, Child abuse",
+    "Moderate": "Death, Racism, Emotional abuse",
+    "Minor": "Homophobia, Miscarriage, Physical abuse"
+  },
+  "16f46d92-0f45-4573-a5d1-34131e5bf1ca": {
+    "Graphic": "Racism, Xenophobia, Racial slurs",
+    "Moderate": "Sexual assault, Homophobia, Sexual harassment",
+    "Minor": "Abortion, Colonisation, Police brutality"
+  },
+  "af548a61-2cf5-4943-a51f-3531b94adac3": {
+    "Graphic": "Death, Pandemic/Epidemic, Animal death",
+    "Moderate": "Gun violence, Animal cruelty, Violence",
+    "Minor": "Murder, Deadnaming, Blood"
+  },
+  "ca07b067-8c64-4b8e-985c-52efc4b94f3e": {
+    "Graphic": "Death, Violence, Gore",
+    "Moderate": "Suicide, Child death, Cancer",
+    "Minor": "Death of parent, War, Cannibalism"
+  },
+  "9a95c81f-7a91-4087-971c-5ff14d5403dd": {
+    "Graphic": "Death, Grief, Violence",
+    "Moderate": "Xenophobia, War, Terminal illness",
+    "Minor": "Sexual content, Drug use, Genocide"
+  },
+  "0885d5f1-edc2-435f-b17c-7e881829dbc6": {
+    "Graphic": "Violence, Gun violence, Death",
+    "Moderate": "Murder, Injury/Injury detail, Slavery",
+    "Minor": "Blood, Gore, Medical content"
+  },
+  "79eff593-846b-46fc-880c-f5d76cbf1233": {
+    "Graphic": "War, Murder, Death",
+    "Moderate": "Violence, Animal death, Child death",
+    "Minor": "Death of parent, Vomit, Blood"
+  },
+  "34c66d4e-2363-4a88-a43e-40baacae7afa": {
+    "Graphic": "Fire/Fire injury",
+    "Moderate": "Violence, Sexual harassment, Stalking",
+    "Minor": "Blood, Injury/Injury detail, Alcohol"
+  },
+  "706b3a63-85e3-44dc-80b8-93337e718e60": {
+    "Graphic": "Homophobia, Religious bigotry, Body horror",
+    "Moderate": "Car accident, Fire/Fire injury, Gaslighting",
+    "Minor": "Gun violence, Confinement, Drug use"
+  },
+  "28a4d1b0-2a64-45a4-bf0d-b7b565272080": {
+    "Graphic": "Death, Violence, Gore",
+    "Moderate": "Murder, Death of parent, Child death",
+    "Minor": "Animal death, Vomit, Racism"
+  },
+  "3a20bed9-40e3-49e0-a4b7-9f09deb44fcc": {
+    "Graphic": "Panic attacks/disorders, Murder, Alcohol",
+    "Moderate": "Violence, Police brutality, Medical trauma",
+    "Minor": "Ableism, Kidnapping, Sexism"
+  },
+  "35fdf605-50d4-467a-93fd-a255f2cb24ae": {
+    "Graphic": "Transphobia, Sexual assault, Child abuse",
+    "Moderate": "Rape, Deadnaming, Racism",
+    "Minor": "Self harm, War, Alcoholism"
+  },
+  "d57e098f-82dc-41f1-94f3-8fcb02dfab1b": {
+    "Graphic": "Gun violence, Death, Suicide",
+    "Moderate": "Death of parent, Car accident, Pregnancy",
+    "Minor": "Abortion, Cancer, Vomit"
+  },
+  "588567c5-7937-4413-af01-3b204cff82ff": {
+    "Graphic": "Xenophobia, Genocide, Death",
+    "Moderate": "Sexual content, Car accident, Deportation",
+    "Minor": "Drug use, Racism, Vomit"
+  },
+  "97d777d8-a679-4bc3-977f-16b945d1960d": {
+    "Graphic": "Death, War, Violence",
+    "Moderate": "Blood, Torture, Body horror",
+    "Minor": "Confinement, Murder, Animal death"
+  },
+  "192aa102-a58d-4370-af16-f40f2e90bb4e": {
+    "Graphic": "Blood, Violence, Injury/Injury detail",
+    "Moderate": "Death, Genocide, Car accident",
+    "Minor": "Suicide, Torture, Vomit"
+  },
+  "bafcb622-dcf1-4e53-89fa-bf925158f6e3": {
+    "Graphic": "Death, Violence, Panic attacks/disorders",
+    "Moderate": "War, Racism, Xenophobia",
+    "Minor": "Mass/school shootings, Child death, Pregnancy"
+  },
+  "6d74f9d0-c0ad-40f8-abc2-3d8016467c1d": {
+    "Graphic": "Child death, Child abuse, Death",
+    "Moderate": "Sexual content, Slavery, Violence",
+    "Minor": "Cannibalism, Pregnancy, Pedophilia"
+  },
+  "088d6b33-fac4-46a0-8a69-cbb3b632ae20": {
+    "Graphic": "War, Slavery, Religious bigotry",
+    "Moderate": "Colonisation, Racism, Violence",
+    "Minor": "Ableism, Alcoholism, Animal death"
+  },
+  "dcb5c66b-672a-4844-ad2b-8389d717d077": {
+    "Graphic": "Torture, Violence, Fatphobia",
+    "Moderate": "Animal death, Kidnapping, Death of parent",
+    "Minor": "Suicidal thoughts, Animal cruelty, Racial slurs"
+  },
+  "ac3ea915-993d-4f30-8632-0f91e4ad0704": {
+    "Graphic": "Death, Confinement, Medical content",
+    "Moderate": "Suicide, Injury/Injury detail, Suicidal thoughts",
+    "Minor": "Alcohol, Drug use, Cannibalism"
+  },
+  "8c784b55-c3e6-4e6b-8221-a8da7bf632d4": {
+    "Moderate": "Death"
+  }
+}

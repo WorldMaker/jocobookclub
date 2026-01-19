@@ -31,6 +31,17 @@
         <div class="content">
             {{ content }}
         </div>
+            {{ if cws[tsgid] }}
+            <details>
+                <summary>Content Warnings (suggested by The Story Graph)</summary>
+                <dl>
+                    {{ for section, cw of cws[tsgid] }}
+                        <dt>{{ section }}</dt>
+                        <dd>{{ cw }}</dd>
+                    {{ /for }}
+                </dl>
+            </details>
+            {{ /if }}
         {{ /if }}
         {{ if currentBallot }}
         <dolphin-rating ltid="{{ ltid }}"></dolphin-rating>
