@@ -15,27 +15,41 @@ function isBookAttrs(attrs: unknown): attrs is BookAttrs {
     'tsgid' in attrs && typeof attrs.tsgid === 'string'
 }
 
-const pulledCws = JSON.parse(await Deno.readTextFile('./src/site/_data/cws.json')) ?? {} as Record<string, Record<string, string>>
+const pulledCws =
+  JSON.parse(await Deno.readTextFile('./src/site/_data/cws.json')) ??
+    {} as Record<string, Record<string, string>>
 
 const cws: Record<string, Record<string, string>> = {}
 
 for await (const f of walk('./src/site/', { exts: ['.md'] })) {
-  console.log("Reading file", f.path)
+  console.log('Reading file', f.path)
   const content = await Deno.readTextFile(f.path)
   if (test(content)) {
     const { attrs } = extractYaml(content)
     if (isBookAttrs(attrs)) {
       if (attrs.tsgid in pulledCws) {
-        console.log('Using cached CWs', { tsgid: attrs.tsgid, title: attrs.title, author: attrs.author })
+        console.log('Using cached CWs', {
+          tsgid: attrs.tsgid,
+          title: attrs.title,
+          author: attrs.author,
+        })
         cws[attrs.tsgid] = pulledCws[attrs.tsgid]
         continue
       }
-      console.log('Pulling CWs', { tsgid: attrs.tsgid, title: attrs.title, author: attrs.author })
-      const resp = await fetch(`https://app.thestorygraph.com/books/${attrs.tsgid}/content_warnings_section`)
+      console.log('Pulling CWs', {
+        tsgid: attrs.tsgid,
+        title: attrs.title,
+        author: attrs.author,
+      })
+      const resp = await fetch(
+        `https://app.thestorygraph.com/books/${attrs.tsgid}/content_warnings_section`,
+      )
       const html = await resp.text()
       const dom = new JSDOM(html)
       // The StoryGraph has some real ugly HTML structure for this…
-      const cwElement = dom.window.document.querySelector('.content-warnings-information')
+      const cwElement = dom.window.document.querySelector(
+        '.content-warnings-information',
+      )
       const cwList: Record<string, string> = {}
       let cwSection = 'Uncategorized'
       for (const child of cwElement?.childNodes ?? []) {
