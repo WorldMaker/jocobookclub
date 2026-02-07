@@ -24,9 +24,13 @@ tags: [main]
         <section class="section cell is-col-span-2">
             <h1 class="title" id="upcoming"><span class="icon has-text-primary"><i class="fa-duotone fa-solid fa-book-sparkles"></i></span> Upcoming Club Reads</h1>
 
-            {{ for upcoming of search.pages("upcoming") }}
+            {{ set upcomingBooks = search.pages("upcoming") }}
+            {{ for upcoming of upcomingBooks }}
             {{ include "book-card.vto" { ...upcoming, showExcerpt: true } }}
             {{ /for }}
+            {{ if upcomingBooks.length == 0 }}
+            <p class="block container">No upcoming books have been announced yet. Be sure to vote and check back soon!</p>
+            {{ /if }}
         </section>
         <section class="section cell">
             <h1 class="title"><span class="icon has-text-primary"><i class="fa-duotone fa-solid fa-ballot"></i></span> Current Rankings</h1>
