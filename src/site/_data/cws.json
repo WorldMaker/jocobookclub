@@ -173,6 +173,11 @@
     "Moderate": "Suicide, Child abuse, Domestic abuse",
     "Minor": "Toxic relationship, Cancer, Body shaming"
   },
+  "c83664bb-15bf-4404-b896-af6bbb0cfc18": {
+    "Graphic": "Body horror, Death, Gore",
+    "Moderate": "War, Suicidal thoughts, Alcoholism",
+    "Minor": "Rape, Sexual assault, Sexual content"
+  },
   "3cfd6c5b-5ae5-44a5-a1a2-b14023f9b554": {
     "Graphic": "Violence, Torture, Death",
     "Moderate": "Child death, Death of parent, Murder",
@@ -222,6 +227,11 @@
     "Graphic": "Sexual assault, Rape, Murder",
     "Moderate": "Drug abuse, Drug use, Addiction",
     "Minor": "Vomit"
+  },
+  "cb1b7d81-9b5d-4e5c-9e00-b4a643988c6b": {
+    "Graphic": "Blood, Animal death, Fire/Fire injury",
+    "Moderate": "Death, Violence, Gore",
+    "Minor": "Sexual content, Grief, Animal cruelty"
   },
   "2348e75c-5a77-4dbe-9875-55e433994bbe": {
     "Graphic": "Death, Police brutality, Suicide",
@@ -293,25 +303,25 @@
     "Moderate": "War, Death, Toxic relationship",
     "Minor": "Death of parent, Blood, Abandonment"
   },
-  "c83664bb-15bf-4404-b896-af6bbb0cfc18": {
-    "Graphic": "Body horror, Death, Gore",
-    "Moderate": "War, Suicidal thoughts, Alcoholism",
-    "Minor": "Rape, Sexual assault, Sexual content"
-  },
   "977e301d-c438-40f4-810b-25a96dbee03e": {
     "Graphic": "Abandonment, Confinement, Cursing",
     "Moderate": "Injury/Injury detail, Excrement, Blood",
     "Minor": "Cannibalism, Suicidal thoughts, Medical content"
   },
-  "cb1b7d81-9b5d-4e5c-9e00-b4a643988c6b": {
-    "Graphic": "Blood, Animal death, Fire/Fire injury",
-    "Moderate": "Death, Violence, Gore",
-    "Minor": "Sexual content, Grief, Animal cruelty"
-  },
   "b4868836-7c8e-482e-b051-c2684ca7920f": {
     "Graphic": "Death, Police brutality, Toxic friendship",
     "Moderate": "War, Sexual content, Sexual violence",
     "Minor": "Murder, Sexism, Religious bigotry"
+  },
+  "a7df81c0-55ec-4568-a3c9-cd8c89e387ca": {
+    "Graphic": "Violence, Body horror, Bullying",
+    "Moderate": "Animal death, War, Death",
+    "Minor": "Cursing, Infidelity, Vomit"
+  },
+  "39a5590d-ad16-4a75-82a2-c9337d59418a": {
+    "Graphic": "Murder, Death, Violence",
+    "Moderate": "Grief, Misogyny",
+    "Minor": "Stalking, Body horror, Abandonment"
   },
   "f0c78406-50a8-4edf-adb8-d6a1049cbabd": {
     "Graphic": "Suicide, Death of parent, Child abuse",
