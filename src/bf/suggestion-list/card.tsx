@@ -25,8 +25,18 @@ function LibraryThingLink({ ltid }: { ltid?: string }) {
   }
   return (
     <span>
-      View on{' '}
-      <a href={`https://www.librarything.com/work/${ltid}`}>LibraryThing</a>
+      <a href={`https://www.librarything.com/work/${ltid}`} target='_blank'>LibraryThing <i class="fa-duotone fa-solid fa-arrow-up-right-from-square"></i></a>
+    </span>
+  )
+}
+
+function StoryGraphLink({ tsgid }: { tsgid?: string }) {
+  if (!tsgid) {
+    return <span>No StoryGraph ID yet</span>
+  }
+  return (
+    <span>
+      <a href={`https://app.thestorygraph.com/books/${tsgid}`} target='_blank'>StoryGraph <i class="fa-duotone fa-solid fa-arrow-up-right-from-square"></i></a>
     </span>
   )
 }
@@ -57,6 +67,9 @@ export function SuggestionCard(
 
   const ltLink = vm.suggestion.pipe(
     map((suggestion) => () => <LibraryThingLink ltid={suggestion.ltid} />),
+  )
+  const tsgLink = vm.suggestion.pipe(
+    map((suggestion) => () => <StoryGraphLink tsgid={suggestion.tsgid} />),
   )
 
   const olidSrc = vm.suggestion.pipe(
@@ -149,6 +162,7 @@ export function SuggestionCard(
           childrenBind={ltLink}
           childrenBindMode='replace'
         />
+        <p class='card-footer-item' childrenBind={tsgLink} childrenBindMode='replace' />
         <p class='card-footer-item buttons'>
           <button
             type='button'

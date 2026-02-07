@@ -4,8 +4,11 @@ import { UserId } from './user.ts'
 export const Suggestion = z.object({
   id: z.ulid(),
   userId: UserId,
+  /** The LibraryThing ID for the book */
   ltid: z.string().optional(),
+  /** The Open Library ID for the book */
   olid: z.string().optional(),
+  /** The StoryGraph ID for the book */
   tsgid: z.string().optional(),
   title: z.string().nonempty(),
   author: z.string().nonempty(),
