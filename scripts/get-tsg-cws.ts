@@ -2,6 +2,7 @@
 // deno-lint-ignore-file no-import-prefix no-unversioned-import
 import { extractYaml, test } from 'jsr:@std/front-matter'
 import { walk } from 'jsr:@std/fs'
+import { exit } from 'node:process'
 import { JSDOM } from 'npm:jsdom'
 
 interface BookAttrs {
@@ -67,7 +68,19 @@ for await (const f of walk('./src/site/', { exts: ['.md'] })) {
         }
       }
       console.log(cwList)
-      cws[attrs.tsgid] = cwList
+      if (Object.keys(cwList).length === 0) {
+        console.warn('No CWs found for', {
+          tsgid: attrs.tsgid,
+          title: attrs.title,
+        })
+        const intentional = dom.window.document.querySelector('.book-pane > p').textContent.includes('doesn\'t have any')
+        if (!intentional) {
+          console.log(dom.serialize())
+          exit(1)
+        }
+      } else {
+        cws[attrs.tsgid] = cwList
+      }
     }
   }
 }
