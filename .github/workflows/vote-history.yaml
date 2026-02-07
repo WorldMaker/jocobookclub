@@ -1,0 +1,36 @@
+name: Save Vote History
+
+on:
+  schedule:
+    - cron: '59 23 * * *' # Runs every day at midnight
+  workflow_dispatch: # Allows manual triggering of the workflow
+
+jobs:
+  save-vote-history:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Deno
+      # uses: denoland/setup-deno@v1
+      uses: denoland/setup-deno@61fe2df320078202e33d7d5ad347e7dcfa0e8f31 # v1.1.2
+      with:
+        deno-version: v2.x
+
+    - name: Run save-tally
+      run: deno task save-tally
+      env:
+        DENO_KV_ACCESS_TOKEN: ${{ secrets.DENO_KV_ACCESS_TOKEN }}
+        CLUB_KV_URL: ${{ secrets.CLUB_KV_URL }}
+
+    - name: Create PR with updated vote history
+      # uses: peter-evans/create-pull-request@v4
+      uses: peter-evans/create-pull-request@38e0b6e68b4c852a5500a94740f0e535e0d7ba54
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: "Update vote history"
+        title: "Update vote history"
+        body: "This PR updates the vote history with the day's final tally."
+        branch: update-vote-history
