@@ -73,7 +73,8 @@ for await (const f of walk('./src/site/', { exts: ['.md'] })) {
           tsgid: attrs.tsgid,
           title: attrs.title,
         })
-        const intentional = dom.window.document.querySelector('.book-pane > p').textContent.includes('doesn\'t have any')
+        const intentional = dom.window.document.querySelector('.book-pane > p')
+          .textContent.includes("doesn't have any")
         if (!intentional) {
           console.log(dom.serialize())
           exit(1)
@@ -88,3 +89,7 @@ for await (const f of walk('./src/site/', { exts: ['.md'] })) {
 const encoder = new TextEncoder()
 const data = encoder.encode(JSON.stringify(cws, null, 2))
 await Deno.writeFile('./src/site/_data/cws.json', data)
+
+const fmtcmd = new Deno.Command(Deno.execPath(), { args: ['fmt'] })
+const { code: fmtcode } = await fmtcmd.output()
+console.assert(fmtcode === 0, 'Error running deno fmt')
