@@ -31,5 +31,3 @@ Blurb from a JoCoNaut:
 > and a useful comparison to current silly fare like _When the Moon Hits Your
 > Eye_ and previous club read _The Kaiju Preservation Society_, because it shows
 > that John has always been that silly.
-
-Content warnings include undefined

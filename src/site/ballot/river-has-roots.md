@@ -19,5 +19,3 @@ Blurb from a JoCoNaut:
 
 > Amal's solo debut after previous club read _How to Lose the Time War_. I've
 > heard it is pretty and powerful.
-
-Content warnings include undefined

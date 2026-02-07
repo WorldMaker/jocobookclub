@@ -21,4 +21,4 @@ Blurb from a JoCoNaut:
 > and a quick read. It predates the scifi/fantasy novel the club previously read
 > from friend of the cruise Ryka Aoki.
 
-Content warnings include undefined
+Content warnings could not be found
