@@ -25,7 +25,10 @@ function LibraryThingLink({ ltid }: { ltid?: string }) {
   }
   return (
     <span>
-      <a href={`https://www.librarything.com/work/${ltid}`} target='_blank'>LibraryThing <i class="fa-duotone fa-solid fa-arrow-up-right-from-square"></i></a>
+      <a href={`https://www.librarything.com/work/${ltid}`} target='_blank'>
+        LibraryThing{' '}
+        <i class='fa-duotone fa-solid fa-arrow-up-right-from-square'></i>
+      </a>
     </span>
   )
 }
@@ -36,7 +39,10 @@ function StoryGraphLink({ tsgid }: { tsgid?: string }) {
   }
   return (
     <span>
-      <a href={`https://app.thestorygraph.com/books/${tsgid}`} target='_blank'>StoryGraph <i class="fa-duotone fa-solid fa-arrow-up-right-from-square"></i></a>
+      <a href={`https://app.thestorygraph.com/books/${tsgid}`} target='_blank'>
+        StoryGraph{' '}
+        <i class='fa-duotone fa-solid fa-arrow-up-right-from-square'></i>
+      </a>
     </span>
   )
 }
@@ -162,7 +168,11 @@ export function SuggestionCard(
           childrenBind={ltLink}
           childrenBindMode='replace'
         />
-        <p class='card-footer-item' childrenBind={tsgLink} childrenBindMode='replace' />
+        <p
+          class='card-footer-item'
+          childrenBind={tsgLink}
+          childrenBindMode='replace'
+        />
         <p class='card-footer-item buttons'>
           <button
             type='button'
