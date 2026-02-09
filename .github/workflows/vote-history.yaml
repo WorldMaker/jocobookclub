@@ -2,7 +2,7 @@ name: Save Vote History
 
 on:
   schedule:
-    - cron: '59 23 * * *' # Runs every day at midnight
+    - cron: '51 19 * * *' # Runs every day around America/New_York midnight
   workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
@@ -33,4 +33,5 @@ jobs:
           commit-message: 'Update vote history'
           title: 'Update vote history'
           body: "This PR updates the vote history with the day's final tally."
-          branch: update-vote-history
+          branch: vote-history-bot/update
+          branch-suffix: timestamp
