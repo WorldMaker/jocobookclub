@@ -1,3 +1,19 @@
 @view-transition {
   navigation: auto;
 }
+
+dl {
+  display: grid;
+  grid-template-columns: 10ch 1fr;
+  gap: 0.5rem;
+}
+
+dl dt {
+  font-weight: 600;
+  text-align: right;
+  grid-column: 1;
+}
+
+dl dd {
+  grid-column: 2;
+}

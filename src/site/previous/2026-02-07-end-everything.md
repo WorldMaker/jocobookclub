@@ -3,7 +3,9 @@ title: The End of Everything (Astrophysically Speaking)
 author: Katie Mack
 ltid: '24122920'
 olid: OL29837371M
-tags: [non-fiction]
+tsgid: 8c784b55-c3e6-4e6b-8221-a8da7bf632d4
+tags: [non-fiction, boat]
+scheduled: true
 ---
 
 Blurb from a JoCoNaut:

@@ -226,6 +226,10 @@ export class SuggestionEditorVm implements GenreTagCheckboxVm {
     this.#updateSuggestion((s) => ({ ...s, olid }))
   }
 
+  tsgidChanged(tsgid: string) {
+    this.#updateSuggestion((s) => ({ ...s, tsgid }))
+  }
+
   whyBlurbChanged(whyBlurb: string) {
     this.#updateSuggestion((s) => ({ ...s, whyBlurb }))
   }

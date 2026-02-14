@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-import-prefix
 import { slugify } from 'jsr:@bossley9/slugify@1.0.1'
 import { stringify } from 'jsr:@std/yaml@1.0.5'
 import { listSuggestions } from '../src/api/models/suggestion.ts'

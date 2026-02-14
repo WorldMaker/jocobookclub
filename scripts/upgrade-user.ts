@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-import-prefix no-unversioned-import
 import { parseArgs } from 'jsr:@std/cli'
 import { getUserIdByEmail } from '../src/api/models/user.ts'
 import { getPasskeysForUser, updatePasskey } from '../src/api/models/passkey.ts'

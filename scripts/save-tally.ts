@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-import-prefix no-unversioned-import
 import { parseArgs } from 'jsr:@std/cli'
 import { getFinalTally } from '../src/api/models/tally.ts'
 

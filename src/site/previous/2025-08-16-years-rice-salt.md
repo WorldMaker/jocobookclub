@@ -3,6 +3,7 @@ title: The Years of Rice and Salt
 author: Kim Stanley Robinson
 ltid: '23185'
 olid: OL3950670M
+tsgid: 088d6b33-fac4-46a0-8a69-cbb3b632ae20
 tags: [fantasy]
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: Club Rules
-layout: page.vto
+layout: rules-page.vto
 tags: [rules]
 ---
 

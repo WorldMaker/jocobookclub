@@ -3,6 +3,7 @@ id: 01K2WS00YBBKWDCGRN3JQDJGJ6
 userId: 01JMT7GVFK73Y0Q89C55221011
 ltid: '9191913'
 olid: OL56976455M
+tsgid: 98d62b0b-7b34-4b33-a498-faabb63988c2
 title: 'The New Jim Crow: Mass Incarceration in the Age of Colorblindness'
 author: Michelle Alexander
 whyBlurb: >-

@@ -3,6 +3,7 @@ id: 01K2V1KZC80DW74K7CS42X4RE9
 userId: 01JYVVYCEPXVQH06ZZQS0GH6YJ
 ltid: '30677740'
 olid: OL57586063M
+tsgid: 10acce6a-fa33-4c05-a3b8-72f8fa3fda4d
 title: Funny Story
 author: Emily Henry
 whyBlurb: >-

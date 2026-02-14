@@ -14,6 +14,7 @@ export interface SuggestionEditorFormEvents {
   authorChanged: ObservableEvent<InputEvent>
   ltidChanged: ObservableEvent<InputEvent>
   olidChanged: ObservableEvent<InputEvent>
+  tsgidChanged: ObservableEvent<InputEvent>
   whyBlurbChanged: ObservableEvent<InputEvent>
   cwChanged: ObservableEvent<InputEvent>
 }
@@ -45,6 +46,10 @@ export function Form(
   bindImmediateEffect(
     events.olidChanged,
     (e) => vm.olidChanged((e.target as HTMLInputElement).value),
+  )
+  bindImmediateEffect(
+    events.tsgidChanged,
+    (e) => vm.tsgidChanged((e.target as HTMLInputElement).value),
   )
   bindImmediateEffect(
     events.whyBlurbChanged,
@@ -118,6 +123,22 @@ export function Form(
       valid.success
         ? ''
         : valid.error.issues.find((issue) => issue.path[0] === 'olid')
+          ?.message ?? ''
+    ),
+  )
+  const tsgid = vm.suggestion.pipe(map((suggestion) => suggestion?.tsgid ?? ''))
+  const tsgidInvalid = vm.valid.pipe(
+    map((valid) =>
+      !valid.success &&
+      valid.error.issues.some((issue) => issue.path[0] === 'tsgid')
+    ),
+    shareReplay(1),
+  )
+  const tsgidError = vm.valid.pipe(
+    map((valid) =>
+      valid.success
+        ? ''
+        : valid.error.issues.find((issue) => issue.path[0] === 'tsgid')
           ?.message ?? ''
     ),
   )
@@ -262,6 +283,36 @@ export function Form(
           <a href='https://openlibrary.org/'>Open Library website</a>. Scroll
           down to "Edition Identifiers" and copy the ID that should start with
           an OL and end with an M, for example <code>OL1234567M</code>.
+        </p>
+      </div>
+      <div class='field'>
+        <label htmlFor='tsgid' class='label'>The Story Graph ID</label>
+        <div class='field has-addons'>
+          <div class='control'>
+            <a class='button is-static'>
+              https://app.thestorygraph.com/books/
+            </a>
+          </div>
+          <div class='control is-expanded'>
+            <input
+              id='tsgid'
+              class='input'
+              type='text'
+              placeholder='The Story Graph ID'
+              immediateBind={{ value: tsgid }}
+              events={{ change: events.tsgidChanged }}
+              classBind={{ 'is-danger': tsgidInvalid }}
+            />
+          </div>
+        </div>
+        <p
+          class='help'
+          classBind={{ 'is-danger': tsgidInvalid }}
+          bind={{ innerText: tsgidError }}
+        />
+        <p class='help'>
+          Optionally provide the The Story Graph ID to help make sure we find
+          the right book
         </p>
       </div>
       <div class='field'>
