@@ -16,6 +16,10 @@
     "jsxFragmentFactory": "Fragment"
   },
   "tasks": {
+    "get-discord-handles": {
+      "description": "Get all opt-in Discord handles from the database",
+      "command": "deno run -A --env-file --unstable-kv ./scripts/get-discord-handles.ts"
+    },
     "get-tsg-cws": {
       "description": "Get The Story Graph content warning data",
       "command": "deno run -A ./scripts/get-tsg-cws.ts"
