@@ -19,6 +19,11 @@
     "Moderate": "Addiction, Genocide, Drug abuse",
     "Minor": "Body horror, Vomit, Suicide"
   },
+  "a7df81c0-55ec-4568-a3c9-cd8c89e387ca": {
+    "Graphic": "Violence, Body horror, Bullying",
+    "Moderate": "Animal death, War, Death",
+    "Minor": "Cursing, Infidelity, Vomit"
+  },
   "a471be89-aaae-42aa-ac3e-d5e4169ec71e": {
     "Graphic": "Body horror, Violence, Death",
     "Moderate": "Confinement, War, Injury/Injury detail",
@@ -243,10 +248,20 @@
     "Moderate": "Alcoholism, Gun violence, Cursing",
     "Minor": "War, Death, Drug use"
   },
+  "75265899-70af-40e2-82cc-6c473770a89b": {
+    "Graphic": "Violence, Gore, Death",
+    "Moderate": "War, Injury/Injury detail, Sexual content",
+    "Minor": "Confinement, Blood, Medical trauma"
+  },
   "367bcd99-cc75-4f49-94eb-4e1f27bff536": {
     "Graphic": "Racism, Body horror, Violence",
     "Moderate": "Slavery, Racial slurs, Death of parent",
     "Minor": "Sexual content, Animal death, War"
+  },
+  "39a5590d-ad16-4a75-82a2-c9337d59418a": {
+    "Graphic": "Murder, Death, Violence",
+    "Moderate": "Grief, Misogyny",
+    "Minor": "Stalking, Body horror, Abandonment"
   },
   "c6402cfc-fff1-4b40-a30b-7ebe32871b68": {
     "Graphic": "Suicide, Xenophobia, War",
@@ -312,16 +327,6 @@
     "Graphic": "Death, Police brutality, Toxic friendship",
     "Moderate": "War, Sexual content, Sexual violence",
     "Minor": "Murder, Sexism, Religious bigotry"
-  },
-  "a7df81c0-55ec-4568-a3c9-cd8c89e387ca": {
-    "Graphic": "Violence, Body horror, Bullying",
-    "Moderate": "Animal death, War, Death",
-    "Minor": "Cursing, Infidelity, Vomit"
-  },
-  "39a5590d-ad16-4a75-82a2-c9337d59418a": {
-    "Graphic": "Murder, Death, Violence",
-    "Moderate": "Grief, Misogyny",
-    "Minor": "Stalking, Body horror, Abandonment"
   },
   "f0c78406-50a8-4edf-adb8-d6a1049cbabd": {
     "Graphic": "Suicide, Death of parent, Child abuse",
