@@ -21,6 +21,7 @@ const pulledCws =
     {} as Record<string, Record<string, string>>
 
 const cws: Record<string, Record<string, string>> = {}
+const newCws: Record<string, Record<string, string>> = {}
 
 for await (const f of walk('./src/site/', { exts: ['.md'] })) {
   console.log('Reading file', f.path)
@@ -81,10 +82,13 @@ for await (const f of walk('./src/site/', { exts: ['.md'] })) {
         }
       } else {
         cws[attrs.tsgid] = cwList
+        newCws[`${attrs.title} by ${attrs.author}`] = cwList
       }
     }
   }
 }
+
+console.log('New CWs', newCws)
 
 const encoder = new TextEncoder()
 const data = encoder.encode(JSON.stringify(cws, null, 2))
