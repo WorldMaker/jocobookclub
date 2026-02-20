@@ -1,0 +1,64 @@
+---
+layout: 'main.vto'
+---
+
+<section class="section">
+    <h1 class="title"><span class="icon has-text-info"><i class="fa-duotone fa-solid fa-ballot"></i></span> {{ title }}</h1>
+
+    <p class='block'>
+        <i class='fa-duotone fa-solid fa-user-astronaut'></i> {{ count }} JoCoNauts
+        participated in these rankings calculated on {{ new Date(updated).toLocaleDateString() }} at {{ new Date(updated).toLocaleTimeString() }}.
+    </p>
+
+      <table class='table'>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Tags</th>
+          </tr>
+        </thead>
+        {{> /* The list is reversed because sorted in ascending order */}}
+        <tbody>
+          {{ for idx, ltid of ranking.toReversed() }}
+            {{ set book = books.get(ltid) }}
+            {{ if !book }}
+            <tr>
+                <th>{{ Number(idx) + 1 }}</th>
+                <td colSpan="3">[Redacted]</td>
+            </tr>
+            {{ else }}
+            <tr>
+                <th>{{ Number(idx) + 1 }}</th>
+                <td>
+                    <a href="{{ book.url }}">{{ book.title }}</a>
+                    [<a href="https://www.librarything.com/work/{{ltid}}">LT</a>]
+                </td>
+                <td>{{ book.author }}</td>
+                <td>
+                    <div class="tags">
+                    {{ for tag of book.tags }}
+                        {{ if genre.tags[tag] }}
+                            <a class="tag {{ genre.tags[tag].tagClass }}" href="/tags/{{ tag }}">
+                                <span class="icon-text">
+                                    <span class="icon {{ genre.tags[tag].tagIconClass }}"><i class="fa-duotone fa-solid {{ genre.tags[tag].icon }}"></i></span>
+                                    <span>{{ genre.tags[tag].name ?? genre.tags[tag].title }}</span>
+                                </span>
+                            </a>
+                        {{ /if }}
+                    {{ /for }}
+                    </div>
+                </td>
+            </tr>
+            {{ /if }}
+              <tr>
+                <td></td>
+                <td colSpan="4">
+                  {{> /* TODO: <Interest ltid={ltid} ranking={ranking} /> */}}
+                </td>
+              </tr>
+            {{ /for }}
+        </tbody>
+      </table>
+</section>

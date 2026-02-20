@@ -55,6 +55,8 @@
     "npm:@peculiar/asn1-schema@^2.3.8": "2.4.0",
     "npm:@peculiar/asn1-x509@^2.3.8": "2.4.0",
     "npm:@simplewebauthn/browser@^13.1.0": "13.1.0",
+    "npm:chart.js@^4.5.1": "4.5.1",
+    "npm:chartjs-adapter-date-fns@3": "3.0.0_chart.js@4.5.1_date-fns@4.1.0",
     "npm:esbuild@~0.24.2": "0.24.2",
     "npm:estree-walker@3.0.3": "3.0.3",
     "npm:hono@^4.6.16": "4.9.0",
@@ -404,6 +406,9 @@
         "tslib"
       ]
     },
+    "@kurkle/color@0.3.4": {
+      "integrity": "sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w=="
+    },
     "@levischuck/tiny-cbor@0.2.11": {
       "integrity": "sha512-llBRm4dT4Z89aRsm6u2oEZ8tfwL/2l6BwpZ7JcyieouniDECM5AqNgr/y08zalEIvW3RSK4upYyybDcmjXqAow=="
     },
@@ -473,6 +478,19 @@
     "asynckit@0.4.0": {
       "integrity": "sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q=="
     },
+    "chart.js@4.5.1": {
+      "integrity": "sha512-GIjfiT9dbmHRiYi6Nl2yFCq7kkwdkp1W/lp2J99rX0yo9tgJGn3lKQATztIjb5tVtevcBtIdICNWqlq5+E8/Pw==",
+      "dependencies": [
+        "@kurkle/color"
+      ]
+    },
+    "chartjs-adapter-date-fns@3.0.0_chart.js@4.5.1_date-fns@4.1.0": {
+      "integrity": "sha512-Rs3iEB3Q5pJ973J93OBTpnP7qoGwvq3nUnoMdtxO+9aoJof7UFcRbWcIDteXuYd1fgAvct/32T9qaLyLuZVwCg==",
+      "dependencies": [
+        "chart.js",
+        "date-fns"
+      ]
+    },
     "combined-stream@1.0.8": {
       "integrity": "sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==",
       "dependencies": [
@@ -492,6 +510,9 @@
         "whatwg-mimetype",
         "whatwg-url"
       ]
+    },
+    "date-fns@4.1.0": {
+      "integrity": "sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg=="
     },
     "debug@4.4.0": {
       "integrity": "sha512-6WTZ/IxCY/T6BALoZHaE4ctp9xm+Z5kY/pzYaCHRFeyVhojxlrm+46y68HA6hr0TcwEssoxNiDEUJQjfPZ/RYA==",
@@ -1012,6 +1033,8 @@
           "jsr:@std/ulid@1",
           "jsr:@worldmaker/butterfloat@^1.6.4",
           "npm:@simplewebauthn/browser@^13.1.0",
+          "npm:chart.js@^4.5.1",
+          "npm:chartjs-adapter-date-fns@3",
           "npm:esbuild@~0.24.2",
           "npm:hono@^4.6.16",
           "npm:jsdom@26",
