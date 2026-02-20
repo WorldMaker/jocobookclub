@@ -1,4 +1,12 @@
-import { Chart, LinearScale, LineController, LineElement, PointElement, TimeScale, Tooltip } from 'chart.js'
+import {
+  Chart,
+  LinearScale,
+  LineController,
+  LineElement,
+  PointElement,
+  TimeScale,
+  Tooltip,
+} from 'chart.js'
 import 'chartjs-adapter-date-fns' // silly side effect to register the date adapter // TODO: Temporal adapter when it exists
 import { StaticApiBase } from './final-tally/vm.ts'
 
@@ -9,7 +17,7 @@ Chart.register([
   PointElement,
   TimeScale,
   Tooltip,
-]);
+])
 
 class BookRankChart extends HTMLElement {
   #chart?: Chart<'line', unknown, unknown>
@@ -22,7 +30,9 @@ class BookRankChart extends HTMLElement {
     }
     const rankResponse = await fetch(`${StaticApiBase}/book-ranks/${ltid}.json`)
     if (!rankResponse.ok) {
-      console.error(`Failed to fetch rank data for ltid ${ltid}: ${rankResponse.statusText}`)
+      console.error(
+        `Failed to fetch rank data for ltid ${ltid}: ${rankResponse.statusText}`,
+      )
       return
     }
     const rank = await rankResponse.json()
@@ -48,7 +58,7 @@ class BookRankChart extends HTMLElement {
           label: 'Book Rank',
           data,
           borderColor: 'rgba(75, 192, 192, 1)',
-        }]
+        }],
       },
       options: {
         responsive: true,
@@ -59,9 +69,9 @@ class BookRankChart extends HTMLElement {
           },
           x: {
             type: 'time',
-          }
-        }
-      }
+          },
+        },
+      },
     })
   }
 

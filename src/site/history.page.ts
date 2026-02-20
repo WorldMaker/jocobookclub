@@ -12,8 +12,14 @@ type BookEntry = {
   tags: string[]
   url: string
 }
-type PreviousBookEntry = BookEntry & { type: 'previous', date: Temporal.PlainDate }
-type ScheduledUpcomingBookEntry = BookEntry & { type: 'upcoming', date: Temporal.PlainDate }
+type PreviousBookEntry = BookEntry & {
+  type: 'previous'
+  date: Temporal.PlainDate
+}
+type ScheduledUpcomingBookEntry = BookEntry & {
+  type: 'upcoming'
+  date: Temporal.PlainDate
+}
 
 type BooksByLtId = Map<string, BookEntry>
 
@@ -69,7 +75,11 @@ export default async function* history({ search }: Lume.Data) {
     dayCalendar.get(day)!.push(book)
   }
 
-  const addToBookRanks = (ltid: string, date: Temporal.PlainDate, rank: number) => {
+  const addToBookRanks = (
+    ltid: string,
+    date: Temporal.PlainDate,
+    rank: number,
+  ) => {
     if (!bookRanks.has(ltid)) {
       bookRanks.set(ltid, {})
     }
@@ -144,7 +154,9 @@ export default async function* history({ search }: Lume.Data) {
       continue
     }
     const date = Temporal.PlainDate.from(historyMatch[1])
-    const path = `/ranking/${date.year}/${date.month.toString().padStart(2, '0')}/${date.day.toString().padStart(2, '0')}/`
+    const path = `/ranking/${date.year}/${
+      date.month.toString().padStart(2, '0')
+    }/${date.day.toString().padStart(2, '0')}/`
     const ranking: CalendarEntry = {
       type: 'ranking',
       date,
@@ -183,7 +195,9 @@ export default async function* history({ search }: Lume.Data) {
   }
 
   for (const ranking of rankings) {
-    const tally = FinalTally.safeParse(JSON.parse(await Deno.readTextFile(ranking.filename)))
+    const tally = FinalTally.safeParse(
+      JSON.parse(await Deno.readTextFile(ranking.filename)),
+    )
     if (!tally.success) {
       continue
     }
