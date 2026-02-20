@@ -1,4 +1,6 @@
+import { FinalTally } from '@worldmaker/jocobookclub-api/models'
 import site from './_config.ts'
+import { contentType } from 'jsr:@std/media-types@^1.0.0-rc.1/content-type'
 
 type BookType = 'previous' | 'upcoming' | 'ballot' | 'held'
 type BookEntry = {
@@ -32,6 +34,9 @@ type DayCalendary = Map<number, CalendarEntry[]>
 type MonthCalendar = Map<number, DayCalendary>
 type YearCalendar = Map<number, MonthCalendar>
 
+type DayRank = Record<string, number>
+type BookDayRank = Map<string, DayRank>
+
 function toPlainDate(date: Date): Temporal.PlainDate {
   return Temporal.PlainDate.from({
     year: date.getFullYear(),
@@ -43,6 +48,7 @@ function toPlainDate(date: Date): Temporal.PlainDate {
 export default async function* history({ search }: Lume.Data) {
   const calendar: YearCalendar = new Map()
   const books: BooksByLtId = new Map()
+  const bookRanks: BookDayRank = new Map()
 
   const addToCalendar = (book: CalendarEntry) => {
     if (!book.date) {
@@ -63,6 +69,13 @@ export default async function* history({ search }: Lume.Data) {
     dayCalendar.get(day)!.push(book)
   }
 
+  const addToBookRanks = (ltid: string, date: Temporal.PlainDate, rank: number) => {
+    if (!bookRanks.has(ltid)) {
+      bookRanks.set(ltid, {})
+    }
+    bookRanks.get(ltid)![date.toString()] = rank
+  }
+
   const previousBooks = search.pages('previous')
   for (const page of previousBooks) {
     const book: PreviousBookEntry = {
@@ -76,6 +89,7 @@ export default async function* history({ search }: Lume.Data) {
     }
     books.set(book.ltid, book)
     addToCalendar(book)
+    addToBookRanks(book.ltid, book.date, 0)
   }
 
   const upcomingBooks = search.pages('upcoming')
@@ -92,6 +106,7 @@ export default async function* history({ search }: Lume.Data) {
     books.set(book.ltid, book)
     if (book.date) {
       addToCalendar(book as ScheduledUpcomingBookEntry)
+      addToBookRanks(book.ltid, book.date, 0)
     }
   }
 
@@ -166,7 +181,16 @@ export default async function* history({ search }: Lume.Data) {
   }
 
   for (const ranking of rankings) {
-    const data = JSON.parse(await Deno.readTextFile(ranking.filename))
+    const tally = FinalTally.safeParse(JSON.parse(await Deno.readTextFile(ranking.filename)))
+    if (!tally.success) {
+      continue
+    }
+    const data = tally.data
+    // rankings are in reverse order
+    for (let i = data.ranking.length - 1; i >= 0; i--) {
+      const ltid = data.ranking[i]
+      addToBookRanks(ltid, ranking.date, data.ranking.length - i)
+    }
     yield {
       ...data,
       layout: 'ranking.vto',
@@ -174,6 +198,14 @@ export default async function* history({ search }: Lume.Data) {
       url: ranking.path,
       books,
       rankingDate: ranking.date,
+    }
+  }
+
+  for (const [ltid, book] of bookRanks.entries()) {
+    yield {
+      url: `/static-api/book-ranks/${ltid}.json`,
+      contentType: 'application/json',
+      content: JSON.stringify(book),
     }
   }
 }
