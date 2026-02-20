@@ -43,11 +43,8 @@ type DayRank = Record<string, number>
 type BookDayRank = Map<string, DayRank>
 
 function toPlainDate(date: Date): Temporal.PlainDate {
-  return Temporal.PlainDate.from({
-    year: date.getFullYear(),
-    month: date.getMonth() + 1,
-    day: date.getDate() + 1,
-  })
+  // Lume dates are always in UTC
+  return date.toTemporalInstant().toZonedDateTimeISO('UTC').toPlainDate()
 }
 
 export default async function* history({ search }: Lume.Data) {
