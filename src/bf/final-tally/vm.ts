@@ -4,7 +4,7 @@ import { map, Observable, shareReplay } from 'rxjs'
 import { apiClient } from '../client.ts'
 import sessionManager from '../vm/session-manager.ts'
 
-export const StaticApiBase = 'https://worldmaker.net/jocobookclub/static-api'
+export const StaticApiBase = '/static-api'
 
 const ActiveBallotUrl = `${StaticApiBase}/ballot.json`
 
