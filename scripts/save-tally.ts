@@ -44,7 +44,7 @@ if (
   Deno.exit(0)
 }
 
-const filename = `src/site/vote-history/${updated.year}-${
+const filename = `src/site/_vote-history/${updated.year}-${
   updated.month.toString().padStart(2, '0')
 }-${updated.day.toString().padStart(2, '0')}.json`
 
