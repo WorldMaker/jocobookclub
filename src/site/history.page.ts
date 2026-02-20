@@ -1,6 +1,5 @@
 import { FinalTally } from '@worldmaker/jocobookclub-api/models'
 import site from './_config.ts'
-import { contentType } from 'jsr:@std/media-types@^1.0.0-rc.1/content-type'
 
 type BookType = 'previous' | 'upcoming' | 'ballot' | 'held'
 type BookEntry = {
