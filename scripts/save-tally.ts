@@ -36,15 +36,26 @@ const now = Temporal.Now.zonedDateTimeISO('America/New_York')
 
 console.info(updated)
 
+// If it's before 4am, we want to use yesterday's date for the filename
+// because GitHub Actions cron may be delayed
+const useYesterday = now.hour < 4
+const startOfDay = useYesterday
+  ? now.subtract({ days: 1 }).startOfDay()
+  : now.startOfDay()
+
 if (
   !args.force &&
-  Temporal.ZonedDateTime.compare(updated.startOfDay(), now.startOfDay()) !== 0
+  Temporal.ZonedDateTime.compare(updated.startOfDay(), startOfDay) !== 0
 ) {
-  console.log('Final tally is not from today')
+  console.log(
+    `Final tally is not from ${
+      startOfDay.toLocaleString(undefined, { dateStyle: 'short' })
+    }`,
+  )
   Deno.exit(0)
 }
 
-const filename = `src/site/vote-history/${updated.year}-${
+const filename = `src/site/_vote-history/${updated.year}-${
   updated.month.toString().padStart(2, '0')
 }-${updated.day.toString().padStart(2, '0')}.json`
 

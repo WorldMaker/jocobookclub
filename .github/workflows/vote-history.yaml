@@ -2,7 +2,7 @@ name: Save Vote History
 
 on:
   schedule:
-    - cron: '51 19 * * *' # Runs every day around America/New_York midnight
+    - cron: '55 4 * * *' # Runs every day around America/New_York midnight
   workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
