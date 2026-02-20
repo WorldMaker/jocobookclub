@@ -47,7 +47,11 @@ if (
   !args.force &&
   Temporal.ZonedDateTime.compare(updated.startOfDay(), startOfDay) !== 0
 ) {
-  console.log(`Final tally is not from ${startOfDay.toLocaleString(undefined, { dateStyle: 'short' })}`)
+  console.log(
+    `Final tally is not from ${
+      startOfDay.toLocaleString(undefined, { dateStyle: 'short' })
+    }`,
+  )
   Deno.exit(0)
 }
 
