@@ -1,10 +1,5 @@
 import genreTags from './_data/genre/tags.json' with { type: 'json' }
-
-const baseUrl = 'https://worldmaker.net/jocobookclub/'
-
-function pageUrl(url: string): string {
-  return new URL(url.startsWith('/') ? url.slice(1) : url, baseUrl).toString()
-}
+import site from './_config.ts'
 
 interface BookInfo {
   title: string
@@ -33,7 +28,7 @@ export default function* staticApi({ search }: Lume.Data) {
       scheduledDate: page.date,
       ltid: page.ltid,
       tags: page.tags,
-      url: pageUrl(page.url),
+      url: site.url(page.url),
     }))
   const previousBooksByLtid = byLtId(previousBooks)
   yield {
@@ -48,7 +43,7 @@ export default function* staticApi({ search }: Lume.Data) {
       scheduledDate: page.scheduled ? page.date : undefined,
       ltid: page.ltid,
       tags: page.tags,
-      url: pageUrl(page.url),
+      url: site.url(page.url, true),
     }))
   const upcomingBooksByLtid = byLtId(upcomingBooks)
   yield {
@@ -62,7 +57,7 @@ export default function* staticApi({ search }: Lume.Data) {
       author: page.author,
       ltid: page.ltid,
       tags: page.tags,
-      url: pageUrl(page.url),
+      url: site.url(page.url, true),
     }))
   const ballotBooksByLtid = byLtId(ballotBooks)
   yield {
@@ -78,7 +73,7 @@ export default function* staticApi({ search }: Lume.Data) {
         author: page.author,
         ltid: page.ltid,
         tags: page.tags,
-        url: pageUrl(page.url),
+        url: site.url(page.url, true),
       }))
     const tagBooksByLtid = byLtId(tagBooks)
     yield {
