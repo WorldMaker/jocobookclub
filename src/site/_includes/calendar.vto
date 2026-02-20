@@ -4,9 +4,10 @@ layout: 'main.vto'
 
 <section class="section">
     <div class="container">
-        <h1 class="title">{{ title }}</h1>
+        <h1 class="title"><span class="icon has-text-info"><i class="fa fa-solid fa-duotone fa-calendar"></i></span> {{ title }}</h1>
     </div>
 
+    <div class="calendar">
     {{ set months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] }}
     {{ for i, month of months }}
         {{ set startDow = new Date(year, i, 1).getDay() }}
@@ -20,29 +21,30 @@ layout: 'main.vto'
             <div class="saturday">Sat</div>
             <div class="sunday">Sun</div>
             {{ set monthCal = calendar.get(Number(i) + 1) ?? new Map() }}
-            {{ for day of monthCal.keys() }}
+            {{ set daysInMonth = new Date(year, Number(i) + 1, 0).getDate() }}
+            {{ for day of daysInMonth }}
                 {{ set entries = monthCal.get(day) }}
+                {{ if entries }}
                 <div class="day" style="--day: {{ day }}">
                     <strong class="number">{{ day }}</strong>
-                    <div class="content">
+                    <div class="events">
                         <ul>
                         {{ for entry of entries }}
                              <li><a href="{{ entry.url }}">
                              {{ if entry.type === 'ranking' }}
                                 Ranking
                              {{ else if entry.type === 'previous' }}
-                                Discussed {{ entry.title }} by {{ entry.author }}
+                                Discussed <span class="book-title">{{ entry.title }}</span> by {{ entry.author }}
                              {{ else if entry.type === 'upcoming' }}
-                                Will Discuss {{ entry.title }} by {{ entry.author }}
+                                Will Discuss <span class="book-title">{{ entry.title }}</span> by {{ entry.author }}
                              {{ /if }}
                              </a>
                             <div class="tags">
                                 {{ for tag of entry.tags }}
                                     {{ if genre.tags[tag] }}
-                                        <a class="tag {{ genre.tags[tag].tagClass }}" href="/tags/{{ tag }}">
+                                        <a class="tag {{ genre.tags[tag].tagClass }}" title="{{ genre.tags[tag].name ?? genre.tags[tag].title }}" href="/tags/{{ tag }}">
                                             <span class="icon-text">
                                                 <span class="icon {{ genre.tags[tag].tagIconClass }}"><i class="fa-duotone fa-solid {{ genre.tags[tag].icon }}"></i></span>
-                                                <span>{{ genre.tags[tag].name ?? genre.tags[tag].title }}</span>
                                             </span>
                                         </a>
                                     {{ /if }}
@@ -53,14 +55,18 @@ layout: 'main.vto'
                         </ul>
                     </div>
                 </div>
+                {{ else }}
+                <div class="empty-day" style="--day: {{ day }}"><span class="number">{{ day }}</span></div>
+                {{ /if }}
             {{ /for }}
         </div>
     {{ /for }}
+    </div>
 </section>
 
 <section class="section">
     <div class="container">
-        <h2 class="subtitle"><a href="/history/">Club History</a></h2>
+        <h2 class="subtitle"><a href="/history/"><i class="fa fa-solid fa-duotone fa-calendar"></i> Club History</a></h2>
         <ul>
             {{ for pastYear of pastYears }}
                 <li><a href="/history/{{ pastYear }}/">{{ pastYear }}</a></li>
