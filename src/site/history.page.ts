@@ -122,8 +122,8 @@ export default async function* history({ search }: Lume.Data) {
   }
 
   const rankings: RankingEntry[] = []
-  for await (const entry of Deno.readDir('./vote-history')) {
-    const filename = `./vote-history/${entry.name}`
+  for await (const entry of Deno.readDir('./_vote-history')) {
+    const filename = `./_vote-history/${entry.name}`
     const historyMatch = entry.name.match(/(\d{4}-\d{2}-\d{2}).*\.json$/)
     if (!historyMatch) {
       continue
