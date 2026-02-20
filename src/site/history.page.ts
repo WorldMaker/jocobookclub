@@ -167,6 +167,7 @@ export default async function* history({ search }: Lume.Data) {
     year: currentYear,
     calendar: currentYearCalendar,
     pastYears,
+    tags: ['history'],
   }
 
   for (const [year, yearCalendar] of calendar.entries()) {
@@ -177,6 +178,7 @@ export default async function* history({ search }: Lume.Data) {
       year,
       calendar: yearCalendar,
       pastYears,
+      tags: ['history'],
     }
   }
 
@@ -198,6 +200,7 @@ export default async function* history({ search }: Lume.Data) {
       url: ranking.path,
       books,
       rankingDate: ranking.date,
+      tags: ['history'],
     }
   }
 
