@@ -24,7 +24,7 @@ import { queueVoted } from './models/voting.ts'
 import { sessionToken, type SessionVariables } from './session-token.ts'
 import * as z from 'zod'
 import { ulid } from '@std/ulid/ulid'
-import { Invite, updateInvite } from './models/invite.ts'
+import { type Invite, updateInvite } from './models/invite.ts'
 
 const passkeyPatch = z.object({
   admin: z.boolean().optional(),
