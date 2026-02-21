@@ -22,7 +22,7 @@ function Interest({ ltid, ranking }: InterestProps) {
       const otherTitle = ranking.books[finalTally.books[i]]?.title ??
         'Missing information'
       wins.push(
-        <span class='icon-text'>
+        <span class='icon-text' title={`More Interest than ${otherTitle}`}>
           <span class='icon has-text-success'>
             <i class='fa-duotone fa-solid fa-chevrons-up'></i>
           </span>
@@ -33,7 +33,7 @@ function Interest({ ltid, ranking }: InterestProps) {
       const otherTitle = ranking.books[finalTally.books[i]]?.title ??
         'Missing information'
       wins.push(
-        <span class='icon-text'>
+        <span class='icon-text' title={`Less Interest than ${otherTitle}`}>
           <span class='icon has-text-danger'>
             <i class='fa-duotone fa-solid fa-chevrons-down'></i>
           </span>
@@ -47,7 +47,9 @@ function Interest({ ltid, ranking }: InterestProps) {
       <summary>
         Interest in {ranking.books[ltid]?.title ?? 'Missing Information'}
       </summary>
-      {wins}
+      <div class='ranking-interest'>
+        {wins}
+      </div>
     </details>
   )
 }
@@ -78,7 +80,7 @@ function Row({ idx, ltid, ranking }: RowProps) {
       </td>
       <td>{book.author}</td>
       <td>
-        <GenreTags tags={book.tags} />
+        <GenreTags tags={book.tags} condense />
       </td>
     </tr>
   )

@@ -3,7 +3,7 @@ layout: 'main.vto'
 ---
 
 <section class="section">
-    <h1 class="title"><span class="icon has-text-info"><i class="fa-duotone fa-solid fa-ballot"></i></span> {{ title }}</h1>
+    <h1 class="title"><span class="icon has-text-info"><i class="fa-duotone fa-solid fa-ranking-star"></i></span> {{ title }}</h1>
 
     <p class='block'>
         <i class='fa-duotone fa-solid fa-user-astronaut'></i> {{ count }} JoCoNauts
@@ -22,7 +22,7 @@ layout: 'main.vto'
         {{> /* The list is reversed because sorted in ascending order */}}
         <tbody>
           {{ for idx, ltid of ranking.toReversed() }}
-            {{ set book = books.get(ltid) }}
+            {{ set book = booksByLtId.get(ltid) }}
             {{ if !book }}
             <tr>
                 <th>{{ Number(idx) + 1 }}</th>
@@ -40,10 +40,10 @@ layout: 'main.vto'
                     <div class="tags">
                     {{ for tag of book.tags }}
                         {{ if genre.tags[tag] }}
-                            <a class="tag {{ genre.tags[tag].tagClass }}" href="/tags/{{ tag }}">
+                            <a class="tag {{ genre.tags[tag].tagClass }}" title="{{ genre.tags[tag].name ?? genre.tags[tag].title }}" href="/tags/{{ tag }}">
                                 <span class="icon-text">
                                     <span class="icon {{ genre.tags[tag].tagIconClass }}"><i class="fa-duotone fa-solid {{ genre.tags[tag].icon }}"></i></span>
-                                    <span>{{ genre.tags[tag].name ?? genre.tags[tag].title }}</span>
+                                    <span class="is-hidden-mobile">{{ genre.tags[tag].name ?? genre.tags[tag].title }}</span>
                                 </span>
                             </a>
                         {{ /if }}
@@ -51,13 +51,45 @@ layout: 'main.vto'
                     </div>
                 </td>
             </tr>
-            {{ /if }}
               <tr>
                 <td></td>
                 <td colSpan="4">
-                  {{> /* TODO: <Interest ltid={ltid} ranking={ranking} /> */}}
+                  <details>
+                    <summary>
+                      Interest in {{ book.title }}
+                    </summary>
+                    {{ set matrixIndex = books.indexOf(ltid) }}
+                    {{ if matrixIndex === -1 }}
+                      <p>Missing information</p>
+                    {{ else }}
+                      <div class="ranking-interest">
+                      {{ for bookIdx, score of matrix[matrixIndex] }}
+                        {{ if Number(bookIdx) !== matrixIndex }}
+                          {{ set otherBook = booksByLtId.get(books[bookIdx]) }}
+                          {{ set otherScore = matrix[bookIdx][matrixIndex] }}
+                          {{ if score > otherScore }}
+                            <span class='icon-text' title="More Interest than {{otherBook?.title ?? '[Redacted]'}}">
+                              <span class='icon has-text-success'>
+                                <i class='fa-duotone fa-solid fa-chevrons-up'></i>
+                              </span>
+                              <span>{{otherBook?.title ?? '[Redacted]'}}</span>
+                            </span>
+                          {{ else }}
+                            <span class='icon-text' title="Less Interest than {{otherBook?.title ?? '[Redacted]'}}">
+                              <span class='icon has-text-danger'>
+                                <i class='fa-duotone fa-solid fa-chevrons-down'></i>
+                              </span>
+                              <span>{{otherBook?.title ?? '[Redacted]'}}</span>
+                            </span>
+                          {{ /if }}
+                        {{ /if }}
+                      {{ /for }}
+                      </div>
+                    {{ /if }}
+                  </details>
                 </td>
               </tr>
+            {{ /if }}
             {{ /for }}
         </tbody>
       </table>

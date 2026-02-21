@@ -208,7 +208,7 @@ export default async function* history({ search }: Lume.Data) {
       layout: 'ranking.vto',
       title: `Ranking — ${ranking.date.toLocaleString()}`,
       url: ranking.path,
-      books,
+      booksByLtId: books,
       rankingDate: ranking.date,
       tags: ['history'],
     }

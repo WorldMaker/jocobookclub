@@ -3,7 +3,7 @@ layout: 'main.vto'
 ---
 
 <section class="section">
-    <div class="container">
+    <div class="container block">
         <h1 class="title"><span class="icon has-text-info"><i class="fa fa-solid fa-duotone fa-calendar"></i></span> {{ title }}</h1>
     </div>
 
@@ -30,16 +30,8 @@ layout: 'main.vto'
                     <div class="events">
                         <ul>
                         {{ for entry of entries }}
-                             <li><a href="{{ entry.url }}">
-                             {{ if entry.type === 'ranking' }}
-                                Ranking
-                             {{ else if entry.type === 'previous' }}
-                                Discussed <span class="book-title">{{ entry.title }}</span> by {{ entry.author }}
-                             {{ else if entry.type === 'upcoming' }}
-                                Will Discuss <span class="book-title">{{ entry.title }}</span> by {{ entry.author }}
-                             {{ /if }}
-                             </a>
-                            <div class="tags">
+                             <li>
+                             <div class="tags">
                                 {{ for tag of entry.tags }}
                                     {{ if genre.tags[tag] }}
                                         <a class="tag {{ genre.tags[tag].tagClass }}" title="{{ genre.tags[tag].name ?? genre.tags[tag].title }}" href="/tags/{{ tag }}">
@@ -50,6 +42,23 @@ layout: 'main.vto'
                                     {{ /if }}
                                 {{ /for }}
                             </div>
+                             {{ if entry.type === 'ranking' }}
+                                <a href="{{ entry.url }}" title="Ranking" class="button is-small is-fullwidth is-info is-outlined">
+                                    <span class="icon"><i class="fa-duotone fa-solid fa-ranking-star"></i></span>
+                                    <span class="is-hidden-mobile">Ranking</span>
+                                </a>
+                             {{ else if entry.type === 'previous' }}
+                                <a href="{{ entry.url }}" title="Discussed {{ entry.title }} by {{ entry.author }}">
+                                    <span class="icon has-text-warning"><i class="fa-duotone fa-solid fa-book-bookmark"></i></span>
+                                    <span class="book-title">{{ entry.title }}</span><span class="is-hidden-mobile"> by {{ entry.author }}</span>
+                                </a>
+                             {{ else if entry.type === 'upcoming' }}
+                                <a href="{{ entry.url }}" title="Will Discuss {{ entry.title }} by {{ entry.author }}">
+                                    <span class="icon has-text-info"><i class="fa-duotone fa-solid fa-book-sparkles"></i></span>
+                                    <span class="book-title">{{ entry.title }}</span><span class="is-hidden-mobile"> by {{ entry.author }}</span>
+                                </a>
+                             {{ /if }}
+                            
                              </li>
                         {{ /for }}
                         </ul>
