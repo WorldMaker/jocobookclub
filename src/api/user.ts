@@ -23,6 +23,8 @@ import { getUserById, updateUser, type UserInfo } from './models/user.ts'
 import { queueVoted } from './models/voting.ts'
 import { sessionToken, type SessionVariables } from './session-token.ts'
 import * as z from 'zod'
+import { ulid } from '@std/ulid/ulid'
+import { Invite, updateInvite } from './models/invite.ts'
 
 const passkeyPatch = z.object({
   admin: z.boolean().optional(),
@@ -205,6 +207,22 @@ const app = new Hono<{ Variables: SessionVariables }>()
     }
     await kv.delete(['passkey', session.userId, c.req.param('id')])
     return c.body(null, 204)
+  })
+  .post('/passkey-invite', async (c) => {
+    const kv = c.get('kv')
+    const session = c.get('session')
+    const existingUser = await getUserById(kv, session.userId)
+    if (!existingUser.success) {
+      return c.json({}, 404)
+    }
+    const id = ulid()
+    const invite: Invite = {
+      type: 'specific-email',
+      email: existingUser.data.email,
+      id,
+    }
+    await updateInvite(kv, invite)
+    return c.json(invite, 200)
   })
   .get('/', async (c) => {
     const kv = c.get('kv')
