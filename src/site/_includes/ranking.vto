@@ -40,10 +40,10 @@ layout: 'main.vto'
                     <div class="tags">
                     {{ for tag of book.tags }}
                         {{ if genre.tags[tag] }}
-                            <a class="tag {{ genre.tags[tag].tagClass }}" href="/tags/{{ tag }}">
+                            <a class="tag {{ genre.tags[tag].tagClass }}" title="{{ genre.tags[tag].name ?? genre.tags[tag].title }}" href="/tags/{{ tag }}">
                                 <span class="icon-text">
                                     <span class="icon {{ genre.tags[tag].tagIconClass }}"><i class="fa-duotone fa-solid {{ genre.tags[tag].icon }}"></i></span>
-                                    <span>{{ genre.tags[tag].name ?? genre.tags[tag].title }}</span>
+                                    <span class="is-hidden-mobile">{{ genre.tags[tag].name ?? genre.tags[tag].title }}</span>
                                 </span>
                             </a>
                         {{ /if }}

@@ -78,7 +78,7 @@ function Row({ idx, ltid, ranking }: RowProps) {
       </td>
       <td>{book.author}</td>
       <td>
-        <GenreTags tags={book.tags} />
+        <GenreTags tags={book.tags} condense />
       </td>
     </tr>
   )

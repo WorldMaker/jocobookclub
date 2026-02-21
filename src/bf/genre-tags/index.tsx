@@ -18,27 +18,28 @@ export const genreTags = rawTags as Record<string, TagInfo>
 interface GenreTagProps {
   tag: string
   info: TagInfo
+  condense?: boolean
 }
 
-export function GenreTag({ tag, info }: GenreTagProps) {
+export function GenreTag({ tag, info, condense }: GenreTagProps) {
   return (
-    <a class={`tag ${info.tagClass}`} href={`${baseUrl}/tags/${tag}`}>
+    <a class={`tag ${info.tagClass}`} title={info.name ?? info.title} href={`${baseUrl}/tags/${tag}`}>
       <span class='icon-text'>
         <span class={`icon ${info.tagIconClass}`}>
           <i class={`fa-duotone fa-solid ${info.icon}`}></i>
         </span>
-        <span>{info.name ?? info.title}</span>
+        <span class={condense ? 'is-hidden-mobile' : ''}>{info.name ?? info.title}</span>
       </span>
     </a>
   )
 }
 
-export function GenreTags({ tags }: { tags: string[] }) {
+export function GenreTags({ tags, condense }: { tags: string[], condense?: boolean }) {
   return (
     <div class='tags'>
       {tags
         .filter((tag) => Boolean(genreTags[tag]))
-        .map((tag) => <GenreTag tag={tag} info={genreTags[tag]} />)}
+        .map((tag) => <GenreTag tag={tag} info={genreTags[tag]} condense={condense} />)}
     </div>
   )
 }
