@@ -18,6 +18,16 @@ dl dd {
   grid-column: 2;
 }
 
+.ranking-interest {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 30ch), 1fr));
+
+  .icon-text {
+    display: inline;
+  }
+}
+
 .calendar {
   display: grid;
   gap: 1rem;

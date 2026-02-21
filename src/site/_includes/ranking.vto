@@ -62,19 +62,20 @@ layout: 'main.vto'
                     {{ if matrixIndex === -1 }}
                       <p>Missing information</p>
                     {{ else }}
+                      <div class="ranking-interest">
                       {{ for bookIdx, score of matrix[matrixIndex] }}
                         {{ if Number(bookIdx) !== matrixIndex }}
                           {{ set otherBook = booksByLtId.get(books[bookIdx]) }}
                           {{ set otherScore = matrix[bookIdx][matrixIndex] }}
                           {{ if score > otherScore }}
-                            <span class='icon-text'>
+                            <span class='icon-text' title="More Interest than {{otherBook?.title ?? '[Redacted]'}}">
                               <span class='icon has-text-success'>
                                 <i class='fa-duotone fa-solid fa-chevrons-up'></i>
                               </span>
                               <span>{{otherBook?.title ?? '[Redacted]'}}</span>
                             </span>
                           {{ else }}
-                            <span class='icon-text'>
+                            <span class='icon-text' title="Less Interest than {{otherBook?.title ?? '[Redacted]'}}">
                               <span class='icon has-text-danger'>
                                 <i class='fa-duotone fa-solid fa-chevrons-down'></i>
                               </span>
@@ -83,6 +84,7 @@ layout: 'main.vto'
                           {{ /if }}
                         {{ /if }}
                       {{ /for }}
+                      </div>
                     {{ /if }}
                   </details>
                 </td>
