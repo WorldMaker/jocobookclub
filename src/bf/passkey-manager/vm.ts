@@ -1,5 +1,9 @@
 import { butterfly, StateSetter } from '@worldmaker/butterfloat'
-import { PasskeyMeta, Session } from '@worldmaker/jocobookclub-api/models'
+import {
+  Invite,
+  PasskeyMeta,
+  Session,
+} from '@worldmaker/jocobookclub-api/models'
 import {
   combineLatest,
   combineLatestAll,
@@ -8,6 +12,7 @@ import {
   map,
   Observable,
   shareReplay,
+  Subject,
   switchMap,
 } from 'rxjs'
 import { apiClient } from '../client.ts'
@@ -123,6 +128,14 @@ export class PasskeysVm {
   readonly #lastKey: Observable<boolean>
   readonly #lastAdminKey: Observable<boolean>
 
+  readonly #invite = new Subject<Invite>()
+  #setInvite(invite: Invite) {
+    this.#invite.next(invite)
+  }
+  get invite() {
+    return this.#invite
+  }
+
   constructor(session: Session) {
     this.#session = session
     ;[this.#passkeys, this.#setPasskeys] = butterfly<PasskeyVm[]>([])
@@ -167,5 +180,16 @@ export class PasskeysVm {
         new PasskeyVm(this.#session, passkey, this.#lastKey, this.#lastAdminKey)
       )
     )
+  }
+
+  async createPasskeyInvite() {
+    const result = await apiClient.user['passkey-invite'].$post({}, {
+      headers: { 'Authorization': `Bearer ${this.#session.token}` },
+    })
+    if (!result.ok) {
+      return
+    }
+    const invite = await result.json()
+    this.#setInvite(invite)
   }
 }
