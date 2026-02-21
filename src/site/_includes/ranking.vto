@@ -22,7 +22,7 @@ layout: 'main.vto'
         {{> /* The list is reversed because sorted in ascending order */}}
         <tbody>
           {{ for idx, ltid of ranking.toReversed() }}
-            {{ set book = books.get(ltid) }}
+            {{ set book = booksByLtId.get(ltid) }}
             {{ if !book }}
             <tr>
                 <th>{{ Number(idx) + 1 }}</th>
@@ -51,13 +51,43 @@ layout: 'main.vto'
                     </div>
                 </td>
             </tr>
-            {{ /if }}
               <tr>
                 <td></td>
                 <td colSpan="4">
-                  {{> /* TODO: <Interest ltid={ltid} ranking={ranking} /> */}}
+                  <details>
+                    <summary>
+                      Interest in {{ book.title }}
+                    </summary>
+                    {{ set matrixIndex = books.indexOf(ltid) }}
+                    {{ if matrixIndex === -1 }}
+                      <p>Missing information</p>
+                    {{ else }}
+                      {{ for bookIdx, score of matrix[matrixIndex] }}
+                        {{ if Number(bookIdx) !== matrixIndex }}
+                          {{ set otherBook = booksByLtId.get(books[bookIdx]) }}
+                          {{ set otherScore = matrix[bookIdx][matrixIndex] }}
+                          {{ if score > otherScore }}
+                            <span class='icon-text'>
+                              <span class='icon has-text-success'>
+                                <i class='fa-duotone fa-solid fa-chevrons-up'></i>
+                              </span>
+                              <span>{{otherBook?.title ?? '[Redacted]'}}</span>
+                            </span>
+                          {{ else }}
+                            <span class='icon-text'>
+                              <span class='icon has-text-danger'>
+                                <i class='fa-duotone fa-solid fa-chevrons-down'></i>
+                              </span>
+                              <span>{{otherBook?.title ?? '[Redacted]'}}</span>
+                            </span>
+                          {{ /if }}
+                        {{ /if }}
+                      {{ /for }}
+                    {{ /if }}
+                  </details>
                 </td>
               </tr>
+            {{ /if }}
             {{ /for }}
         </tbody>
       </table>
