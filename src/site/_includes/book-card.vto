@@ -32,7 +32,7 @@
             {{ content }}
         </div>
             {{ if cws[tsgid] }}
-            <details>
+            <details class="block">
                 <summary>Content Warnings (suggested by The Story Graph)</summary>
                 <dl>
                     {{ for section, cw of cws[tsgid] }}
@@ -42,18 +42,18 @@
                 </dl>
             </details>
             {{ /if }}
-        <book-rank-chart ltid="{{ ltid }}"></book-rank-chart>
+        <book-rank-chart class="block" ltid="{{ ltid }}"></book-rank-chart>
         {{ /if }}
         {{ if currentBallot }}
-        <dolphin-rating ltid="{{ ltid }}"></dolphin-rating>
+        <dolphin-rating class="block" ltid="{{ ltid }}"></dolphin-rating>
         {{ /if }}
         {{ if scheduled }}
             {{ if time }}
                 {{> const plainDate = Temporal.PlainDate.from({ year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, day: date.getUTCDate() }) }}
                 {{> const zonedDateTime = plainDate.toPlainDateTime(time).toZonedDateTime(timezone ?? 'UTC') }}
-                <time is="local-time" datetime="{{ zonedDateTime.toString() }}">{{ zonedDateTime.toLocaleString('en-us', { dateStyle: 'full', timeStyle: 'long' }) }}</time>
+                <time class="block" is="local-time" datetime="{{ zonedDateTime.toString() }}">{{ zonedDateTime.toLocaleString('en-us', { dateStyle: 'full', timeStyle: 'long' }) }}</time>
             {{ else }}
-                <time datetime="{{ date.toISOString() }}">{{ date.toLocaleString('en-us', { dateStyle: 'medium' }) }}</time>
+                <time class="block" datetime="{{ date.toISOString() }}">{{ date.toLocaleString('en-us', { dateStyle: 'medium' }) }}</time>
             {{ /if }}
         {{ /if }}
     </div>
