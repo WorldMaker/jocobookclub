@@ -90,7 +90,7 @@ export class UserPrefsManager {
   }
 
   async load() {
-    const response = await apiClient.user.$get({
+    const response = await apiClient.user.$get({}, {
       headers: {
         Authorization: `Bearer ${this.#session.token}`,
       },
