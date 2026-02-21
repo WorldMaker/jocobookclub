@@ -53,7 +53,7 @@ function InviteView(
       for the account with email:{' '}
       <a href={`mailto:${invite.email}`}>
         <code>{invite.email}</code>
-      </a>
+      </a>. This link will expire in roughly 42 hours.
     </div>
   )
 }
@@ -74,7 +74,11 @@ export function List(
   return (
     <>
       <div class='block'>
-        <div childrenBind={inviteView} childrenBindMode='append' />
+        <div
+          class='block'
+          childrenBind={inviteView}
+          childrenBindMode='append'
+        />
         <button
           type='button'
           class='button is-primary'
@@ -85,7 +89,7 @@ export function List(
           </span>{' '}
           <span>Create Link to Add Passkey to Your Account</span>
         </button>
-        <p>
+        <p class='block'>
           Build a link that you can send to another device to add a Passkey to
           your account. Send the link any way you feel comfortable securely
           sending links to your other devices.
