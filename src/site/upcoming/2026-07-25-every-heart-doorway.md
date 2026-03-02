@@ -5,6 +5,7 @@ ltid: '15998723'
 olid: OL29720583M
 tsgid: 072434cd-81e4-44ad-8faa-834f353da241
 tags: [fantasy]
+scheduled: true
 ---
 
 Blurb from a JoCoNaut:
