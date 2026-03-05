@@ -1,5 +1,6 @@
 import {
   Chart,
+  Filler,
   LinearScale,
   LineController,
   LineElement,
@@ -11,6 +12,7 @@ import 'chartjs-adapter-date-fns' // silly side effect to register the date adap
 import { StaticApiBase } from './final-tally/vm.ts'
 
 Chart.register([
+  Filler,
   LineController,
   LineElement,
   LinearScale,
@@ -36,6 +38,13 @@ class BookRankChart extends HTMLElement {
       return
     }
     const rank = await rankResponse.json()
+    const totalsResponse = await fetch(`${StaticApiBase}/total-books.json`)
+    if (!totalsResponse.ok) {
+      console.warn(
+        `Failed to fetch total books data: ${totalsResponse.statusText}`,
+      )
+    }
+    const totals = totalsResponse.ok ? await totalsResponse.json() : {}
 
     this.style.display = 'block'
     this.style.position = 'relative'
@@ -50,15 +59,28 @@ class BookRankChart extends HTMLElement {
       .sort((a, b) => new Date(a.x).getTime() - new Date(b.x).getTime())
     console.log('Rank data for book', ltid, data)
 
+    const totalData = data
+      .map(({ x }) => x in totals ? ({ x, y: totals[x] }) : null)
+      .filter((total) => total !== null)
+    console.log('Total books data', totalData)
+
     this.#chart = new Chart(canvas, {
       type: 'line',
       data: {
         labels: rank.labels,
-        datasets: [{
-          label: 'Book Rank',
-          data,
-          borderColor: 'rgba(75, 192, 192, 1)',
-        }],
+        datasets: [
+          {
+            label: 'Total Books',
+            data: totalData,
+            backgroundColor: 'hsla(204, 71%, 39%, 10%)',
+            fill: 'origin',
+          },
+          {
+            label: 'Book Rank',
+            data,
+            borderColor: 'hsl(204, 86%, 53%)',
+          },
+        ],
       },
       options: {
         responsive: true,
