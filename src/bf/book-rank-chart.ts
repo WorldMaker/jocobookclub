@@ -68,7 +68,7 @@ class BookRankChart extends HTMLElement {
       type: 'line',
       data: {
         labels: rank.labels,
-        datasets: [  
+        datasets: [
           {
             label: 'Total Books',
             data: totalData,
