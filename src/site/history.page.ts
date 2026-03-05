@@ -190,6 +190,7 @@ export default async function* history({ search }: Lume.Data) {
     }
   }
 
+  const totalBooks: DayRank = {}
   for (const ranking of rankings) {
     const tally = FinalTally.safeParse(
       JSON.parse(await Deno.readTextFile(ranking.filename)),
@@ -198,6 +199,7 @@ export default async function* history({ search }: Lume.Data) {
       continue
     }
     const data = tally.data
+    totalBooks[ranking.date.toString()] = data.ranking.length
     // rankings are in reverse order
     for (let i = data.ranking.length - 1; i >= 0; i--) {
       const ltid = data.ranking[i]
@@ -220,5 +222,11 @@ export default async function* history({ search }: Lume.Data) {
       contentType: 'application/json',
       content: JSON.stringify(book),
     }
+  }
+
+  yield {
+    url: `/static-api/total-books.json`,
+    contentType: 'application/json',
+    content: JSON.stringify(totalBooks),
   }
 }
