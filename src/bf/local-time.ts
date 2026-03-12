@@ -1,32 +1,39 @@
-export class LocalTimeComponent extends HTMLTimeElement {
+export class LocalTimeComponent extends HTMLElement {
   connectedCallback() {
-    const datetime = this.getAttribute('datetime')
-    if (datetime) {
-      if (globalThis.Temporal) {
-        const temporalDate = Temporal.ZonedDateTime.from(datetime)
-        const localTemporalDate = temporalDate.withTimeZone(
-          Temporal.Now.timeZoneId(),
-        )
-        this.textContent = localTemporalDate.toLocaleString(undefined, {
-          dateStyle: 'full',
-          timeStyle: 'long',
-        })
-        this.title = temporalDate.toLocaleString()
-        this.classList.add('has-background-info-dark')
-        return
-      }
-      const splitDatetime = datetime.split('[')
-      const date = new Date(splitDatetime[0])
-      if (date && !isNaN(date.getTime())) {
-        this.textContent = date.toLocaleString(undefined, {
-          dateStyle: 'full',
-          timeStyle: 'long',
-        })
-        this.title = datetime
-        this.classList.add('has-background-info-dark')
+    const timeElements = this.querySelectorAll('time[datetime]')
+    for (const timeElement of timeElements) {
+      const datetime = timeElement.getAttribute('datetime')
+      if (datetime) {
+        if (globalThis.Temporal) {
+          const temporalDate = Temporal.ZonedDateTime.from(datetime)
+          const localTemporalDate = temporalDate.withTimeZone(
+            Temporal.Now.timeZoneId(),
+          )
+          timeElement.textContent = localTemporalDate.toLocaleString(
+            undefined,
+            {
+              dateStyle: 'full',
+              timeStyle: 'long',
+            },
+          )
+          ;(timeElement as HTMLTimeElement).title = temporalDate
+            .toLocaleString()
+          timeElement.classList.add('has-background-info-dark')
+          continue
+        }
+        const splitDatetime = datetime.split('[')
+        const date = new Date(splitDatetime[0])
+        if (date && !isNaN(date.getTime())) {
+          timeElement.textContent = date.toLocaleString(undefined, {
+            dateStyle: 'full',
+            timeStyle: 'long',
+          })
+          ;(timeElement as HTMLTimeElement).title = datetime
+          timeElement.classList.add('has-background-info-dark')
+        }
       }
     }
   }
 }
 
-customElements.define('local-time', LocalTimeComponent, { extends: 'time' })
+customElements.define('local-time', LocalTimeComponent)

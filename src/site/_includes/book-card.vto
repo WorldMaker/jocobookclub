@@ -51,7 +51,7 @@
             {{ if time }}
                 {{> const plainDate = Temporal.PlainDate.from({ year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, day: date.getUTCDate() }) }}
                 {{> const zonedDateTime = plainDate.toPlainDateTime(time).toZonedDateTime(timezone ?? 'UTC') }}
-                <time class="block" is="local-time" datetime="{{ zonedDateTime.toString() }}">{{ zonedDateTime.toLocaleString('en-us', { dateStyle: 'full', timeStyle: 'long' }) }}</time>
+                <local-time><time class="block" datetime="{{ zonedDateTime.toString() }}">{{ zonedDateTime.toLocaleString('en-us', { dateStyle: 'full', timeStyle: 'long' }) }}</time></local-time>
             {{ else }}
                 <time class="block" datetime="{{ date.toISOString() }}">{{ date.toLocaleString('en-us', { dateStyle: 'medium' }) }}</time>
             {{ /if }}
