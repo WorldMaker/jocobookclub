@@ -52,7 +52,35 @@ layout: 'main.vto'
                 </td>
             </tr>
               <tr>
-                <td></td>
+                <td>
+                {{ if lastRankingUrl }}
+                  <a href="{{ lastRankingUrl }}">
+                    {{ set rankDiff = lastRankingByLtId[ltid] ? Number(idx) + 1 - lastRankingByLtId[ltid] : null }}
+                    {{ if rankDiff !== null }}
+                      {{ if rankDiff !== 0 }}
+                      <span class='icon-text' title="{{ rankDiff > 0 ? 'Moved down ' : 'Moved up ' }}{{ Math.abs(rankDiff) }} spots since last ranking">
+                        <span class='icon {{ rankDiff > 0 ? 'has-text-danger' : 'has-text-success' }}'>
+                          <i class='fa-duotone fa-solid {{ rankDiff > 0 ? 'fa-down' : 'fa-up' }}'></i>
+                        </span>
+                        {{ Math.abs(rankDiff) }}
+                      </span>
+                      {{ else }}
+                      <span class='icon-text' title="No change since last ranking">
+                        <span class='icon has-text-grey'>
+                          <i class='fa-duotone fa-solid fa-equals'></i>
+                        </span>
+                      </span>
+                      {{ /if }}
+                    {{ else }}
+                      <span class='icon-text' title="New entry since last ranking">
+                        <span class='icon has-text-info'>
+                          <i class="fa-duotone fa-solid fa-burst-new"></i>
+                        </span>
+                      </span>
+                    {{ /if }}
+                  </a>
+                {{ /if }}
+                </td>
                 <td colSpan="4">
                   <details>
                     <summary>
