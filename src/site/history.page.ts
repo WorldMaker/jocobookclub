@@ -190,7 +190,11 @@ export default async function* history({ search }: Lume.Data) {
     }
   }
 
+  rankings.sort((a, b) => Temporal.PlainDate.compare(a.date, b.date))
+
   const totalBooks: DayRank = {}
+  let lastRankingUrl: string | null = null
+  let lastRankingByLtId: Record<string, number> = {}
   for (const ranking of rankings) {
     const tally = FinalTally.safeParse(
       JSON.parse(await Deno.readTextFile(ranking.filename)),
@@ -201,8 +205,10 @@ export default async function* history({ search }: Lume.Data) {
     const data = tally.data
     totalBooks[ranking.date.toString()] = data.ranking.length
     // rankings are in reverse order
+    const rankingByLtId: Record<string, number> = {}
     for (let i = data.ranking.length - 1; i >= 0; i--) {
       const ltid = data.ranking[i]
+      rankingByLtId[ltid] = data.ranking.length - i
       addToBookRanks(ltid, ranking.date, data.ranking.length - i)
     }
     yield {
@@ -212,8 +218,12 @@ export default async function* history({ search }: Lume.Data) {
       url: ranking.path,
       booksByLtId: books,
       rankingDate: ranking.date,
+      lastRankingUrl,
+      lastRankingByLtId,
       tags: ['history'],
     }
+    lastRankingUrl = site.url(ranking.path, true)
+    lastRankingByLtId = rankingByLtId
   }
 
   for (const [ltid, book] of bookRanks.entries()) {
