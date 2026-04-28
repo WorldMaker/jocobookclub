@@ -18,6 +18,17 @@ export async function enqueue<MessageType>(kv: Deno.Kv, message: MessageType) {
 }
 
 /**
+ * Enqueue a message to the queue as part of a larger atomic operation.
+ * @param atomic Atomic operation
+ * @param message Queue message
+ * @returns Atomic operation
+ */
+export function atomicEnqueue<MessageType>(atomic: Deno.AtomicOperation, message: MessageType) {
+  const id = ulid()
+  return atomic.set(['dunq', id], message)
+}
+
+/**
  * Enqueue a message to the queue and start a worker to process it.
  * @param kv KV Store
  * @param message Queue message

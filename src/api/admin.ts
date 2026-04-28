@@ -3,7 +3,7 @@ import { Hono } from 'hono'
 import * as z from 'zod'
 import { Invite, updateInvite } from './models/invite.ts'
 import { getAllUserPreferredEmails } from './models/user.ts'
-import { queueRecountRequested } from './models/voting.ts'
+import { pushRecountRequested } from './models/voting.ts'
 import { adminToken, type SessionVariables } from './session-token.ts'
 
 const app = new Hono<{ Variables: SessionVariables }>()
@@ -36,11 +36,8 @@ const app = new Hono<{ Variables: SessionVariables }>()
     },
   )
   .post('/recount', async (c) => {
-    const result = await queueRecountRequested(c.get('kv'))
-    if (!result.ok) {
-      return c.json({ error: 'Failed to queue recount' }, 500)
-    }
-    return c.json({ success: true }, 200)
+    const queueId = await pushRecountRequested(c.get('kv'))
+    return c.json({ success: true, queueId }, 200)
   })
 
 export default app

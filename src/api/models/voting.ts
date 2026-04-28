@@ -1,4 +1,5 @@
 import * as z from 'zod'
+import { atomicEnqueue, enqueue, push } from '../dunq/model.ts'
 import { UserId } from './user.ts'
 import { Bucket } from './tally.ts'
 
@@ -33,33 +34,28 @@ export type QueueMessages = z.infer<typeof QueueMessages>
 
 export function queueRecountBucketRequested(kv: Deno.Kv, bucket: Bucket) {
   const at = new Date()
-  return kv.atomic()
+  return atomicEnqueue(kv.atomic(), { type: 'recount-bucket-requested', bucket, at })
     .set(['recount-bucket', bucket], at)
-    .enqueue({
-      type: 'recount-bucket-requested',
-      bucket,
-      at,
-    })
     .commit()
 }
 
-export function queueRecountRequested(kv: Deno.Kv) {
-  return kv.enqueue({
+export function pushRecountRequested(kv: Deno.Kv) {
+  return push(kv, {
     type: 'recount-requested',
     at: new Date(),
   })
 }
 
 export function queueTallied(kv: Deno.Kv, bucket: Bucket) {
-  return kv.enqueue({
+  return enqueue(kv, {
     type: 'bucket-tallied',
     bucket,
     at: new Date(),
   })
 }
 
-export function queueVoted(kv: Deno.Kv, userId: UserId) {
-  return kv.enqueue({
+export function pushVoted(kv: Deno.Kv, userId: UserId) {
+  return push(kv, {
     type: 'user-voted',
     userId,
     at: new Date(),

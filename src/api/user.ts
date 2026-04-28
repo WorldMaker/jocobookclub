@@ -20,7 +20,7 @@ import { origin, rpId, rpName } from './models/rp.ts'
 import { deleteSession } from './models/session.ts'
 import { getFinalTally } from './models/tally.ts'
 import { getUserById, updateUser, type UserInfo } from './models/user.ts'
-import { queueVoted } from './models/voting.ts'
+import { pushVoted } from './models/voting.ts'
 import { sessionToken, type SessionVariables } from './session-token.ts'
 import * as z from 'zod'
 import { ulid } from '@std/ulid/ulid'
@@ -142,7 +142,7 @@ const app = new Hono<{ Variables: SessionVariables }>()
       return c.json({}, 403)
     }
     await updateUserBallot(kv, ballot)
-    await queueVoted(kv, ballot.userId)
+    await pushVoted(kv, ballot.userId)
     return c.json(ballot)
   })
   .get('/final-tally', async (c) => {
