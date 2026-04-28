@@ -104,22 +104,11 @@ export async function listenQueue(kv: Deno.Kv, msg: unknown) {
       break
     case 'user-voted':
       {
-        const books = await getBallotEligibleBooks()
         const bucket = getBucketForUser(qmessage.data.userId)
         if (!bucket) {
           return
         }
-        const time = await kv.get<Date>(['tally-time', bucket])
-        if (time.value && time.value >= qmessage.data.at) {
-          return
-        }
-        const tally = await tallyBucket(kv, bucket, books)
-        await kv.atomic()
-          .check(time)
-          .set(['tally-time', bucket], qmessage.data.at)
-          .set(['tally', bucket], tally)
-          .commit()
-        await queueTallied(kv, bucket)
+        await queueRecountBucketRequested(kv, bucket)
       }
       break
   }
