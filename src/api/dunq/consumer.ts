@@ -23,9 +23,12 @@ export async function consume<MessageType>(
       }
 
       console.log('Consuming message', { consumerId, key, value })
-      await consumer(value as MessageType)
+      try {
+        await consumer(value as MessageType)
+      } catch (error) {
+        console.error('Error consuming message', { consumerId, key, error })
+      }
     }
-
     if (retries <= 0) {
       console.warn('No messages found, stopping consumer', { consumerId })
       running = false
