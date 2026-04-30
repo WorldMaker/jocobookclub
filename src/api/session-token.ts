@@ -43,8 +43,17 @@ export const superToken = bearerAuth({
     if (token !== superToken) {
       return false
     }
-    const superTokenAdminCapable = Deno.env.get('SUPER_TOKEN_ADMIN_CAPABLE') === 'true'
-    c.set('session', { token, userId: '🦹 Super Token', expiresAt: new Date(), admin: superTokenAdminCapable } satisfies Session)
+    const superTokenAdminCapable =
+      Deno.env.get('SUPER_TOKEN_ADMIN_CAPABLE') === 'true'
+    c.set(
+      'session',
+      {
+        token,
+        userId: '🦹 Super Token',
+        expiresAt: new Date(),
+        admin: superTokenAdminCapable,
+      } satisfies Session,
+    )
     return true
   },
 })

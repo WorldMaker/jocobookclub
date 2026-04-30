@@ -34,7 +34,11 @@ export type QueueMessages = z.infer<typeof QueueMessages>
 
 export function queueRecountBucketRequested(kv: Deno.Kv, bucket: Bucket) {
   const at = new Date()
-  return atomicEnqueue(kv.atomic(), { type: 'recount-bucket-requested', bucket, at })
+  return atomicEnqueue(kv.atomic(), {
+    type: 'recount-bucket-requested',
+    bucket,
+    at,
+  })
     .set(['recount-bucket', bucket], at)
     .commit()
 }

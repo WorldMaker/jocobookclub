@@ -11,7 +11,10 @@ const args = parseArgs(Deno.args, {
   boolean: ['force'],
 })
 
-const session = await superLogin('01KQG5JD28HXP8EFDE90CX15V5', 'bot+save-tally@example.com')
+const session = await superLogin(
+  '01KQG5JD28HXP8EFDE90CX15V5',
+  'bot+save-tally@example.com',
+)
 
 const response = await apiClient.user['final-tally'].$get({}, {
   headers: {

@@ -11,7 +11,12 @@ import {
 import { zValidator } from '@hono/zod-validator'
 import * as z from 'zod'
 import { origin, rpId } from './models/rp.ts'
-import { getUserByEmail, getUserById, updateUser, type User } from './models/user.ts'
+import {
+  getUserByEmail,
+  getUserById,
+  updateUser,
+  type User,
+} from './models/user.ts'
 import {
   createSessionToken,
   type Session,
@@ -64,7 +69,10 @@ const superApp = new Hono<{ Variables: SessionVariables }>()
     const existingUser = await getUserById(kv, userId)
     if (existingUser.success) {
       if (existingUser.data.email !== email) {
-        return c.json({ error: 'User ID already exists with different email' }, 403)
+        return c.json(
+          { error: 'User ID already exists with different email' },
+          403,
+        )
       }
     } else {
       const result = await updateUser(kv, user)

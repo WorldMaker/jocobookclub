@@ -11,14 +11,19 @@ export async function consume<MessageType>(
   let retries = 3
 
   while (running) {
-    for await (const { key, value, versionstamp } of kv.list({ prefix: ['dunq'] })) {
+    for await (
+      const { key, value, versionstamp } of kv.list({ prefix: ['dunq'] })
+    ) {
       // attempt dequeue
       const result = await kv.atomic()
         .check({ key, versionstamp })
         .delete(key)
         .commit()
       if (!result.ok) {
-        console.log('Message already consumed by another consumer, skipping', { consumerId, key })
+        console.log('Message already consumed by another consumer, skipping', {
+          consumerId,
+          key,
+        })
         continue
       }
 

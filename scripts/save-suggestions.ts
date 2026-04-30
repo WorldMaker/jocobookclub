@@ -8,7 +8,10 @@ import { superLogin } from './api/super-login.ts'
 // You will need to configure environment variable CLUB_SUPER_TOKEN with a super token
 // You may configure environment variable CLUB_API_URL to point to a different API URL
 
-const session = await superLogin('01KQG5TEJBPPJTS8S44WSMYZPS', 'bot+save-suggestions@example.com')
+const session = await superLogin(
+  '01KQG5TEJBPPJTS8S44WSMYZPS',
+  'bot+save-suggestions@example.com',
+)
 
 const response = await apiClient.suggestion.$get({}, {
   headers: {

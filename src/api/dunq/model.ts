@@ -23,7 +23,10 @@ export async function enqueue<MessageType>(kv: Deno.Kv, message: MessageType) {
  * @param message Queue message
  * @returns Atomic operation
  */
-export function atomicEnqueue<MessageType>(atomic: Deno.AtomicOperation, message: MessageType) {
+export function atomicEnqueue<MessageType>(
+  atomic: Deno.AtomicOperation,
+  message: MessageType,
+) {
   const id = ulid()
   return atomic.set(['dunq', id], message)
 }
@@ -37,7 +40,7 @@ export function atomicEnqueue<MessageType>(atomic: Deno.AtomicOperation, message
 export async function push<MessageType>(kv: Deno.Kv, message: MessageType) {
   const id = await enqueue(kv, message)
   new Worker(new URL('../dunq-worker.ts', import.meta.url), {
-    type: 'module'
+    type: 'module',
   })
   return id
 }

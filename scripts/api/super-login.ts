@@ -7,13 +7,17 @@ if (!superToken) {
   Deno.exit(1)
 }
 
-export async function superLogin(userId: UserId, email: string, admin?: boolean) {
+export async function superLogin(
+  userId: UserId,
+  email: string,
+  admin?: boolean,
+) {
   const response = await apiClient.login.super.verify.$post({
     json: {
       email,
       userId,
       admin,
-    }
+    },
   }, {
     headers: {
       Authorization: `Bearer ${superToken}`,
