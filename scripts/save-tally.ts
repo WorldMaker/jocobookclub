@@ -1,35 +1,30 @@
 // deno-lint-ignore-file no-import-prefix no-unversioned-import
 import { parseArgs } from 'jsr:@std/cli'
-import { getFinalTally } from '../src/api/models/tally.ts'
+import { apiClient } from './api/client.ts'
+import { superLogin } from './api/super-login.ts'
 
 // Save the final tally to disk
-// You will need to configure environment variables DENO_KV_ACCESS_TOKEN
-// and CLUB_KV_URL
-
-const hasKvAccess = Deno.env.has('DENO_KV_ACCESS_TOKEN')
-const clubUrl = Deno.env.get('CLUB_KV_URL')
-
-if (!hasKvAccess || !clubUrl) {
-  console.log(
-    'You need to set the DENO_KV_ACCESS_TOKEN and CLUB_KV_URL environment variables',
-  )
-  Deno.exit(1)
-}
+// You will need to configure environment variable CLUB_SUPER_TOKEN with a super token
+// You may configure environment variable CLUB_API_URL to point to a different API URL
 
 const args = parseArgs(Deno.args, {
   boolean: ['force'],
 })
 
-const kv = await Deno.openKv(clubUrl)
+const session = await superLogin('01KQG5JD28HXP8EFDE90CX15V5', 'bot+save-tally@example.com')
 
-const tally = await getFinalTally(kv)
+const response = await apiClient.user['final-tally'].$get({}, {
+  headers: {
+    Authorization: `Bearer ${session.token}`,
+  },
+})
 
-if (!tally.success) {
-  console.error('Error getting final tally')
+if (!response.ok) {
+  console.error('Error getting final tally', await response.text())
   Deno.exit(2)
 }
 
-const finalTally = tally.data
+const finalTally = await response.json()
 const updated = new Date(finalTally.updated).toTemporalInstant()
   .toZonedDateTimeISO('America/New_York')
 const now = Temporal.Now.zonedDateTimeISO('America/New_York')
