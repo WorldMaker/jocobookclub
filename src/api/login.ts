@@ -28,6 +28,8 @@ import {
 } from './models/passkey.ts'
 import { getLoginChallenge } from './models/passkey.ts'
 import type { KvProvidedVariables } from './kv.ts'
+import { UserId } from '@worldmaker/jocobookclub-api/models'
+import { SessionVariables, superToken } from './session-token.ts'
 
 const inviteVerifyQuerySchema = z.object({
   sessionKey: z.string(),
@@ -41,6 +43,40 @@ const loginVerifySchema = z.object({
   email: z.email(),
   id: z.string(),
 })
+
+const superVerifySchema = z.object({
+  email: z.email(),
+  userId: UserId,
+  admin: z.boolean().optional(),
+})
+
+const superApp = new Hono<{ Variables: SessionVariables }>()
+  .use('/*', superToken)
+  .post('/verify', zValidator('json', superVerifySchema), async (c) => {
+    const { email, userId, admin } = c.req.valid('json')
+    const superSession = c.get('session')
+    const kv = c.get('kv')
+    const user = {
+      active: true,
+      email,
+      id: userId,
+    } satisfies User
+    const result = await updateUser(kv, user)
+    if (!result.ok) {
+      return c.json({ error: 'Unable to create or update user' }, 403)
+    }
+    const newSession: Session = {
+      token: createSessionToken(),
+      userId,
+      expiresAt: new Date(),
+      admin: Boolean(admin && superSession?.admin),
+    }
+    const session = await updateSession(kv, newSession)
+    if (!session) {
+      return c.json({ error: 'Unable to start session' }, 403)
+    }
+    return c.json({ session }, 200)
+  })
 
 const app = new Hono<{ Variables: KvProvidedVariables }>()
   .post(
@@ -209,5 +245,6 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
     }
     return c.json({ session, verification }, 200)
   })
+  .route('/super', superApp)
 
 export default app
