@@ -34,7 +34,7 @@ import {
 import { getLoginChallenge } from './models/passkey.ts'
 import type { KvProvidedVariables } from './kv.ts'
 import { UserId } from '@worldmaker/jocobookclub-api/models'
-import { SessionVariables, superToken } from './session-token.ts'
+import { type SessionVariables, superToken } from './session-token.ts'
 
 const inviteVerifyQuerySchema = z.object({
   sessionKey: z.string(),
