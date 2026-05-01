@@ -34,23 +34,30 @@ const { customElements, document, HTMLElement } = window
 globalThis.customElements = customElements
 globalThis.HTMLElement = HTMLElement
 
+console.info('Building ballot stamps...')
 const { buildBallotStamps } = await import('./pages/_ballot-stamps.ts')
 await buildBallotStamps(document)
 
+console.info('Building book stamps...')
 const { buildBookStamps } = await import('./pages/_book-stamps.ts')
 await buildBookStamps(document)
 
+console.info('Building invite stamps...')
 const { buildInviteStamps } = await import('./_invite-register-stamps.ts')
 await buildInviteStamps(document)
 
+console.info('Building login stamps...')
 const { buildLoginStamps } = await import('./_login-form-stamps.ts')
 await buildLoginStamps(document)
 
+console.info('Building passkey stamps...')
 const { buildPasskeyStamps } = await import('./pages/_passkey-stamps.ts')
 await buildPasskeyStamps(document)
 
+console.info('Building suggestion stamps...')
 const { buildSuggestionStamps } = await import('./pages/_suggestions-stamps.ts')
 await buildSuggestionStamps(document)
 
+console.info('Building tag page stamps...')
 const { buildTagPageStamps } = await import('./pages/_tag-stamps.ts')
 await buildTagPageStamps(document)

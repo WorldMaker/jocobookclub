@@ -18,7 +18,9 @@ const userId = Deno.env.get('CLUB_USER_ID') || args['user-id']
 const email = Deno.env.get('CLUB_USER_EMAIL') || args['email']
 
 if (!userId || !email) {
-  console.error('User ID and email must be provided via environment variables or command line arguments')
+  console.error(
+    'User ID and email must be provided via environment variables or command line arguments',
+  )
   Deno.exit(1)
 }
 

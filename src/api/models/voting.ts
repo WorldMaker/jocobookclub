@@ -1,7 +1,15 @@
 import * as z from 'zod'
 import { atomicEnqueue, enqueue, push } from '../dunq/model.ts'
 import { UserId } from './user.ts'
-import { Bucket } from './tally.ts'
+import {
+  addTally,
+  Bucket,
+  type EligibleBooks,
+  getTally,
+  TallyBooksMismatchError,
+  tallyFinal,
+  zeroTally,
+} from './tally.ts'
 
 /**
  * A message that can be enqueued to the voting queue.
@@ -64,4 +72,32 @@ export function pushVoted(kv: Deno.Kv, userId: UserId) {
     userId,
     at: new Date(),
   })
+}
+
+export async function tallyFinalRanking(kv: Deno.Kv, books: EligibleBooks) {
+  let finalTally = zeroTally(books)
+  let invalidBuckets = false
+  for (const bucket of Bucket.options) {
+    const tally = await getTally(kv, bucket)
+    if (!tally.success) {
+      continue
+    }
+    try {
+      finalTally = addTally(finalTally, tally.data)
+    } catch (error) {
+      if (error instanceof TallyBooksMismatchError) {
+        await queueRecountBucketRequested(kv, bucket)
+        console.warn('Tally books mismatch, requesting recount for bucket', {
+          bucket,
+        })
+        invalidBuckets = true
+        continue
+      }
+      throw error
+    }
+  }
+  if (invalidBuckets) {
+    throw new Error('Invalid buckets found, recount requested')
+  }
+  return tallyFinal(finalTally)
 }

@@ -1,14 +1,10 @@
 import { getBallotEligibleBooks } from './clients/static-api.ts'
-import {
-  Bucket,
-  getBucketForUser,
-  tallyBucket,
-  tallyFinalRanking,
-} from './models/tally.ts'
+import { Bucket, getBucketForUser, tallyBucket } from './models/tally.ts'
 import {
   QueueMessages,
   queueRecountBucketRequested,
   queueTallied,
+  tallyFinalRanking,
 } from './models/voting.ts'
 
 async function anyRecountBucketsRemaining(kv: Deno.Kv) {

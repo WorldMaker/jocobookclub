@@ -2,7 +2,6 @@ import * as z from 'zod'
 import { Ballot } from './ballot.ts'
 import type { UserId } from './user.ts'
 import { reverseUlid } from '../util/reverse.ts'
-import { queueRecountBucketRequested } from './voting.ts'
 
 export const EligibleBooks = z.array(z.string())
 
@@ -56,7 +55,7 @@ export function getTallyFromBallot(
   return tally
 }
 
-class TallyBooksMismatchError extends Error {
+export class TallyBooksMismatchError extends Error {
   constructor() {
     super('Tally books mismatch')
     this.name = 'TallyBooksMismatchError'
@@ -244,34 +243,6 @@ export async function tallyBucket(
     tally = addTally(tally, userTally)
   }
   return tally
-}
-
-export async function tallyFinalRanking(kv: Deno.Kv, books: EligibleBooks) {
-  let finalTally = zeroTally(books)
-  let invalidBuckets = false
-  for (const bucket of Bucket.options) {
-    const tally = await getTally(kv, bucket)
-    if (!tally.success) {
-      continue
-    }
-    try {
-      finalTally = addTally(finalTally, tally.data)
-    } catch (error) {
-      if (error instanceof TallyBooksMismatchError) {
-        await queueRecountBucketRequested(kv, bucket)
-        console.warn('Tally books mismatch, requesting recount for bucket', {
-          bucket,
-        })
-        invalidBuckets = true
-        continue
-      }
-      throw error
-    }
-  }
-  if (invalidBuckets) {
-    throw new Error('Invalid buckets found, recount requested')
-  }
-  return tallyFinal(finalTally)
 }
 
 export async function getFinalTally(kv: Deno.Kv) {
