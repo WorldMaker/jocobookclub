@@ -1,14 +1,10 @@
 import { getBallotEligibleBooks } from './clients/static-api.ts'
-import {
-  Bucket,
-  getBucketForUser,
-  tallyBucket,
-  tallyFinalRanking,
-} from './models/tally.ts'
+import { Bucket, getBucketForUser, tallyBucket } from './models/tally.ts'
 import {
   QueueMessages,
   queueRecountBucketRequested,
   queueTallied,
+  tallyFinalRanking,
 } from './models/voting.ts'
 
 async function anyRecountBucketsRemaining(kv: Deno.Kv) {
@@ -104,22 +100,11 @@ export async function listenQueue(kv: Deno.Kv, msg: unknown) {
       break
     case 'user-voted':
       {
-        const books = await getBallotEligibleBooks()
         const bucket = getBucketForUser(qmessage.data.userId)
         if (!bucket) {
           return
         }
-        const time = await kv.get<Date>(['tally-time', bucket])
-        if (time.value && time.value >= qmessage.data.at) {
-          return
-        }
-        const tally = await tallyBucket(kv, bucket, books)
-        await kv.atomic()
-          .check(time)
-          .set(['tally-time', bucket], qmessage.data.at)
-          .set(['tally', bucket], tally)
-          .commit()
-        await queueTallied(kv, bucket)
+        await queueRecountBucketRequested(kv, bucket)
       }
       break
   }

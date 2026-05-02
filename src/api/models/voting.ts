@@ -1,6 +1,15 @@
 import * as z from 'zod'
+import { atomicEnqueue, enqueue, push } from '../dunq/model.ts'
 import { UserId } from './user.ts'
-import { Bucket } from './tally.ts'
+import {
+  addTally,
+  Bucket,
+  type EligibleBooks,
+  getTally,
+  TallyBooksMismatchError,
+  tallyFinal,
+  zeroTally,
+} from './tally.ts'
 
 /**
  * A message that can be enqueued to the voting queue.
@@ -33,35 +42,62 @@ export type QueueMessages = z.infer<typeof QueueMessages>
 
 export function queueRecountBucketRequested(kv: Deno.Kv, bucket: Bucket) {
   const at = new Date()
-  return kv.atomic()
+  return atomicEnqueue(kv.atomic(), {
+    type: 'recount-bucket-requested',
+    bucket,
+    at,
+  })
     .set(['recount-bucket', bucket], at)
-    .enqueue({
-      type: 'recount-bucket-requested',
-      bucket,
-      at,
-    })
     .commit()
 }
 
-export function queueRecountRequested(kv: Deno.Kv) {
-  return kv.enqueue({
+export function pushRecountRequested(kv: Deno.Kv) {
+  return push(kv, {
     type: 'recount-requested',
     at: new Date(),
   })
 }
 
 export function queueTallied(kv: Deno.Kv, bucket: Bucket) {
-  return kv.enqueue({
+  return enqueue(kv, {
     type: 'bucket-tallied',
     bucket,
     at: new Date(),
   })
 }
 
-export function queueVoted(kv: Deno.Kv, userId: UserId) {
-  return kv.enqueue({
+export function pushVoted(kv: Deno.Kv, userId: UserId) {
+  return push(kv, {
     type: 'user-voted',
     userId,
     at: new Date(),
   })
+}
+
+export async function tallyFinalRanking(kv: Deno.Kv, books: EligibleBooks) {
+  let finalTally = zeroTally(books)
+  let invalidBuckets = false
+  for (const bucket of Bucket.options) {
+    const tally = await getTally(kv, bucket)
+    if (!tally.success) {
+      continue
+    }
+    try {
+      finalTally = addTally(finalTally, tally.data)
+    } catch (error) {
+      if (error instanceof TallyBooksMismatchError) {
+        await queueRecountBucketRequested(kv, bucket)
+        console.warn('Tally books mismatch, requesting recount for bucket', {
+          bucket,
+        })
+        invalidBuckets = true
+        continue
+      }
+      throw error
+    }
+  }
+  if (invalidBuckets) {
+    throw new Error('Invalid buckets found, recount requested')
+  }
+  return tallyFinal(finalTally)
 }

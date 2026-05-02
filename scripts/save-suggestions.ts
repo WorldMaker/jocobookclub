@@ -1,25 +1,29 @@
 // deno-lint-ignore-file no-import-prefix
 import { slugify } from 'jsr:@bossley9/slugify@1.0.1'
 import { stringify } from 'jsr:@std/yaml@1.0.5'
-import { listSuggestions } from '../src/api/models/suggestion.ts'
+import { apiClient } from './api/client.ts'
+import { superLogin } from './api/super-login.ts'
 
 // Save the suggestions to disk
-// You will need to configure environment variables DENO_KV_ACCESS_TOKEN
-// and CLUB_KV_URL
+// You will need to configure environment variable CLUB_SUPER_TOKEN with a super token
+// You may configure environment variable CLUB_API_URL to point to a different API URL
 
-const hasKvAccess = Deno.env.has('DENO_KV_ACCESS_TOKEN')
-const clubUrl = Deno.env.get('CLUB_KV_URL')
+const session = await superLogin(
+  '01KQG5TEJBPPJTS8S44WSMYZPS',
+  'bot+save-suggestions@example.com',
+)
 
-if (!hasKvAccess || !clubUrl) {
-  console.log(
-    'You need to set the DENO_KV_ACCESS_TOKEN and CLUB_KV_URL environment variables',
-  )
-  Deno.exit(1)
+const response = await apiClient.suggestion.$get({}, {
+  headers: {
+    Authorization: `Bearer ${session.token}`,
+  },
+})
+if (!response.ok) {
+  console.error('Error getting suggestions', await response.text())
+  Deno.exit(2)
 }
 
-const kv = await Deno.openKv(clubUrl)
-
-const suggestions = await listSuggestions(kv)
+const { suggestions } = await response.json()
 
 for (const suggestion of suggestions) {
   const slug = slugify(suggestion.title)

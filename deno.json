@@ -16,9 +16,13 @@
     "jsxFragmentFactory": "Fragment"
   },
   "tasks": {
-    "get-discord-handles": {
-      "description": "Get all opt-in Discord handles from the database",
-      "command": "deno run -A --env-file --unstable-kv ./scripts/get-discord-handles.ts"
+    "create-session": {
+      "description": "Create a session and print it to the console",
+      "command": "deno run -A --env-file ./scripts/create-session.ts"
+    },
+    "create-my-session": {
+      "description": "Create a session for the current user and print it to the console",
+      "command": "deno run -A --env-file ./scripts/create-session.ts --admin"
     },
     "get-tsg-cws": {
       "description": "Get The Story Graph content warning data",
@@ -26,19 +30,11 @@
     },
     "save-suggestions": {
       "description": "Save suggestions to disk",
-      "command": "deno run -A --env-file --unstable-kv ./scripts/save-suggestions.ts"
+      "command": "deno run -A --env-file ./scripts/save-suggestions.ts"
     },
     "save-tally": {
       "description": "Save a tally to disk",
-      "command": "deno run -A --env-file --unstable-kv --unstable-temporal ./scripts/save-tally.ts"
-    },
-    "upgrade-session": {
-      "description": "Upgrade a session to admin session",
-      "command": "deno run -A --env-file --unstable-kv ./scripts/upgrade-session.ts"
-    },
-    "upgrade-user": {
-      "description": "Upgrade a book club user's passkeys to Admin passkeys",
-      "command": "deno run -A --env-file --unstable-kv ./scripts/upgrade-user.ts"
+      "command": "deno run -A --env-file ./scripts/save-tally.ts"
     }
   }
 }

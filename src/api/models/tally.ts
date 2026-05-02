@@ -55,13 +55,20 @@ export function getTallyFromBallot(
   return tally
 }
 
+export class TallyBooksMismatchError extends Error {
+  constructor() {
+    super('Tally books mismatch')
+    this.name = 'TallyBooksMismatchError'
+  }
+}
+
 export function addTally(tally1: Tally, tally2: Tally): Tally {
   if (tally1.books.length !== tally2.books.length) {
-    throw new Error('Tally books mismatch')
+    throw new TallyBooksMismatchError()
   }
   for (let i = 0; i < tally1.books.length; i++) {
     if (tally1.books[i] !== tally2.books[i]) {
-      throw new Error('Tally books mismatch')
+      throw new TallyBooksMismatchError()
     }
   }
   const matrix = tally1.matrix.map((row, i) =>
@@ -236,18 +243,6 @@ export async function tallyBucket(
     tally = addTally(tally, userTally)
   }
   return tally
-}
-
-export async function tallyFinalRanking(kv: Deno.Kv, books: EligibleBooks) {
-  let finalTally = zeroTally(books)
-  for (const bucket of Bucket.options) {
-    const tally = await getTally(kv, bucket)
-    if (!tally.success) {
-      continue
-    }
-    finalTally = addTally(finalTally, tally.data)
-  }
-  return tallyFinal(finalTally)
 }
 
 export async function getFinalTally(kv: Deno.Kv) {

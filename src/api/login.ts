@@ -11,7 +11,12 @@ import {
 import { zValidator } from '@hono/zod-validator'
 import * as z from 'zod'
 import { origin, rpId } from './models/rp.ts'
-import { getUserByEmail, updateUser, type User } from './models/user.ts'
+import {
+  getUserByEmail,
+  getUserById,
+  updateUser,
+  type User,
+} from './models/user.ts'
 import {
   createSessionToken,
   type Session,
@@ -28,6 +33,8 @@ import {
 } from './models/passkey.ts'
 import { getLoginChallenge } from './models/passkey.ts'
 import type { KvProvidedVariables } from './kv.ts'
+import { UserId } from '@worldmaker/jocobookclub-api/models'
+import { type SessionVariables, superToken } from './session-token.ts'
 
 const inviteVerifyQuerySchema = z.object({
   sessionKey: z.string(),
@@ -41,6 +48,50 @@ const loginVerifySchema = z.object({
   email: z.email(),
   id: z.string(),
 })
+
+const superVerifySchema = z.object({
+  email: z.email(),
+  userId: UserId,
+  admin: z.boolean().optional(),
+})
+
+const superApp = new Hono<{ Variables: SessionVariables }>()
+  .use('/*', superToken)
+  .post('/verify', zValidator('json', superVerifySchema), async (c) => {
+    const { email, userId, admin } = c.req.valid('json')
+    const superSession = c.get('session')
+    const kv = c.get('kv')
+    const user = {
+      active: true,
+      email,
+      id: userId,
+    } satisfies User
+    const existingUser = await getUserById(kv, userId)
+    if (existingUser.success) {
+      if (existingUser.data.email !== email) {
+        return c.json(
+          { error: 'User ID already exists with different email' },
+          403,
+        )
+      }
+    } else {
+      const result = await updateUser(kv, user)
+      if (!result.ok) {
+        return c.json({ error: 'Unable to create or update user' }, 403)
+      }
+    }
+    const newSession: Session = {
+      token: createSessionToken(),
+      userId,
+      expiresAt: new Date(),
+      admin: Boolean(admin && superSession?.admin),
+    }
+    const session = await updateSession(kv, newSession)
+    if (!session) {
+      return c.json({ error: 'Unable to start session' }, 403)
+    }
+    return c.json({ session }, 200)
+  })
 
 const app = new Hono<{ Variables: KvProvidedVariables }>()
   .post(
@@ -209,5 +260,6 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
     }
     return c.json({ session, verification }, 200)
   })
+  .route('/super', superApp)
 
 export default app

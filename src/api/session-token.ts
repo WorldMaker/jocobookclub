@@ -32,3 +32,28 @@ export const adminToken = bearerAuth({
     return true
   },
 })
+
+export const superToken = bearerAuth({
+  verifyToken: (token, c) => {
+    const superToken = Deno.env.get('SUPER_TOKEN')
+    if (!superToken) {
+      console.warn('SUPER_TOKEN is not set in environment variables')
+      return false
+    }
+    if (token !== superToken) {
+      return false
+    }
+    const superTokenAdminCapable =
+      Deno.env.get('SUPER_TOKEN_ADMIN_CAPABLE') === 'true'
+    c.set(
+      'session',
+      {
+        token,
+        userId: '🦹 Super Token',
+        expiresAt: new Date(),
+        admin: superTokenAdminCapable,
+      } satisfies Session,
+    )
+    return true
+  },
+})
