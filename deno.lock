@@ -45,8 +45,10 @@
     "jsr:@std/yaml@1.0.5": "1.0.5",
     "jsr:@std/yaml@^1.0.0-rc.1": "1.0.5",
     "jsr:@worldmaker/butterfloat@^1.6.4": "1.6.4",
+    "jsr:@zod/zod@4.4": "4.4.2",
+    "jsr:@zod/zod@^4.4.2": "4.4.2",
     "npm:@hexagon/base64@^1.1.27": "1.1.28",
-    "npm:@hono/zod-validator@0.7": "0.7.2_hono@4.9.0_zod@4.0.17",
+    "npm:@hono/zod-validator@0.7": "0.7.2_hono@4.9.0_zod@4.4.2",
     "npm:@js-temporal/polyfill@0.4.4": "0.4.4",
     "npm:@levischuck/tiny-cbor@~0.2.2": "0.2.11",
     "npm:@peculiar/asn1-android@^2.3.10": "2.4.0",
@@ -67,9 +69,7 @@
     "npm:markdown-it-deflist@3.0.0": "3.0.0",
     "npm:markdown-it@14.1.0": "14.1.0",
     "npm:meriyah@4.5.0": "4.5.0",
-    "npm:rxjs@^7.8.1": "7.8.2",
-    "npm:zod@4": "4.0.17",
-    "npm:zod@latest": "4.0.17"
+    "npm:rxjs@^7.8.1": "7.8.2"
   },
   "jsr": {
     "@bossley9/slugify@1.0.1": {
@@ -223,6 +223,9 @@
       "dependencies": [
         "npm:rxjs"
       ]
+    },
+    "@zod/zod@4.4.2": {
+      "integrity": "7be10562a99ca7a0ce194764f0c0c2abee8013f43e368594690a381f44036de4"
     }
   },
   "npm": {
@@ -392,7 +395,7 @@
     "@hexagon/base64@1.1.28": {
       "integrity": "sha512-lhqDEAvWixy3bZ+UOYbPwUbBkwBq5C1LAJ/xPC8Oi+lL54oyakv/npbA0aU2hgCsx/1NUd4IBvV03+aUBWxerw=="
     },
-    "@hono/zod-validator@0.7.2_hono@4.9.0_zod@4.0.17": {
+    "@hono/zod-validator@0.7.2_hono@4.9.0_zod@4.4.2": {
       "integrity": "sha512-ub5eL/NeZ4eLZawu78JpW/J+dugDAYhwqUIdp9KYScI6PZECij4Hx4UsrthlEUutqDDhPwRI0MscUfNkvn/mqQ==",
       "dependencies": [
         "hono",
@@ -770,7 +773,8 @@
       "integrity": "sha512-6qN4hJdMwfYBtE3YBTTHhoeuUrDBPZmbQaxWAqSALV/MeEnR5z1xd8UKud2RAkFoPkmB+hli1TZSnyi84xz1vQ==",
       "dependencies": [
         "iconv-lite"
-      ]
+      ],
+      "deprecated": true
     },
     "whatwg-mimetype@4.0.0": {
       "integrity": "sha512-QaKxh0eNIi2mE9p2vEdzfagOKHCcj1pJ56EEHGQOVxp8r9/iszLUUV7v89x9O1p/T+NlTM5W7jW6+cz4Fq1YVg=="
@@ -791,8 +795,8 @@
     "xmlchars@2.2.0": {
       "integrity": "sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw=="
     },
-    "zod@4.0.17": {
-      "integrity": "sha512-1PHjlYRevNxxdy2JZ8JcNAw7rX8V9P1AKkP+x/xZfxB0K5FYfuV+Ug6P/6NVSR2jHQ+FzDDoDHS04nYUsOIyLQ=="
+    "zod@4.4.2": {
+      "integrity": "sha512-IynmDyxsEsb9RKzO3J9+4SxXnl2FTFSzNBaKKaMV6tsSk0rw9gYw9gs+JFCq/qk2LCZ78KDwyj+Z289TijSkUw=="
     }
   },
   "remote": {
@@ -1021,9 +1025,10 @@
         "dependencies": [
           "jsr:@simplewebauthn/server@13",
           "jsr:@std/ulid@1",
+          "jsr:@zod/zod@4.4",
+          "jsr:@zod/zod@^4.4.2",
           "npm:@hono/zod-validator@0.7",
-          "npm:hono@latest",
-          "npm:zod@latest"
+          "npm:hono@latest"
         ]
       },
       "src/bf": {
@@ -1032,14 +1037,14 @@
           "jsr:@std/assert@1",
           "jsr:@std/ulid@1",
           "jsr:@worldmaker/butterfloat@^1.6.4",
+          "jsr:@zod/zod@4.4",
           "npm:@simplewebauthn/browser@^13.1.0",
           "npm:chart.js@^4.5.1",
           "npm:chartjs-adapter-date-fns@3",
           "npm:esbuild@~0.24.2",
           "npm:hono@^4.6.16",
           "npm:jsdom@26",
-          "npm:rxjs@^7.8.1",
-          "npm:zod@4"
+          "npm:rxjs@^7.8.1"
         ]
       }
     }
