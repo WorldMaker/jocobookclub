@@ -16,7 +16,7 @@ export const Ballot = z.object({
   userId: UserId,
   active: z.boolean(),
   books: z.record(z.string(), z.xor([Vote, BookBallot])),
-  updated: z.iso.datetime({ offset: true }),
+  updated: z.coerce.date(),
 })
 
 export type Ballot = z.infer<typeof Ballot>

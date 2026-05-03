@@ -10,6 +10,7 @@ import {
   tallyFinal,
   zeroTally,
 } from './tally.ts'
+import type { Preferred } from './preferred.ts'
 
 /**
  * A message that can be enqueued to the voting queue.
@@ -74,16 +75,21 @@ export function pushVoted(kv: Deno.Kv, userId: UserId) {
   })
 }
 
-export async function tallyFinalRanking(kv: Deno.Kv, books: EligibleBooks) {
+export async function tallyFinalRanking(kv: Deno.Kv, books: EligibleBooks, preferred: Preferred) {
   let finalTally = zeroTally(books)
   let invalidBuckets = false
   for (const bucket of Bucket.options) {
     const tally = await getTally(kv, bucket)
     if (!tally.success) {
+      await queueRecountBucketRequested(kv, bucket)
+      console.warn('Invalid tally found, requesting recount for bucket', {
+        bucket,
+      })
+      invalidBuckets = true
       continue
     }
     try {
-      finalTally = addTally(finalTally, tally.data)
+      finalTally = addTally(finalTally, tally.data, preferred)
     } catch (error) {
       if (error instanceof TallyBooksMismatchError) {
         await queueRecountBucketRequested(kv, bucket)
