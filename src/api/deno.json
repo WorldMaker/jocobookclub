@@ -16,6 +16,8 @@
   "imports": {
     "@hono/zod-validator": "npm:@hono/zod-validator@0.7",
     "@simplewebauthn/server": "jsr:@simplewebauthn/server@^13.0.0",
+    "@std/expect": "jsr:@std/expect@^1.0.19",
+    "@std/testing": "jsr:@std/testing@^1.0.18",
     "@std/ulid": "jsr:@std/ulid@^1.0.0",
     "@zod/zod": "jsr:@zod/zod@^4.4.2",
     "hono": "npm:hono@latest",
