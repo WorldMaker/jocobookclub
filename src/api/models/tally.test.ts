@@ -38,4 +38,39 @@ describe('tally', () => {
     const tally = getTallyFromBallot(eligibleBooks, ballot, emptyPreferred)
     expect(tally.supports).toEqual([0, 0, 0, 1, 0])
   })
+
+  it('should calculate supports from a simple, extreme ballot with preferred multiplier', () => {
+    const ballot: Ballot = {
+      active: true,
+      books: {
+        D: 5,
+      },
+      updated: new Date(),
+      userId: 'user1',
+    }
+    const preferred: Preferred = {
+      multiplier: 3,
+      userIds: new Set(['user1']),
+    }
+    const tally = getTallyFromBallot(eligibleBooks, ballot, preferred)
+    expect(tally.count).toEqual(3)
+    expect(tally.supports).toEqual([0, 0, 0, 3, 0])
+  })
+
+  it('should recognize a meh ballot', () => {
+    const ballot: Ballot = {
+      active: true,
+      books: {
+        A: 3,
+        B: 3,
+        C: 3,
+        D: 3,
+        E: 3,
+      },
+      updated: new Date(),
+      userId: 'user1',
+    }
+    const tally = getTallyFromBallot(eligibleBooks, ballot, emptyPreferred)
+    expect(tally.mehCount).toEqual(1)
+  })
 })
