@@ -13,6 +13,9 @@ export type EligibleBooks = z.infer<typeof EligibleBooks>
  * A tally of 0 or more ballots for a specific list of eligible books
  *
  * This is an adjacency matrix of pairwise comparisons of books
+ * 
+ * It is considered internal to the voting process and compatibility
+ * is not guaranteed across versions
  */
 export const Tally = z.object({
   count: z.number().int().gte(0),
@@ -142,8 +145,11 @@ export function addTally(tally1: Tally, tally2: Tally, preferred: Preferred): Ta
   }
 }
 
-/*
+/**
  * The final tally is a "widest path" matrix, and a chosen winner
+ *
+ * It is considered the final output of the voting process and should be compatible across versions
+ * (for instance, it is dumped to JSON and stored/built by the static site for history pages)
  */
 export const FinalTally = z.object({
   count: z.number().int().gte(0),
