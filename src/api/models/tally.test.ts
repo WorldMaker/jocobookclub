@@ -1,7 +1,7 @@
 import { expect } from '@std/expect'
 import { describe, it } from '@std/testing/bdd'
 import type { Ballot } from './ballot.ts'
-import { getTallyFromBallot, zeroTally } from './tally.ts'
+import { addTally, getTallyFromBallot, zeroTally } from './tally.ts'
 import type { Preferred } from './preferred.ts'
 
 describe('tally', () => {
@@ -72,5 +72,39 @@ describe('tally', () => {
     }
     const tally = getTallyFromBallot(eligibleBooks, ballot, emptyPreferred)
     expect(tally.mehCount).toEqual(1)
+  })
+
+  it('should calculate marks from a ballot', () => {
+    const markDate = new Date()
+    const ballot: Ballot = {
+      active: true,
+      books: {
+        A: { vote: 1, mark: ['otter', markDate] },
+        B: { vote: 2, mark: ['raccoon', markDate] },
+        C: 3,
+        D: 4,
+        E: 5,
+      },
+      updated: new Date(),
+      userId: 'user1',
+    }
+    const tally = getTallyFromBallot(eligibleBooks, ballot, emptyPreferred)
+    expect(tally.marks[0][0]).toEqual(['user1', 'otter', markDate])
+    expect(tally.marks[1][0]).toEqual(['user1', 'raccoon', markDate])
+    expect(tally.marks[2]).toEqual([])
+  })
+
+  it('should accumulate marks', () => {
+    const markDate1 = new Date()
+    const markDate2 = new Date()
+    const tally1 = zeroTally(eligibleBooks)
+    tally1.marks[0].push(['user1', 'otter', markDate1])
+    const tally2 = zeroTally(eligibleBooks)
+    tally2.marks[0].push(['user2', 'raccoon', markDate2])
+    const combinedTally = addTally(tally1, tally2, emptyPreferred)
+    expect(combinedTally.marks[0]).toEqual([
+      ['user1', 'otter', markDate1],
+      ['user2', 'raccoon', markDate2]
+    ])
   })
 })
