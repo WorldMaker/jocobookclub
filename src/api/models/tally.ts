@@ -4,7 +4,6 @@ import { UserId } from './user.ts'
 import { reverseUlid } from '../util/reverse.ts'
 import { Mark } from './mark.ts'
 import type { Preferred } from './preferred.ts'
-import is from 'zod/v4/locales/is'
 
 export const EligibleBooks = z.array(z.string())
 
