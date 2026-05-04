@@ -17,7 +17,7 @@ export async function getPreferred(kv: Deno.Kv): Promise<Preferred> {
   return result.data
 }
 
-export function setPreferred(kv: Deno.Kv, preferred: Preferred) {
+export function updatePreferred(kv: Deno.Kv, preferred: Preferred) {
   Preferred.parse(preferred)
   return kv.set(['preferred'], preferred)
 }
