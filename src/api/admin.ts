@@ -43,7 +43,7 @@ const app = new Hono<{ Variables: SessionVariables }>()
       return c.json(invite, 200)
     },
   )
-  .post('/preferred', zValidator('json', PreferredRequest), async (c) => {
+  .put('/preferred', zValidator('json', PreferredRequest), async (c) => {
     const kv = c.get('kv')
     const body = c.req.valid('json')
     const preferred: Preferred = {
