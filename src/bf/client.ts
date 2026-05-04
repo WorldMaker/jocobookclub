@@ -2,7 +2,7 @@ import type apiApp from '@worldmaker/jocobookclub-api'
 import { hc } from 'hono/client'
 
 const overrideApiUrl = localStorage.getItem('override/api-url')
-const apiUrl = overrideApiUrl ?? 'https://jocobookclub-api.worldmaker.deno.net/'
+const apiUrl = overrideApiUrl ?? 'https://api.jocobook.club'
 if (overrideApiUrl) {
   console.warn(`Using overridden API URL: ${overrideApiUrl}`)
 }
