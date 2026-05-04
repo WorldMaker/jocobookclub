@@ -158,7 +158,7 @@ export const FinalTally = z.object({
   oldest: z.coerce.date().optional(),
   books: EligibleBooks,
   matrix: z.array(z.array(z.number().int().gte(0))),
-  marks: z.array(z.array(z.tuple([UserId, Mark, z.coerce.date()]))).optional(),
+  marks: z.array(z.partialRecord(Mark, z.array(z.tuple([UserId, z.coerce.date()])))).optional(),
   supports: z.array(z.number().int().gte(0)).optional(),
   preferredMultiplier: z.number().int().gte(1).optional(),
   preferred: z.set(UserId).optional(),
@@ -222,6 +222,17 @@ export function tallyFinal(tally: Tally): FinalTally {
     .sort(([, a], [, b]) => a - b)
     .map(([book]) => book)
 
+  const marksByType = tally.marks.map((row) => {
+    const record: Partial<Record<Mark, [UserId, Date][]>> = {}
+    for (const [userId, mark, date] of row) {
+      if (!record[mark]) {
+        record[mark] = []
+      }
+      record[mark].push([userId, date])
+    }
+    return record
+  })
+
   return {
     count: tally.count,
     mehCount: tally.mehCount,
@@ -229,7 +240,7 @@ export function tallyFinal(tally: Tally): FinalTally {
     oldest: tally.oldest,
     books,
     matrix,
-    marks: tally.marks,
+    marks: marksByType,
     supports: tally.supports,
     preferredMultiplier: tally.preferredMultiplier,
     preferred: tally.preferred,
