@@ -8,9 +8,13 @@ export const Preferred = z.object({
 
 export type Preferred = z.infer<typeof Preferred>
 
-export async function getPreferred(kv: Deno.Kv) {
+export async function getPreferred(kv: Deno.Kv): Promise<Preferred> {
   const preferred = await kv.get(['preferred'])
-  return Preferred.safeParse(preferred.value)
+  const result = Preferred.safeParse(preferred.value)
+  if (!result.success) {
+    return { multiplier: 1, userIds: new Set<string>() }
+  }
+  return result.data
 }
 
 export function setPreferred(kv: Deno.Kv, preferred: Preferred) {

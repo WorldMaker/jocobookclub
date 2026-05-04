@@ -1,4 +1,5 @@
 import { getBallotEligibleBooks } from './clients/static-api.ts'
+import { getPreferred } from './models/preferred.ts'
 import { Bucket, getBucketForUser, tallyBucket } from './models/tally.ts'
 import {
   QueueMessages,
@@ -26,11 +27,12 @@ export async function listenQueue(kv: Deno.Kv, msg: unknown) {
     case 'bucket-tallied':
       {
         const books = await getBallotEligibleBooks()
+        const preferred = await getPreferred(kv)
         const time = await kv.get<Date>(['final-tally-time'])
         if (time.value && time.value >= qmessage.data.at) {
           return
         }
-        const finalTally = await tallyFinalRanking(kv, books)
+        const finalTally = await tallyFinalRanking(kv, books, preferred)
         await kv.atomic()
           .check(time)
           .set(['final-tally-time'], qmessage.data.at)
@@ -41,6 +43,7 @@ export async function listenQueue(kv: Deno.Kv, msg: unknown) {
     case 'recount-bucket-requested':
       {
         const books = await getBallotEligibleBooks()
+        const preferred = await getPreferred(kv)
         const time = await kv.get<Date>(['tally-time', qmessage.data.bucket])
         const recount = await kv.get<Date>([
           'recount-bucket',
@@ -60,7 +63,7 @@ export async function listenQueue(kv: Deno.Kv, msg: unknown) {
           }
           return
         }
-        const tally = await tallyBucket(kv, qmessage.data.bucket, books)
+        const tally = await tallyBucket(kv, qmessage.data.bucket, books, preferred)
         const result = tally.count > 0
           ? await kv.atomic()
             .check(time)
