@@ -2,7 +2,7 @@ import * as z from 'zod'
 import { Ballot } from './ballot.ts'
 import { UserId } from './user.ts'
 import { reverseUlid } from '../util/reverse.ts'
-import { Mark } from './mark.ts'
+import { BookMarks, Mark } from './mark.ts'
 import type { Preferred } from './preferred.ts'
 
 export const EligibleBooks = z.array(z.string())
@@ -24,7 +24,7 @@ export const Tally = z.object({
   oldest: z.coerce.date(),
   books: EligibleBooks,
   matrix: z.array(z.array(z.number().int().gte(0))),
-  marks: z.array(z.array(z.tuple([UserId, Mark, z.coerce.date()]))),
+  marks: z.array(BookMarks),
   supports: z.array(z.number().int().gte(0)),
   preferredMultiplier: z.number().int().gte(1),
   preferred: z.set(UserId),
@@ -40,7 +40,7 @@ export function zeroTally(books: EligibleBooks): Tally {
     oldest: new Date(),
     books,
     matrix: books.map(() => books.map(() => 0)),
-    marks: books.map(() => []),
+    marks: books.map(() => ({})),
     supports: books.map(() => 0),
     preferredMultiplier: 1,
     preferred: new Set(),
@@ -78,7 +78,7 @@ export function getTallyFromBallot(
     addBookToRank(votes1, i)
     const mark = typeof book1State === 'number' ? undefined : book1State?.mark
     if (mark) {
-      tally.marks[i].push([ballot.userId, mark[0], mark[1]])
+      tally.marks[i][mark[0]] = { [ballot.userId]: mark[1] }
     }
     for (let j = i + 1; j < books.length; j++) {
       const book2 = books[j]
@@ -136,9 +136,18 @@ export function addTally(tally1: Tally, tally2: Tally, preferred: Preferred): Ta
     oldest: new Date(Math.min(tally1.oldest.getTime(), tally2.oldest.getTime())),
     books: tally1.books,
     matrix,
-    marks: tally1.marks.map((row, i) =>
-      [...row, ...tally2.marks[i]]
-    ),
+    marks: tally1.marks.map((row, i) => {
+      const newRow: BookMarks = {}
+      for (const mark of Mark.options) {
+        if (row[mark] || tally2.marks[i][mark]) {
+          newRow[mark] = {
+            ...row[mark],
+            ...tally2.marks[i][mark],
+          }
+        }
+      }
+      return newRow
+    }),
     supports: tally1.supports.map((value, i) => value + tally2.supports[i]),
     preferredMultiplier: tally1.preferredMultiplier,
     preferred: new Set([...tally1.preferred, ...tally2.preferred]),
@@ -158,7 +167,7 @@ export const FinalTally = z.object({
   oldest: z.coerce.date().optional(),
   books: EligibleBooks,
   matrix: z.array(z.array(z.number().int().gte(0))),
-  marks: z.array(z.partialRecord(Mark, z.array(z.tuple([UserId, z.coerce.date()])))).optional(),
+  marks: z.array(z.partialRecord(Mark, z.partialRecord(UserId, z.coerce.date()))).optional(),
   supports: z.array(z.number().int().gte(0)).optional(),
   preferredMultiplier: z.number().int().gte(1).optional(),
   preferred: z.set(UserId).optional(),
@@ -222,17 +231,6 @@ export function tallyFinal(tally: Tally): FinalTally {
     .sort(([, a], [, b]) => a - b)
     .map(([book]) => book)
 
-  const marksByType = tally.marks.map((row) => {
-    const record: Partial<Record<Mark, [UserId, Date][]>> = {}
-    for (const [userId, mark, date] of row) {
-      if (!record[mark]) {
-        record[mark] = []
-      }
-      record[mark].push([userId, date])
-    }
-    return record
-  })
-
   return {
     count: tally.count,
     mehCount: tally.mehCount,
@@ -240,7 +238,7 @@ export function tallyFinal(tally: Tally): FinalTally {
     oldest: tally.oldest,
     books,
     matrix,
-    marks: marksByType,
+    marks: tally.marks,
     supports: tally.supports,
     preferredMultiplier: tally.preferredMultiplier,
     preferred: tally.preferred,
