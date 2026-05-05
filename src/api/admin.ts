@@ -5,7 +5,7 @@ import { Invite, updateInvite } from './models/invite.ts'
 import { getAllUserPreferredEmails, getUserIdByEmail, UserId } from './models/user.ts'
 import { pushRecountRequested } from './models/voting.ts'
 import { adminToken, type SessionVariables } from './session-token.ts'
-import { type Preferred, updatePreferred } from './models/preferred.ts'
+import { getPreferred, type Preferred, updatePreferred } from './models/preferred.ts'
 
 export const PreferredRequest = z.object({
   multiplier: z.number().int().gte(1),
@@ -43,6 +43,11 @@ const app = new Hono<{ Variables: SessionVariables }>()
       return c.json(invite, 200)
     },
   )
+  .get('/preferred', async (c) => {
+    const kv = c.get('kv')
+    const preferred = await getPreferred(kv)
+    return c.json({ preferred }, 200)
+  })
   .put('/preferred', zValidator('json', PreferredRequest), async (c) => {
     const kv = c.get('kv')
     const body = c.req.valid('json')
