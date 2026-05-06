@@ -66,6 +66,12 @@
                                     {{ genre.tags[tag].name ?? genre.tags[tag].title }}
                                 </a>
                             {{ /for }}
+                            {{ for mark of Object.keys(genre.marks) }}
+                                <a class="navbar-item {{ if tags?.includes(mark) }} has-background-dark has-text-info{{ /if }}" href="/marks/{{ mark }}" title="{{ genre.marks[mark].name }}">
+                                    <span class="icon {{ genre.marks[mark].iconClass }}"><i class="fa-duotone fa-solid {{ genre.marks[mark].icon }}"></i></span>
+                                    {{ genre.marks[mark].name }}
+                                </a>
+                            {{ /for }}
                         </div>
                     </div>
                     <div class="navbar-item has-dropdown is-hoverable">

@@ -1,4 +1,5 @@
-import { FinalTally } from '@worldmaker/jocobookclub-api/models'
+import { FinalTally, Mark, TallyBookMarks } from '@worldmaker/jocobookclub-api/models'
+import rawMarks from './_data/genre/marks.json' with { type: 'json' }
 import site from './_config.ts'
 
 type BookType = 'previous' | 'upcoming' | 'ballot' | 'held'
@@ -195,6 +196,8 @@ export default async function* history({ search }: Lume.Data) {
   const totalBooks: DayRank = {}
   let lastRankingUrl: string | null = null
   let lastRankingByLtId: Record<string, number> = {}
+  let lastBooks: string[] = []
+  let lastMarks: TallyBookMarks[] = []
   for (const ranking of rankings) {
     const tally = FinalTally.safeParse(
       JSON.parse(await Deno.readTextFile(ranking.filename)),
@@ -224,6 +227,8 @@ export default async function* history({ search }: Lume.Data) {
     }
     lastRankingUrl = site.url(ranking.path, true)
     lastRankingByLtId = rankingByLtId
+    lastBooks = data.books
+    lastMarks = data.marks ?? []
   }
 
   for (const [ltid, book] of bookRanks.entries()) {
@@ -238,5 +243,41 @@ export default async function* history({ search }: Lume.Data) {
     url: `/static-api/total-books.json`,
     contentType: 'application/json',
     content: JSON.stringify(totalBooks),
+  }
+
+  const twoMonthsAgo = new Date(Temporal.Now.zonedDateTimeISO().subtract({ months: 2 }).toString())
+
+  for (const [mark, info] of Object.entries(rawMarks)) {
+    const recentMarks: Record<string, [string, Date]> = {}
+    const allMarks: Record<string, [string, Date][]> = {}
+
+    for (let i = 0; i < lastBooks.length; i++) {
+      const ltid = lastBooks[i]
+      const bookMarks = lastMarks[i]?.[mark as Mark]
+      if (bookMarks) {
+        for (const [userId, date] of Object.entries(bookMarks)) {
+          if (date! > twoMonthsAgo) {
+            if (userId in recentMarks && date! > recentMarks[userId][1]) {
+              recentMarks[userId] = [ltid, date!]
+            } else if (!(userId in recentMarks)) {
+              recentMarks[userId] = [ltid, date!]
+            }
+          }
+          if (!(userId in allMarks)) {
+            allMarks[userId] = []
+          }
+          allMarks[userId].push([ltid, date!])
+        }
+      }
+    }
+
+    yield {
+      url: `/marks/${mark}`,
+      layout: 'mark.vto',
+      ...info,
+      books,
+      recentMarks,
+      allMarks,
+    }
   }
 }
