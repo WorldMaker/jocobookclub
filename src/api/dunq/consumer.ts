@@ -1,5 +1,7 @@
 import { ulid } from '@std/ulid'
 
+const EmptyQueueRetries = 3
+
 export async function consume<MessageType>(
   kv: Deno.Kv,
   consumer: (message: MessageType) => Promise<void>,
@@ -8,12 +10,14 @@ export async function consume<MessageType>(
   console.log('Starting consumer', { consumerId })
 
   let running = true
-  let retries = 3
+  let retries = EmptyQueueRetries
 
   while (running) {
+    let foundMessage = false
     for await (
       const { key, value, versionstamp } of kv.list({ prefix: ['dunq'] })
     ) {
+      foundMessage = true
       // attempt dequeue
       const result = await kv.atomic()
         .check({ key, versionstamp })
@@ -34,6 +38,15 @@ export async function consume<MessageType>(
         console.error('Error consuming message', { consumerId, key, error })
       }
     }
+
+    if (foundMessage) {
+      retries = EmptyQueueRetries
+      console.log('Finished consuming messages, checking for more...', {
+        consumerId,
+      })
+      continue
+    }
+
     if (retries <= 0) {
       console.warn('No messages found, stopping consumer', { consumerId })
       running = false

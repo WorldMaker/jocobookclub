@@ -5,7 +5,8 @@
   "tasks": {
     "lume": "echo \"import 'lume/cli.ts'\" | deno run -A --unstable-temporal -",
     "build": "deno task lume",
-    "serve": "deno task lume -s"
+    "serve": "deno task lume -s",
+    "portless": "portless jocobookclub pwsh -NoProfile -Command 'deno task serve -p $env:PORT'"
   },
   "fmt": {
     "semiColons": false,
