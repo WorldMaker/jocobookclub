@@ -14,10 +14,12 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
     c.set('kv', kv)
     await next()
   })
-  .use(cors({
-    origin: ['https://worldmaker.net', 'https://jocobookclub.localhost'],
-    allowHeaders: ['Authorization', 'Content-Type'],
-  }))
+  .use(
+    cors({
+      origin: ['https://worldmaker.net', 'https://jocobookclub.localhost'],
+      allowHeaders: ['Authorization', 'Content-Type'],
+    }),
+  )
   .route('/admin', adminApp)
   .route('/invite', inviteApp)
   .route('/login', loginApp)

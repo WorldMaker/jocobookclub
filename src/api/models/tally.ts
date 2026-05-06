@@ -152,13 +152,15 @@ export function addTally(
     ),
     books: tally1.books,
     matrix,
-    marks: tally1.marks.map((row, i) => {
+    marks: tally1.books.map((_book, i) => {
       const newRow: BookMarks = {}
       for (const mark of Mark.options) {
-        if (row[mark] || tally2.marks[i][mark]) {
+        const mark1 = tally1.marks[i][mark]
+        const mark2 = tally2.marks[i][mark]
+        if (mark1 || mark2) {
           newRow[mark] = {
-            ...row[mark],
-            ...tally2.marks[i][mark],
+            ...mark1,
+            ...mark2,
           }
         }
       }

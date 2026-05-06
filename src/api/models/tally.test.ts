@@ -92,22 +92,28 @@ describe('tally', () => {
       userId: 'user1',
     }
     const tally = getTallyFromBallot(eligibleBooks, ballot, emptyPreferred)
-    expect(tally.marks[0][0]).toEqual(['user1', 'otter', markDate])
-    expect(tally.marks[1][0]).toEqual(['user1', 'raccoon', markDate])
-    expect(tally.marks[2]).toEqual([])
+    expect(tally.marks[0]['otter']!['user1']).toEqual(markDate)
+    expect(tally.marks[1]['raccoon']!['user1']).toEqual(markDate)
+    expect(tally.marks[2]).toEqual({})
   })
 
   it('should accumulate marks', () => {
     const markDate1 = new Date()
     const markDate2 = new Date()
     const tally1 = zeroTally(eligibleBooks)
-    tally1.marks[0].push(['user1', 'otter', markDate1])
+    tally1.count = 1
+    tally1.marks[0] = {
+      otter: { user1: markDate1 },
+    }
     const tally2 = zeroTally(eligibleBooks)
-    tally2.marks[0].push(['user2', 'raccoon', markDate2])
+    tally2.count = 1
+    tally2.marks[0] = {
+      raccoon: { user2: markDate2 },
+    }
     const combinedTally = addTally(tally1, tally2, emptyPreferred)
-    expect(combinedTally.marks[0]).toEqual([
-      ['user1', 'otter', markDate1],
-      ['user2', 'raccoon', markDate2],
-    ])
+    expect(combinedTally.marks[0]).toEqual({
+      otter: { user1: markDate1 },
+      raccoon: { user2: markDate2 },
+    })
   })
 })
