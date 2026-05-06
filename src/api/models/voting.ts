@@ -75,7 +75,11 @@ export function pushVoted(kv: Deno.Kv, userId: UserId) {
   })
 }
 
-export async function tallyFinalRanking(kv: Deno.Kv, books: EligibleBooks, preferred: Preferred) {
+export async function tallyFinalRanking(
+  kv: Deno.Kv,
+  books: EligibleBooks,
+  preferred: Preferred,
+) {
   let finalTally = zeroTally(books)
   let invalidBuckets = false
   for (const bucket of Bucket.options) {

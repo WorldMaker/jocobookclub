@@ -6,7 +6,10 @@ import type { Preferred } from './preferred.ts'
 
 describe('tally', () => {
   const eligibleBooks = ['A', 'B', 'C', 'D', 'E']
-  const emptyPreferred: Preferred = { multiplier: 1, userIds: new Set<string>() }
+  const emptyPreferred: Preferred = {
+    multiplier: 1,
+    userIds: new Set<string>(),
+  }
 
   it('should return a zero tally for an inactive ballot', () => {
     const ballot: Ballot = {
@@ -104,7 +107,7 @@ describe('tally', () => {
     const combinedTally = addTally(tally1, tally2, emptyPreferred)
     expect(combinedTally.marks[0]).toEqual([
       ['user1', 'otter', markDate1],
-      ['user2', 'raccoon', markDate2]
+      ['user2', 'raccoon', markDate2],
     ])
   })
 })

@@ -41,7 +41,9 @@ export async function consume<MessageType>(
 
     if (foundMessage) {
       retries = EmptyQueueRetries
-      console.log('Finished consuming messages, checking for more...', { consumerId })
+      console.log('Finished consuming messages, checking for more...', {
+        consumerId,
+      })
       continue
     }
 

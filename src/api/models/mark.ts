@@ -12,6 +12,9 @@ export const Mark = z.enum([
 
 export type Mark = z.infer<typeof Mark>
 
-export const BookMarks = z.partialRecord(Mark, z.partialRecord(UserId, z.coerce.date()))
+export const BookMarks = z.partialRecord(
+  Mark,
+  z.partialRecord(UserId, z.coerce.date()),
+)
 
 export type BookMarks = z.infer<typeof BookMarks>

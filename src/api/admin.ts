@@ -2,10 +2,18 @@ import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import * as z from 'zod'
 import { Invite, updateInvite } from './models/invite.ts'
-import { getAllUserPreferredEmails, getUserIdByEmail, UserId } from './models/user.ts'
+import {
+  getAllUserPreferredEmails,
+  getUserIdByEmail,
+  UserId,
+} from './models/user.ts'
 import { pushRecountRequested } from './models/voting.ts'
 import { adminToken, type SessionVariables } from './session-token.ts'
-import { getPreferred, type Preferred, updatePreferred } from './models/preferred.ts'
+import {
+  getPreferred,
+  type Preferred,
+  updatePreferred,
+} from './models/preferred.ts'
 
 export const PreferredRequest = z.object({
   multiplier: z.number().int().gte(1),

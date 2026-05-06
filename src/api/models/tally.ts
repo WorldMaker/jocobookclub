@@ -13,7 +13,7 @@ export type EligibleBooks = z.infer<typeof EligibleBooks>
  * A tally of 0 or more ballots for a specific list of eligible books
  *
  * This is an adjacency matrix of pairwise comparisons of books
- * 
+ *
  * It is considered internal to the voting process and compatibility
  * is not guaranteed across versions
  */
@@ -58,7 +58,7 @@ export function getTallyFromBallot(
   }
   tally.oldest = ballot.updated
   tally.preferredMultiplier = preferred.multiplier
-  const isPreferred = preferred.userIds.has(ballot.userId)  
+  const isPreferred = preferred.userIds.has(ballot.userId)
   const voteStrength = isPreferred ? preferred.multiplier : 1
   tally.count = voteStrength
   if (isPreferred) {
@@ -74,7 +74,9 @@ export function getTallyFromBallot(
   for (let i = 0; i < books.length; i++) {
     const book1 = books[i]
     const book1State = ballot.books[book1]
-    const votes1 = typeof book1State === 'number' ? book1State : book1State?.vote ?? 1
+    const votes1 = typeof book1State === 'number'
+      ? book1State
+      : book1State?.vote ?? 1
     addBookToRank(votes1, i)
     const mark = typeof book1State === 'number' ? undefined : book1State?.mark
     if (mark) {
@@ -83,7 +85,9 @@ export function getTallyFromBallot(
     for (let j = i + 1; j < books.length; j++) {
       const book2 = books[j]
       const book2State = ballot.books[book2]
-      const votes2 = typeof book2State === 'number' ? book2State : book2State?.vote ?? 1
+      const votes2 = typeof book2State === 'number'
+        ? book2State
+        : book2State?.vote ?? 1
       if (votes1 > votes2) {
         tally.matrix[i][j] = voteStrength
       } else if (votes2 > votes1) {
@@ -111,14 +115,21 @@ export class TallyBooksMismatchError extends Error {
   }
 }
 
-export function addTally(tally1: Tally, tally2: Tally, preferred: Preferred): Tally {
+export function addTally(
+  tally1: Tally,
+  tally2: Tally,
+  preferred: Preferred,
+): Tally {
   if (tally2.count === 0) {
     return tally1
   }
   if (tally1.books.length !== tally2.books.length) {
     throw new TallyBooksMismatchError('Books length mismatch')
   }
-  if (tally1.preferredMultiplier !== tally2.preferredMultiplier || tally2.preferredMultiplier !== preferred.multiplier) {
+  if (
+    tally1.preferredMultiplier !== tally2.preferredMultiplier ||
+    tally2.preferredMultiplier !== preferred.multiplier
+  ) {
     throw new TallyBooksMismatchError('Preferred multiplier mismatch')
   }
   if (!tally2.preferred.isSubsetOf(preferred.userIds)) {
@@ -136,7 +147,9 @@ export function addTally(tally1: Tally, tally2: Tally, preferred: Preferred): Ta
     count: tally1.count + tally2.count,
     mehCount: tally1.mehCount + tally2.mehCount,
     updated: new Date(),
-    oldest: new Date(Math.min(tally1.oldest.getTime(), tally2.oldest.getTime())),
+    oldest: new Date(
+      Math.min(tally1.oldest.getTime(), tally2.oldest.getTime()),
+    ),
     books: tally1.books,
     matrix,
     marks: tally1.marks.map((row, i) => {
@@ -170,7 +183,9 @@ export const FinalTally = z.object({
   oldest: z.coerce.date().optional(),
   books: EligibleBooks,
   matrix: z.array(z.array(z.number().int().gte(0))),
-  marks: z.array(z.partialRecord(Mark, z.partialRecord(UserId, z.coerce.date()))).optional(),
+  marks: z.array(
+    z.partialRecord(Mark, z.partialRecord(UserId, z.coerce.date())),
+  ).optional(),
   supports: z.array(z.number().int().gte(0)).optional(),
   preferredMultiplier: z.number().int().gte(1).optional(),
   preferred: z.array(UserId).optional(),

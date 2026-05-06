@@ -63,7 +63,12 @@ export async function listenQueue(kv: Deno.Kv, msg: unknown) {
           return
         }
         const preferred = await getPreferred(kv)
-        const tally = await tallyBucket(kv, qmessage.data.bucket, books, preferred)
+        const tally = await tallyBucket(
+          kv,
+          qmessage.data.bucket,
+          books,
+          preferred,
+        )
         const result = tally.count > 0
           ? await kv.atomic()
             .check(time)
