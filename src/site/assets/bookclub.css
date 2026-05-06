@@ -126,3 +126,17 @@ dl dd {
 .book-title {
   font-style: italic;
 }
+
+.dolphins {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: "rating mark";
+}
+
+.dolphins .rating {
+  grid-area: rating;
+}
+
+.dolphins .mark {
+  grid-area: mark;
+}

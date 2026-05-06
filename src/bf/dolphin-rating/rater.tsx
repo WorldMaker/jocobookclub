@@ -65,11 +65,11 @@ export function Rater(
 ) {
   bindImmediateEffect(events.leave, (_) => vm.updateHoverRating(0))
   return (
-    <div class='columns'>
-      <div class='column' events={{ mouseout: events.leave }}>
+    <div class='dolphins'>
+      <div class='rating' events={{ mouseout: events.leave }}>
         {[1, 2, 3, 4, 5].map((rank) => <Dolphin rank={rank} vm={vm} />)}
       </div>
-      <div class='column'>
+      <div class='mark'>
         <GenreMarkSelectorPopover vm={vm} ltid={vm.ltid} />
       </div>
     </div>
