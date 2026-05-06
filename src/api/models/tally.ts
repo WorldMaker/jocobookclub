@@ -173,7 +173,7 @@ export const FinalTally = z.object({
   marks: z.array(z.partialRecord(Mark, z.partialRecord(UserId, z.coerce.date()))).optional(),
   supports: z.array(z.number().int().gte(0)).optional(),
   preferredMultiplier: z.number().int().gte(1).optional(),
-  preferred: z.set(UserId).optional(),
+  preferred: z.array(UserId).optional(),
   ranking: z.array(z.string()),
 })
 
@@ -244,7 +244,7 @@ export function tallyFinal(tally: Tally): FinalTally {
     marks: tally.marks,
     supports: tally.supports,
     preferredMultiplier: tally.preferredMultiplier,
-    preferred: tally.preferred,
+    preferred: Array.from(tally.preferred.values()),
     ranking,
   }
 }

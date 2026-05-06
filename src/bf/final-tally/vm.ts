@@ -54,6 +54,10 @@ export class FinalTallyVm {
           finalTally: finalTally.data,
           books,
         })
+      } else {
+        console.error('Failed to parse final tally response', {
+          error: finalTally.error,
+        })
       }
     }
   }
