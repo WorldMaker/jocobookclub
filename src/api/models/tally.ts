@@ -32,7 +32,7 @@ export const Tally = z.object({
 
 export type Tally = z.infer<typeof Tally>
 
-export function zeroTally(books: EligibleBooks): Tally {
+export function zeroTally(books: EligibleBooks, preferred: Preferred): Tally {
   return {
     count: 0,
     mehCount: 0,
@@ -42,7 +42,7 @@ export function zeroTally(books: EligibleBooks): Tally {
     matrix: books.map(() => books.map(() => 0)),
     marks: books.map(() => ({})),
     supports: books.map(() => 0),
-    preferredMultiplier: 1,
+    preferredMultiplier: preferred.multiplier,
     preferred: new Set(),
   }
 }
@@ -52,7 +52,7 @@ export function getTallyFromBallot(
   ballot: Ballot,
   preferred: Preferred,
 ): Tally {
-  const tally = zeroTally(books)
+  const tally = zeroTally(books, preferred)
   if (!ballot.active) {
     return tally
   }
@@ -319,7 +319,7 @@ export type Bucket = z.infer<typeof Bucket>
 export async function getTally(kv: Deno.Kv, bucket: Bucket) {
   const maybeTally = await kv.get(['tally', bucket])
   if (maybeTally.versionstamp === null) {
-    return Tally.safeParse(zeroTally([]))
+    return Tally.safeParse(zeroTally([], { multiplier: 1, userIds: new Set() }))
   }
   return Tally.safeParse(maybeTally.value)
 }
@@ -335,7 +335,7 @@ export async function tallyBucket(
   preferred: Preferred,
 ) {
   const bucketIndex = Bucket.options.indexOf(bucket)
-  let tally = zeroTally(books)
+  let tally = zeroTally(books, preferred)
   for await (
     const maybeBallot of kv.list(
       bucketIndex + 1 === Bucket.options.length

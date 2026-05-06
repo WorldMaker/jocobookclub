@@ -25,7 +25,7 @@ describe('tally', () => {
       userId: 'user1',
     }
     const tally = getTallyFromBallot(eligibleBooks, ballot, emptyPreferred)
-    const zero = zeroTally(eligibleBooks)
+    const zero = zeroTally(eligibleBooks, emptyPreferred)
     expect(tally).toMatchObject(zero)
   })
 
@@ -100,12 +100,12 @@ describe('tally', () => {
   it('should accumulate marks', () => {
     const markDate1 = new Date()
     const markDate2 = new Date()
-    const tally1 = zeroTally(eligibleBooks)
+    const tally1 = zeroTally(eligibleBooks, emptyPreferred)
     tally1.count = 1
     tally1.marks[0] = {
       otter: { user1: markDate1 },
     }
-    const tally2 = zeroTally(eligibleBooks)
+    const tally2 = zeroTally(eligibleBooks, emptyPreferred)
     tally2.count = 1
     tally2.marks[0] = {
       raccoon: { user2: markDate2 },

@@ -80,7 +80,7 @@ export async function tallyFinalRanking(
   books: EligibleBooks,
   preferred: Preferred,
 ) {
-  let finalTally = zeroTally(books)
+  let finalTally = zeroTally(books, preferred)
   let invalidBuckets = false
   for (const bucket of Bucket.options) {
     const tally = await getTally(kv, bucket)
