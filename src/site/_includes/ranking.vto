@@ -103,7 +103,7 @@ layout: 'main.vto'
                       <p>Missing information</p>
                     {{ else }}
                       <div class="ranking-interest">
-                      {{ if supports?.[matrixIndex] }}
+                      {{ if supports?.[matrixIndex] || supports?.[matrixIndex] === 0 }}
                         {{ set supportPercent = (supports[matrixIndex] / count) * 100 }}
                         <span class='icon-text' title="{{ supportPercent.toFixed(0) }}% of ballots preferred this book over at least one other">
                           <span class='icon has-text-info'>
