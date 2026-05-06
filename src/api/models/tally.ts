@@ -112,6 +112,9 @@ export class TallyBooksMismatchError extends Error {
 }
 
 export function addTally(tally1: Tally, tally2: Tally, preferred: Preferred): Tally {
+  if (tally2.count === 0) {
+    return tally1
+  }
   if (tally1.books.length !== tally2.books.length) {
     throw new TallyBooksMismatchError('Books length mismatch')
   }
@@ -298,6 +301,9 @@ export type Bucket = z.infer<typeof Bucket>
 
 export async function getTally(kv: Deno.Kv, bucket: Bucket) {
   const maybeTally = await kv.get(['tally', bucket])
+  if (maybeTally.versionstamp === null) {
+    return Tally.safeParse(zeroTally([]))
+  }
   return Tally.safeParse(maybeTally.value)
 }
 

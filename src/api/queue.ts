@@ -43,7 +43,6 @@ export async function listenQueue(kv: Deno.Kv, msg: unknown) {
     case 'recount-bucket-requested':
       {
         const books = await getBallotEligibleBooks()
-        const preferred = await getPreferred(kv)
         const time = await kv.get<Date>(['tally-time', qmessage.data.bucket])
         const recount = await kv.get<Date>([
           'recount-bucket',
@@ -63,6 +62,7 @@ export async function listenQueue(kv: Deno.Kv, msg: unknown) {
           }
           return
         }
+        const preferred = await getPreferred(kv)
         const tally = await tallyBucket(kv, qmessage.data.bucket, books, preferred)
         const result = tally.count > 0
           ? await kv.atomic()
