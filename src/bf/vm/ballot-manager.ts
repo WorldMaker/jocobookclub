@@ -59,7 +59,9 @@ export class BallotManager {
               (lastBook.rank !== maybeBook.rank ||
                 ('mark' in maybeBook) !== ('mark' in lastBook) ||
                 ('mark' in maybeBook && 'mark' in lastBook &&
-                  maybeBook.mark![0] !== lastBook.mark![0]))
+                  (maybeBook.mark![0] !== lastBook.mark![0] ||
+                    maybeBook.mark![1].getTime() >
+                      lastBook.mark![1].getTime())))
             ) {
               return true
             }
