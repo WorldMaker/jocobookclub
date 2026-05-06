@@ -64,14 +64,14 @@ export class DolphinsVm implements GenreMarkSelectorVm {
       map((ballot) => ballot!.books[this.#ltid]),
       map((maybeBallot) =>
         typeof maybeBallot === 'number'
-          ? { vote: maybeBallot }
-          : maybeBallot ?? { vote: 0 }
+          ? { rank: maybeBallot }
+          : maybeBallot ?? { rank: 0 }
       ),
       shareReplay(1),
     )
 
     this.#currentRating = bookBallot.pipe(
-      map((ballot) => ballot.vote),
+      map((ballot) => ballot.rank),
       shareReplay(1),
     )
     ;[this.#hoverRating, this.#setHoverRating] = butterfly(0)

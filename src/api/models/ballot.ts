@@ -3,12 +3,12 @@ import { UserId } from './user.ts'
 import { reverseUlid } from '../util/reverse.ts'
 import { Mark } from './mark.ts'
 
-export const Vote = z.number().int().gte(1).lte(5)
+export const Rank = z.number().int().gte(1).lte(5)
 
-export type Vote = z.infer<typeof Vote>
+export type Rank = z.infer<typeof Rank>
 
 export const BookBallot = z.object({
-  vote: Vote,
+  rank: Rank,
   mark: z.tuple([Mark, z.coerce.date()]).optional(),
 })
 
@@ -17,7 +17,7 @@ export type BookBallot = z.infer<typeof BookBallot>
 export const Ballot = z.object({
   userId: UserId,
   active: z.boolean(),
-  books: z.record(z.string(), z.xor([Vote, BookBallot])),
+  books: z.record(z.string(), z.xor([Rank, BookBallot])),
   updated: z.coerce.date(),
 })
 

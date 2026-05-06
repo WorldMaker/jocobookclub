@@ -76,7 +76,7 @@ export function getTallyFromBallot(
     const book1State = ballot.books[book1]
     const votes1 = typeof book1State === 'number'
       ? book1State
-      : book1State?.vote ?? 1
+      : book1State?.rank ?? 1
     addBookToRank(votes1, i)
     const mark = typeof book1State === 'number' ? undefined : book1State?.mark
     if (mark) {
@@ -87,7 +87,7 @@ export function getTallyFromBallot(
       const book2State = ballot.books[book2]
       const votes2 = typeof book2State === 'number'
         ? book2State
-        : book2State?.vote ?? 1
+        : book2State?.rank ?? 1
       if (votes1 > votes2) {
         tally.matrix[i][j] = voteStrength
       } else if (votes2 > votes1) {

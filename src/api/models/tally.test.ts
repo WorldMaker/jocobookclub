@@ -82,8 +82,8 @@ describe('tally', () => {
     const ballot: Ballot = {
       active: true,
       books: {
-        A: { vote: 1, mark: ['otter', markDate] },
-        B: { vote: 2, mark: ['raccoon', markDate] },
+        A: { rank: 1, mark: ['otter', markDate] },
+        B: { rank: 2, mark: ['raccoon', markDate] },
         C: 3,
         D: 4,
         E: 5,

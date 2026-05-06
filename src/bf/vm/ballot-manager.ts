@@ -56,7 +56,7 @@ export class BallotManager {
               return true
             } else if (
               typeof lastBook === 'object' &&
-              (lastBook.vote !== maybeBook.vote ||
+              (lastBook.rank !== maybeBook.rank ||
                 ('mark' in maybeBook) !== ('mark' in lastBook) ||
                 ('mark' in maybeBook && 'mark' in lastBook &&
                   maybeBook.mark![0] !== lastBook.mark![0]))
@@ -128,7 +128,7 @@ export class BallotManager {
                 newBallot.books[ltid] = maybeBook
               } else if (
                 typeof lastBook === 'object' &&
-                (lastBook.vote !== maybeBook.vote ||
+                (lastBook.rank !== maybeBook.rank ||
                   ('mark' in maybeBook) !== ('mark' in lastBook) ||
                   ('mark' in maybeBook && 'mark' in lastBook &&
                     (maybeBook.mark![0] !== lastBook.mark![0] ||
@@ -203,8 +203,8 @@ export class BallotManager {
         return null
       }
       const book = typeof ballot.books[ltid] === 'number'
-        ? { vote: rank }
-        : { ...ballot.books[ltid], vote: rank }
+        ? { rank }
+        : { ...ballot.books[ltid], rank }
       return {
         ...ballot,
         books: {
@@ -225,7 +225,7 @@ export class BallotManager {
         ? [mark, new Date()] satisfies [Mark, Date]
         : undefined
       const book = typeof current === 'number'
-        ? { vote: current, mark: newMark }
+        ? { rank: current, mark: newMark }
         : { ...current, mark: newMark }
       return {
         ...ballot,
