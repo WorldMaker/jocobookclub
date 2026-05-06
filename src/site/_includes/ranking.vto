@@ -10,6 +10,18 @@ layout: 'main.vto'
         participated in these rankings calculated on {{ new Date(updated).toLocaleDateString() }} at {{ new Date(updated).toLocaleTimeString() }}.
     </p>
 
+    {{ if (preferredMultiplier ?? 1) > 1 && (preferred?.length ?? 0) > 0 }}
+      <p class='block'>
+        <i class='fa-duotone fa-solid fa-user-astronaut'></i> {{ preferred.length }} JoCoNauts had their ballots counted {{ preferredMultiplier }}:1.
+      </p>
+    {{ /if }}
+
+    {{ if oldest }}
+      <p class='block'>
+        The oldest ballot counted was cast on {{ new Date(oldest).toLocaleDateString() }} at {{ new Date(oldest).toLocaleTimeString() }}.
+      </p>
+    {{ /if }}
+
       <table class='table'>
         <thead>
           <tr>
@@ -91,6 +103,15 @@ layout: 'main.vto'
                       <p>Missing information</p>
                     {{ else }}
                       <div class="ranking-interest">
+                      {{ if supports?.[matrixIndex] }}
+                        {{ set supportPercent = (supports[matrixIndex] / count) * 100 }}
+                        <span class='icon-text' title="{{ supportPercent.toFixed(0) }}% of ballots preferred this book over at least one other">
+                          <span class='icon has-text-info'>
+                            <i class='fa-duotone fa-solid fa-hand-holding-star'></i>
+                          </span>
+                          <span><progress class='progress is-info' value="{{ supportPercent }}" max="100">{{ supportPercent.toFixed(0) }}%</progress></span>
+                        </span>
+                      {{ /if }}
                       {{ for bookIdx, score of matrix[matrixIndex] }}
                         {{ if Number(bookIdx) !== matrixIndex }}
                           {{ set otherBook = booksByLtId.get(books[bookIdx]) }}

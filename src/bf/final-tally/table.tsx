@@ -1,4 +1,4 @@
-import { Fragment, jsx, NodeDescription } from '@worldmaker/butterfloat'
+import { Empty, Fragment, jsx, NodeDescription } from '@worldmaker/butterfloat'
 import { Ranking } from './vm.ts'
 import { GenreTags } from '../genre-tags/index.tsx'
 
@@ -42,12 +42,34 @@ function Interest({ ltid, ranking }: InterestProps) {
       )
     }
   }
+  const support = finalTally.supports?.[idx]
+  const supportPercent = support ? (support / finalTally.count) * 100 : 0
+  const supportTag = support || support === 0
+    ? (
+      <span
+        class='icon-text'
+        title={`${
+          supportPercent.toFixed(0)
+        }% of ballots preferred this book over at least one other`}
+      >
+        <span class='icon has-text-info'>
+          <i class='fa-duotone fa-solid fa-hand-holding-star'></i>
+        </span>
+        <span>
+          <progress class='progress is-info' value={supportPercent} max={100}>
+            {supportPercent.toFixed(0)}%
+          </progress>
+        </span>
+      </span>
+    )
+    : Empty()
   return (
     <details>
       <summary>
         Interest in {ranking.books[ltid]?.title ?? 'Missing Information'}
       </summary>
       <div class='ranking-interest'>
+        {supportTag}
         {wins}
       </div>
     </details>
@@ -93,6 +115,27 @@ interface TableProps {
 export function Table({ ranking }: TableProps) {
   const { finalTally } = ranking
   const updated = new Date(finalTally.updated)
+  const preferred = (finalTally.preferredMultiplier ?? 1) > 1 &&
+    (finalTally.preferred?.length ?? 0) > 0
+  const preferredBlock = preferred
+    ? (
+      <p class='block'>
+        <i class='fa-duotone fa-solid fa-user-astronaut'></i>{' '}
+        {finalTally.preferred?.length ?? 0} JoCoNauts had their ballots counted
+        {' '}
+        {finalTally.preferredMultiplier}:1.
+      </p>
+    )
+    : Empty()
+  const oldestBlock = finalTally.oldest
+    ? (
+      <p class='block'>
+        The oldest ballot counted was cast on{' '}
+        {finalTally.oldest.toLocaleDateString()} at{' '}
+        {finalTally.oldest.toLocaleTimeString()}.
+      </p>
+    )
+    : Empty()
   return (
     <>
       <p class='block'>
@@ -101,6 +144,8 @@ export function Table({ ranking }: TableProps) {
         JoCoNauts participated in these rankings calculated on{' '}
         {updated.toLocaleDateString()} at {updated.toLocaleTimeString()}.
       </p>
+      {preferredBlock}
+      {oldestBlock}
       <table class='table'>
         <thead>
           <tr>
