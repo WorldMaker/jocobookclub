@@ -15,7 +15,7 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
     await next()
   })
   .use(cors({
-    origin: ['https://worldmaker.net', 'http://localhost:3000'],
+    origin: ['https://worldmaker.net', 'https://jocobookclub.localhost'],
     allowHeaders: ['Authorization', 'Content-Type'],
   }))
   .route('/admin', adminApp)
