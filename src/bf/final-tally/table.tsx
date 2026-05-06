@@ -1,6 +1,7 @@
 import { Empty, Fragment, jsx, NodeDescription } from '@worldmaker/butterfloat'
 import { Ranking } from './vm.ts'
 import { GenreTags } from '../genre-tags/index.tsx'
+import { GenreMark, GenreMarks } from '../genre-tags/mark.tsx'
 
 interface InterestProps {
   ltid: string
@@ -83,8 +84,10 @@ interface RowProps {
 }
 
 function Row({ idx, ltid, ranking }: RowProps) {
-  const { books } = ranking
+  const { books, finalTally } = ranking
   const book = books[ltid]
+  const bookIdx = finalTally.books.indexOf(ltid)
+  const marks = finalTally.marks?.[bookIdx]
   if (!book) {
     return (
       <tr>
@@ -102,7 +105,10 @@ function Row({ idx, ltid, ranking }: RowProps) {
       </td>
       <td>{book.author}</td>
       <td>
-        <GenreTags tags={book.tags} condense />
+        <div class='tags'>
+          <GenreTags tags={book.tags} condense />
+          <GenreMarks marks={marks ?? {}} condense />
+        </div>
       </td>
     </tr>
   )

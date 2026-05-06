@@ -1,4 +1,4 @@
-import { ComponentContext, jsx, ObservableEvent } from '@worldmaker/butterfloat'
+import { ComponentContext, Fragment, jsx, ObservableEvent } from '@worldmaker/butterfloat'
 import rawMarks from '../../site/_data/genre/marks.json' with { type: 'json' }
 import { combineLatest, map, Observable, shareReplay } from 'rxjs'
 import { Mark, TallyBookMarks } from '@worldmaker/jocobookclub-api/models'
@@ -47,7 +47,7 @@ export function GenreMarks(
   { marks, condense }: { marks: TallyBookMarks; condense?: boolean },
 ) {
   return (
-    <div class='tags'>
+    <>
       {Object.entries(marks)
         .filter(([mark]) => Boolean(genreMarks[mark as Mark]))
         .map(([mark, userMarks]) => (
@@ -58,7 +58,7 @@ export function GenreMarks(
             condense={condense}
           />
         ))}
-    </div>
+    </>
   )
 }
 
