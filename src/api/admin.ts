@@ -54,7 +54,12 @@ const app = new Hono<{ Variables: SessionVariables }>()
   .get('/preferred', async (c) => {
     const kv = c.get('kv')
     const preferred = await getPreferred(kv)
-    return c.json({ preferred }, 200)
+    return c.json({
+      preferred: {
+        multiplier: preferred.multiplier,
+        userIds: Array.from(preferred.userIds.values()),
+      },
+    }, 200)
   })
   .put('/preferred', zValidator('json', PreferredRequest), async (c) => {
     const kv = c.get('kv')
@@ -79,7 +84,14 @@ const app = new Hono<{ Variables: SessionVariables }>()
       return c.json({ error: 'Failed to update preferred' }, 500)
     }
     const queueId = await pushRecountRequested(c.get('kv'))
-    return c.json({ preferred, unknownEmails, queueId }, 200)
+    return c.json({
+      preferred: {
+        multiplier: preferred.multiplier,
+        userIds: Array.from(preferred.userIds.values()),
+      },
+      unknownEmails,
+      queueId,
+    }, 200)
   })
   .post('/recount', async (c) => {
     const queueId = await pushRecountRequested(c.get('kv'))
