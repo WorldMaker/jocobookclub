@@ -1,5 +1,10 @@
 import { butterfly, StateSetter } from '@worldmaker/butterfloat'
-import { Ballot, Session } from '@worldmaker/jocobookclub-api/models'
+import {
+  Ballot,
+  BookBallot,
+  Mark,
+  Session,
+} from '@worldmaker/jocobookclub-api/models'
 import { firstValueFrom, map, Observable, shareReplay } from 'rxjs'
 import { apiClient } from '../client.ts'
 import sessionManager from './session-manager.ts'
@@ -39,9 +44,25 @@ export class BallotManager {
         if (ballot.active != this.#lastBallot.active) {
           return true
         }
-        for (const [ltid, rank] of Object.entries(ballot.books)) {
-          if (this.#lastBallot.books[ltid] != rank) {
+        for (const [ltid, maybeBook] of Object.entries(ballot.books)) {
+          if (
+            typeof maybeBook === 'number' &&
+            this.#lastBallot.books[ltid] != maybeBook
+          ) {
             return true
+          } else if (typeof maybeBook === 'object') {
+            const lastBook = this.#lastBallot.books[ltid]
+            if (typeof lastBook !== 'object') {
+              return true
+            } else if (
+              typeof lastBook === 'object' &&
+              (lastBook.vote !== maybeBook.vote ||
+                ('mark' in maybeBook) !== ('mark' in lastBook) ||
+                ('mark' in maybeBook && 'mark' in lastBook &&
+                  maybeBook.mark![0] !== lastBook.mark![0]))
+            ) {
+              return true
+            }
           }
         }
         return false
@@ -79,12 +100,14 @@ export class BallotManager {
       headers: { Authorization: `Bearer ${this.#session.token}` },
     })
     if (response.ok) {
-      const remoteBallot = await response.json()
+      // reparse for Date coercion (JSON stringifies Dates)
+      const remoteBallot = Ballot.parse(await response.json())
       if (this.#lastBallot && remoteBallot.userId != this.#lastBallot.userId) {
         throw new Error('User ID mismatch between local and server ballots')
       }
       this.#updateBallot((localBallot) => {
-        const newBallot = structuredClone(remoteBallot)
+        // reparse for Date coercion (structuredClone stringifies Dates)
+        const newBallot = Ballot.parse(structuredClone(remoteBallot))
         // try to merge local changes with server changes
         if (localBallot && this.#lastBallot) {
           if (localBallot.userId != this.#lastBallot.userId) {
@@ -93,9 +116,30 @@ export class BallotManager {
           if (localBallot.active != this.#lastBallot.active) {
             newBallot.active = localBallot.active
           }
-          for (const [ltid, rank] of Object.entries(localBallot.books)) {
-            if (this.#lastBallot.books[ltid] != rank) {
-              newBallot.books[ltid] = rank
+          for (const [ltid, maybeBook] of Object.entries(localBallot.books)) {
+            if (
+              typeof maybeBook === 'number' &&
+              this.#lastBallot.books[ltid] != maybeBook
+            ) {
+              newBallot.books[ltid] = maybeBook
+            } else if (typeof maybeBook === 'object') {
+              const lastBook = this.#lastBallot.books[ltid]
+              if (typeof lastBook !== 'object') {
+                newBallot.books[ltid] = maybeBook
+              } else if (
+                typeof lastBook === 'object' &&
+                (lastBook.vote !== maybeBook.vote ||
+                  ('mark' in maybeBook) !== ('mark' in lastBook) ||
+                  ('mark' in maybeBook && 'mark' in lastBook &&
+                    (maybeBook.mark![0] !== lastBook.mark![0] ||
+                      maybeBook.mark![1].getTime() >
+                        lastBook.mark![1].getTime())))
+              ) {
+                // reparse for Date coercion (structuredClone stringifies Dates)
+                newBallot.books[ltid] = BookBallot.parse(
+                  structuredClone(maybeBook),
+                )
+              }
             }
           }
         }
@@ -158,11 +202,36 @@ export class BallotManager {
       if (!ballot) {
         return null
       }
+      const book = typeof ballot.books[ltid] === 'number'
+        ? { vote: rank }
+        : { ...ballot.books[ltid], vote: rank }
       return {
         ...ballot,
         books: {
           ...ballot.books,
-          [ltid]: rank,
+          [ltid]: book,
+        },
+      }
+    })
+  }
+
+  markBook(ltid: string, mark: Mark | null) {
+    this.#updateBallot((ballot) => {
+      if (!ballot) {
+        return null
+      }
+      const current = ballot.books[ltid]
+      const newMark = mark
+        ? [mark, new Date()] satisfies [Mark, Date]
+        : undefined
+      const book = typeof current === 'number'
+        ? { vote: current, mark: newMark }
+        : { ...current, mark: newMark }
+      return {
+        ...ballot,
+        books: {
+          ...ballot.books,
+          [ltid]: book,
         },
       }
     })

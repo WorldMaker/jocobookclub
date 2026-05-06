@@ -1,0 +1,44 @@
+{
+  "alicorn": {
+    "iconClass": "has-text-info",
+    "icon": "fa-alicorn",
+    "name": "Alicorn",
+    "tagClass": "is-info",
+    "tagIconClass": ""
+  },
+  "cat-space": {
+    "iconClass": "has-text-primary",
+    "icon": "fa-cat-space",
+    "name": "Space Cat",
+    "tagClass": "is-primary",
+    "tagIconClass": ""
+  },
+  "lobster": {
+    "iconClass": "has-text-danger",
+    "icon": "fa-lobster",
+    "name": "Lobster",
+    "tagClass": "is-danger",
+    "tagIconClass": ""
+  },
+  "otter": {
+    "iconClass": "has-text-link",
+    "icon": "fa-otter",
+    "name": "Otter",
+    "tagClass": "is-link",
+    "tagIconClass": ""
+  },
+  "raccoon": {
+    "iconClass": "has-text-success",
+    "icon": "fa-raccoon",
+    "name": "Raccoon",
+    "tagClass": "is-success",
+    "tagIconClass": ""
+  },
+  "squirrel": {
+    "iconClass": "has-text-warning",
+    "icon": "fa-squirrel",
+    "name": "Squirrel",
+    "tagClass": "is-warning",
+    "tagIconClass": ""
+  }
+}

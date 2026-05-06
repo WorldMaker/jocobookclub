@@ -12,6 +12,8 @@ export const BookBallot = z.object({
   mark: z.tuple([Mark, z.coerce.date()]).optional(),
 })
 
+export type BookBallot = z.infer<typeof BookBallot>
+
 export const Ballot = z.object({
   userId: UserId,
   active: z.boolean(),

@@ -172,6 +172,14 @@ export function addTally(
   }
 }
 
+export const TallyUserMarks = z.partialRecord(UserId, z.coerce.date())
+
+export type TallyUserMarks = z.infer<typeof TallyUserMarks>
+
+export const TallyBookMarks = z.partialRecord(Mark, TallyUserMarks)
+
+export type TallyBookMarks = z.infer<typeof TallyBookMarks>
+
 /**
  * The final tally is a "widest path" matrix, and a chosen winner
  *
@@ -185,9 +193,7 @@ export const FinalTally = z.object({
   oldest: z.coerce.date().optional(),
   books: EligibleBooks,
   matrix: z.array(z.array(z.number().int().gte(0))),
-  marks: z.array(
-    z.partialRecord(Mark, z.partialRecord(UserId, z.coerce.date())),
-  ).optional(),
+  marks: z.array(TallyBookMarks).optional(),
   supports: z.array(z.number().int().gte(0)).optional(),
   preferredMultiplier: z.number().int().gte(1).optional(),
   preferred: z.array(UserId).optional(),
