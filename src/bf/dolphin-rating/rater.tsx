@@ -1,10 +1,7 @@
 import { ComponentContext, jsx, ObservableEvent } from '@worldmaker/butterfloat'
 import { DolphinsVm } from './vm.ts'
 import { map } from 'rxjs'
-import {
-  GenreMarkSelectorList,
-  GenreMarkSelectorPopover,
-} from '../genre-tags/mark.tsx'
+import { GenreMarkSelectorPopover } from '../genre-tags/mark.tsx'
 
 interface DolphinProps {
   rank: number

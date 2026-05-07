@@ -1,7 +1,7 @@
 import { Empty, Fragment, jsx, NodeDescription } from '@worldmaker/butterfloat'
 import { Ranking } from './vm.ts'
 import { GenreTags } from '../genre-tags/index.tsx'
-import { GenreMark, GenreMarks } from '../genre-tags/mark.tsx'
+import { GenreMarks } from '../genre-tags/mark.tsx'
 
 interface InterestProps {
   ltid: string
