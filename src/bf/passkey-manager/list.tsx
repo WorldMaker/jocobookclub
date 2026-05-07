@@ -74,6 +74,12 @@ export function List(
   return (
     <>
       <div class='block'>
+        <dl>
+          <dt>User ID</dt>
+          <dd><code>{session.userId}</code></dd>
+        </dl>
+      </div>
+      <div class='block'>
         <div
           class='block'
           childrenBind={inviteView}
