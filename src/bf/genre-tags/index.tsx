@@ -1,4 +1,9 @@
-import { ComponentContext, Fragment, jsx, ObservableEvent } from '@worldmaker/butterfloat'
+import {
+  ComponentContext,
+  Fragment,
+  jsx,
+  ObservableEvent,
+} from '@worldmaker/butterfloat'
 import rawTags from '../../site/_data/genre/tags.json' with { type: 'json' }
 import { Observable } from 'rxjs'
 

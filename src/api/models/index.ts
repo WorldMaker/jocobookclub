@@ -1,6 +1,6 @@
 export { Ballot, BookBallot } from './ballot.ts'
 export { Invite } from './invite.ts'
-export { Mark, BookMarks } from './mark.ts'
+export { BookMarks, Mark } from './mark.ts'
 export type { Passkey, PasskeyMeta } from './passkey.ts'
 export { Session } from './session.ts'
 export { Suggestion } from './suggestion.ts'

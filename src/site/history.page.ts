@@ -1,4 +1,8 @@
-import { FinalTally, Mark, TallyBookMarks } from '@worldmaker/jocobookclub-api/models'
+import {
+  FinalTally,
+  Mark,
+  TallyBookMarks,
+} from '@worldmaker/jocobookclub-api/models'
 import rawMarks from './_data/genre/marks.json' with { type: 'json' }
 import site from './_config.ts'
 
@@ -261,7 +265,13 @@ export default async function* history({ search }: Lume.Data) {
         for (const [userId, date] of Object.entries(bookMarks)) {
           const instant = date!.toTemporalInstant()
           if (Temporal.Instant.compare(instant, twoMonthsAgo) > 0) {
-            if (userId in recentMarksByUser && Temporal.Instant.compare(instant, recentMarksByUser[userId][1].toTemporalInstant()) > 0) {
+            if (
+              userId in recentMarksByUser &&
+              Temporal.Instant.compare(
+                  instant,
+                  recentMarksByUser[userId][1].toTemporalInstant(),
+                ) > 0
+            ) {
               recentMarksByUser[userId] = [ltid, date!]
             } else if (!(userId in recentMarksByUser)) {
               recentMarksByUser[userId] = [ltid, date!]
@@ -272,9 +282,12 @@ export default async function* history({ search }: Lume.Data) {
       }
     }
 
-    const recentMarks = Object.entries(recentMarksByUser).reduce((acc, [userId, [ltid, date]]) => ({
-      [ltid]: [...(acc[ltid] ?? []), [userId, date] satisfies [string, Date]],
-    }), {} as Record<string, [string, Date][]>)
+    const recentMarks = Object.entries(recentMarksByUser).reduce(
+      (acc, [userId, [ltid, date]]) => ({
+        [ltid]: [...(acc[ltid] ?? []), [userId, date] satisfies [string, Date]],
+      }),
+      {} as Record<string, [string, Date][]>,
+    )
 
     yield {
       url: `/marks/${mark}`,

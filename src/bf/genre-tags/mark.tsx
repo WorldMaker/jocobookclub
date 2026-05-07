@@ -1,4 +1,9 @@
-import { ComponentContext, Fragment, jsx, ObservableEvent } from '@worldmaker/butterfloat'
+import {
+  ComponentContext,
+  Fragment,
+  jsx,
+  ObservableEvent,
+} from '@worldmaker/butterfloat'
 import rawMarks from '../../site/_data/genre/marks.json' with { type: 'json' }
 import { combineLatest, map, Observable, shareReplay } from 'rxjs'
 import { Mark, TallyBookMarks } from '@worldmaker/jocobookclub-api/models'

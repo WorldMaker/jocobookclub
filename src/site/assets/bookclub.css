@@ -130,7 +130,7 @@ dl dd {
 .dolphins {
   display: grid;
   grid-template-columns: 1fr auto;
-  grid-template-areas: "rating mark";
+  grid-template-areas: 'rating mark';
 }
 
 .dolphins .rating {
