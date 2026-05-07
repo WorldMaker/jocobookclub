@@ -35,6 +35,7 @@ layout: 'main.vto'
         <tbody>
           {{ for idx, ltid of ranking.toReversed() }}
             {{ set book = booksByLtId.get(ltid) }}
+            {{ set matrixIndex = books.indexOf(ltid) }}
             {{ if !book }}
             <tr>
                 <th>{{ Number(idx) + 1 }}</th>
@@ -60,6 +61,22 @@ layout: 'main.vto'
                             </a>
                         {{ /if }}
                     {{ /for }}
+                    {{ set bookMarks = marks?.[matrixIndex] }}
+                    {{ if bookMarks }}
+                      {{ for mark, users of bookMarks }}
+                        {{ set count = Object.keys(users).length }}
+                        {{ if genre.marks[mark] }}
+                          <a class="tags has-addons" title="{{ genre.marks[mark].name }} ({{ count }})" href="/marks/{{ mark }}">
+                            <span class="tag {{ genre.marks[mark].tagClass }}">
+                                <span class="icon {{ genre.marks[mark].tagIconClass }}"><i class="fa-duotone fa-solid {{ genre.marks[mark].icon }}"></i></span>
+                            </span>
+                            <span class="tag is-hidden-mobile">
+                                {{ count }}
+                            </span>
+                          </a>
+                        {{ /if }}
+                      {{ /for }}
+                    {{ /if }}
                     </div>
                 </td>
             </tr>
@@ -98,7 +115,6 @@ layout: 'main.vto'
                     <summary>
                       Interest in {{ book.title }}
                     </summary>
-                    {{ set matrixIndex = books.indexOf(ltid) }}
                     {{ if matrixIndex === -1 }}
                       <p>Missing information</p>
                     {{ else }}

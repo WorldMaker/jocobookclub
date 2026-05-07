@@ -1,4 +1,9 @@
-import { FinalTally } from '@worldmaker/jocobookclub-api/models'
+import {
+  FinalTally,
+  Mark,
+  TallyBookMarks,
+} from '@worldmaker/jocobookclub-api/models'
+import rawMarks from './_data/genre/marks.json' with { type: 'json' }
 import site from './_config.ts'
 
 type BookType = 'previous' | 'upcoming' | 'ballot' | 'held'
@@ -195,6 +200,8 @@ export default async function* history({ search }: Lume.Data) {
   const totalBooks: DayRank = {}
   let lastRankingUrl: string | null = null
   let lastRankingByLtId: Record<string, number> = {}
+  let lastBooks: string[] = []
+  let lastMarks: TallyBookMarks[] = []
   for (const ranking of rankings) {
     const tally = FinalTally.safeParse(
       JSON.parse(await Deno.readTextFile(ranking.filename)),
@@ -224,6 +231,8 @@ export default async function* history({ search }: Lume.Data) {
     }
     lastRankingUrl = site.url(ranking.path, true)
     lastRankingByLtId = rankingByLtId
+    lastBooks = data.books
+    lastMarks = data.marks ?? []
   }
 
   for (const [ltid, book] of bookRanks.entries()) {
@@ -238,5 +247,57 @@ export default async function* history({ search }: Lume.Data) {
     url: `/static-api/total-books.json`,
     contentType: 'application/json',
     content: JSON.stringify(totalBooks),
+  }
+
+  const twoMonthsAgo = Temporal.Now.zonedDateTimeISO().subtract({ months: 2 })
+
+  for (const [mark, info] of Object.entries(rawMarks)) {
+    const recentMarksByUser: Record<string, [string, Date]> = {}
+    const allMarks: Record<string, [string, Date][]> = {}
+
+    for (let i = 0; i < lastBooks.length; i++) {
+      const ltid = lastBooks[i]
+      if (!(ltid in allMarks)) {
+        allMarks[ltid] = []
+      }
+      const bookMarks = lastMarks[i]?.[mark as Mark]
+      if (bookMarks) {
+        for (const [userId, date] of Object.entries(bookMarks)) {
+          const instant = date!.toTemporalInstant()
+          if (Temporal.Instant.compare(instant, twoMonthsAgo) > 0) {
+            if (
+              userId in recentMarksByUser &&
+              Temporal.Instant.compare(
+                  instant,
+                  recentMarksByUser[userId][1].toTemporalInstant(),
+                ) > 0
+            ) {
+              recentMarksByUser[userId] = [ltid, date!]
+            } else if (!(userId in recentMarksByUser)) {
+              recentMarksByUser[userId] = [ltid, date!]
+            }
+          }
+          allMarks[ltid].push([userId, date!])
+        }
+      }
+    }
+
+    const recentMarks = Object.entries(recentMarksByUser).reduce(
+      (acc, [userId, [ltid, date]]) => ({
+        [ltid]: [...(acc[ltid] ?? []), [userId, date] satisfies [string, Date]],
+      }),
+      {} as Record<string, [string, Date][]>,
+    )
+
+    yield {
+      url: `/marks/${mark}`,
+      layout: 'mark.vto',
+      ...info,
+      lastRankingByLtId,
+      mark,
+      books,
+      recentMarks,
+      allMarks,
+    }
   }
 }

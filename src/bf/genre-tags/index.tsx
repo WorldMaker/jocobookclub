@@ -1,4 +1,9 @@
-import { ComponentContext, jsx, ObservableEvent } from '@worldmaker/butterfloat'
+import {
+  ComponentContext,
+  Fragment,
+  jsx,
+  ObservableEvent,
+} from '@worldmaker/butterfloat'
 import rawTags from '../../site/_data/genre/tags.json' with { type: 'json' }
 import { Observable } from 'rxjs'
 
@@ -44,13 +49,13 @@ export function GenreTags(
   { tags, condense }: { tags: string[]; condense?: boolean },
 ) {
   return (
-    <div class='tags'>
+    <>
       {tags
         .filter((tag) => Boolean(genreTags[tag]))
         .map((tag) => (
           <GenreTag tag={tag} info={genreTags[tag]} condense={condense} />
         ))}
-    </div>
+    </>
   )
 }
 

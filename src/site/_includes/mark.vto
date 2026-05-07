@@ -1,0 +1,68 @@
+---
+layout: main.vto
+bfscript: /bf/tag-page.js
+---
+
+<section class="section">
+    <h1 class="title">
+        <span class="icon {{iconClass}}"><i class="fa-duotone fa-solid {{icon}}"></i></span>
+        <span>{{name}}</span>
+    </h1>
+    {{ if description }}
+    <h2 class="subtitle">{{description}}</h2>
+    {{ /if }}
+</section>
+
+{{ if highlightUserId }}
+<section class="section" id="highlight">
+    <h1 class="title">
+        <span class="icon"><i class="fa-duotone fa-solid fa-user-astronaut"></i></span>
+        <span>JoCoNaut Highlighted</span>
+    </h1>
+    <h2 class="subtitle">Books marked {{name}} by a specifically chosen <i class="fa-duotone fa-solid fa-user-astronaut"></i> JoCoNaut.</h2>
+    <div class="grid is-col-min-18">
+    {{ for ltid, marks of allMarks }}
+        {{ for userId, date of marks }}
+            {{ if userId === highlightUserId }}
+                {{ include "book-card.vto" { ...search.page(`ltid='${ltid}'`), currentBallot: true, rank: lastRankingByLtId[ltid], markInfo: genre.marks[mark], markCount: marks.length } }}
+            {{ /if }}
+        {{ /for }}
+    {{ /for }}
+    </div>
+</section>
+{{ /if }}
+
+<section class="section" id="recent">
+    <h1 class="title">
+        <span class="icon"><i class="fa-duotone fa-solid fa-clock-rotate-left"></i></span>
+        <span>Most Recently Marked</span>
+    </h1>
+    <h2 class="subtitle">Most recent book per <i class="fa-duotone fa-solid fa-user-astronaut"></i> JoCoNaut that has been marked {{name}} in the last two months.</h2>
+    <div class="grid is-col-min-18">
+    {{ for ltid, marks of recentMarks }}
+        {{ include "book-card.vto" { ...search.page(`ltid='${ltid}'`), currentBallot: true, rank: lastRankingByLtId[ltid], markInfo: genre.marks[mark], markCount: marks.length } }}
+    {{ /for }}
+    </div>
+</section>
+
+<section class="section" id="all">
+    <h1 class="title">
+        <span class="icon"><i class="fa-duotone fa-solid fa-users"></i></span>
+        <span>All Marked Books</span>
+    </h1>
+    <h2 class="subtitle">All books marked {{name}} by any <i class="fa-duotone fa-solid fa-user-astronaut"></i> JoCoNaut in the last ranking.</h2>
+    <div class="grid is-col-min-18">
+    {{ for ltid, marks of allMarks }}
+        {{ if marks.length > 0 }}
+        {{ include "book-card.vto" { ...search.page(`ltid='${ltid}'`), currentBallot: true, rank: lastRankingByLtId[ltid], markInfo: genre.marks[mark], markCount: marks.length } }}
+        {{ /if }}
+    {{ /for }}
+    </div>
+</section>
+
+<section class="section" id="ballot">
+    <hr />
+    <vote-button></vote-button>
+</section>
+
+{{ include "bf/tag-page.html" }}

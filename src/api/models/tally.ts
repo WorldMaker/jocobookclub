@@ -76,7 +76,7 @@ export function getTallyFromBallot(
     const book1State = ballot.books[book1]
     const votes1 = typeof book1State === 'number'
       ? book1State
-      : book1State?.vote ?? 1
+      : book1State?.rank ?? 1
     addBookToRank(votes1, i)
     const mark = typeof book1State === 'number' ? undefined : book1State?.mark
     if (mark) {
@@ -87,7 +87,7 @@ export function getTallyFromBallot(
       const book2State = ballot.books[book2]
       const votes2 = typeof book2State === 'number'
         ? book2State
-        : book2State?.vote ?? 1
+        : book2State?.rank ?? 1
       if (votes1 > votes2) {
         tally.matrix[i][j] = voteStrength
       } else if (votes2 > votes1) {
@@ -172,6 +172,14 @@ export function addTally(
   }
 }
 
+export const TallyUserMarks = z.partialRecord(UserId, z.coerce.date())
+
+export type TallyUserMarks = z.infer<typeof TallyUserMarks>
+
+export const TallyBookMarks = z.partialRecord(Mark, TallyUserMarks)
+
+export type TallyBookMarks = z.infer<typeof TallyBookMarks>
+
 /**
  * The final tally is a "widest path" matrix, and a chosen winner
  *
@@ -185,9 +193,7 @@ export const FinalTally = z.object({
   oldest: z.coerce.date().optional(),
   books: EligibleBooks,
   matrix: z.array(z.array(z.number().int().gte(0))),
-  marks: z.array(
-    z.partialRecord(Mark, z.partialRecord(UserId, z.coerce.date())),
-  ).optional(),
+  marks: z.array(TallyBookMarks).optional(),
   supports: z.array(z.number().int().gte(0)).optional(),
   preferredMultiplier: z.number().int().gte(1).optional(),
   preferred: z.array(UserId).optional(),

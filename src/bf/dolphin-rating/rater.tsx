@@ -1,6 +1,7 @@
 import { ComponentContext, jsx, ObservableEvent } from '@worldmaker/butterfloat'
 import { DolphinsVm } from './vm.ts'
 import { map } from 'rxjs'
+import { GenreMarkSelectorPopover } from '../genre-tags/mark.tsx'
 
 interface DolphinProps {
   rank: number
@@ -61,8 +62,13 @@ export function Rater(
 ) {
   bindImmediateEffect(events.leave, (_) => vm.updateHoverRating(0))
   return (
-    <div events={{ mouseout: events.leave }}>
-      {[1, 2, 3, 4, 5].map((rank) => <Dolphin rank={rank} vm={vm} />)}
+    <div class='dolphins'>
+      <div class='rating' events={{ mouseout: events.leave }}>
+        {[1, 2, 3, 4, 5].map((rank) => <Dolphin rank={rank} vm={vm} />)}
+      </div>
+      <div class='mark'>
+        <GenreMarkSelectorPopover vm={vm} ltid={vm.ltid} />
+      </div>
     </div>
   )
 }
