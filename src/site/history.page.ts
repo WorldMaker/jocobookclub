@@ -245,36 +245,43 @@ export default async function* history({ search }: Lume.Data) {
     content: JSON.stringify(totalBooks),
   }
 
-  const twoMonthsAgo = new Date(Temporal.Now.zonedDateTimeISO().subtract({ months: 2 }).toString())
+  const twoMonthsAgo = Temporal.Now.zonedDateTimeISO().subtract({ months: 2 })
 
   for (const [mark, info] of Object.entries(rawMarks)) {
-    const recentMarks: Record<string, [string, Date]> = {}
+    const recentMarksByUser: Record<string, [string, Date]> = {}
     const allMarks: Record<string, [string, Date][]> = {}
 
     for (let i = 0; i < lastBooks.length; i++) {
       const ltid = lastBooks[i]
+      if (!(ltid in allMarks)) {
+        allMarks[ltid] = []
+      }
       const bookMarks = lastMarks[i]?.[mark as Mark]
       if (bookMarks) {
         for (const [userId, date] of Object.entries(bookMarks)) {
-          if (date! > twoMonthsAgo) {
-            if (userId in recentMarks && date! > recentMarks[userId][1]) {
-              recentMarks[userId] = [ltid, date!]
-            } else if (!(userId in recentMarks)) {
-              recentMarks[userId] = [ltid, date!]
+          const instant = date!.toTemporalInstant()
+          if (Temporal.Instant.compare(instant, twoMonthsAgo) > 0) {
+            if (userId in recentMarksByUser && Temporal.Instant.compare(instant, recentMarksByUser[userId][1].toTemporalInstant()) > 0) {
+              recentMarksByUser[userId] = [ltid, date!]
+            } else if (!(userId in recentMarksByUser)) {
+              recentMarksByUser[userId] = [ltid, date!]
             }
           }
-          if (!(userId in allMarks)) {
-            allMarks[userId] = []
-          }
-          allMarks[userId].push([ltid, date!])
+          allMarks[ltid].push([userId, date!])
         }
       }
     }
+
+    const recentMarks = Object.entries(recentMarksByUser).reduce((acc, [userId, [ltid, date]]) => ({
+      [ltid]: [...(acc[ltid] ?? []), [userId, date] satisfies [string, Date]],
+    }), {} as Record<string, [string, Date][]>)
 
     yield {
       url: `/marks/${mark}`,
       layout: 'mark.vto',
       ...info,
+      lastRankingByLtId,
+      mark,
       books,
       recentMarks,
       allMarks,
