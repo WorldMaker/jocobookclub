@@ -290,7 +290,7 @@ export default async function* history({ search }: Lume.Data) {
     )
 
     yield {
-      url: `/marks/${mark}`,
+      url: `/marks/${mark}/`,
       layout: 'mark.vto',
       ...info,
       lastRankingByLtId,
