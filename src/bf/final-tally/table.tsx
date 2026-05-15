@@ -137,8 +137,10 @@ export function Table({ ranking }: TableProps) {
     ? (
       <p class='block'>
         The oldest ballot counted was cast on{' '}
-        {finalTally.oldest.toLocaleDateString()} at{' '}
-        {finalTally.oldest.toLocaleTimeString()}.
+        {finalTally.oldest.toLocaleDateString()}.
+        {finalTally.recentCount
+          ? ` ${finalTally.recentCount} ballots were recently cast (${finalTally.recentWindow}).`
+          : ''}
       </p>
     )
     : Empty()
