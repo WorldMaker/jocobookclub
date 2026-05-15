@@ -182,6 +182,20 @@ export function addTally(
   }
 }
 
+export const RecentWindow = z.enum({ unknown: 0, last2Months: 1 })
+
+export type RecentWindow = z.infer<typeof RecentWindow>
+
+export function getRecentWindowDescription(window?: RecentWindow) {
+  switch (window) {
+    case RecentWindow.enum.last2Months:
+      return 'last 2 months'
+    case RecentWindow.enum.unknown:
+    default:
+      return 'unknown'
+  }
+}
+
 export const TallyUserMarks = z.partialRecord(UserId, z.coerce.date())
 
 export type TallyUserMarks = z.infer<typeof TallyUserMarks>
@@ -202,7 +216,7 @@ export const FinalTally = z.object({
   updated: z.coerce.date(),
   oldest: z.coerce.date().optional(),
   recentCount: z.number().int().gte(0).optional(),
-  recentWindow: z.string().optional(),
+  recentWindow: RecentWindow.optional(),
   books: EligibleBooks,
   matrix: z.array(z.array(z.number().int().gte(0))),
   marks: z.array(TallyBookMarks).optional(),
@@ -293,7 +307,7 @@ export function tallyFinal(tally: Tally): FinalTally {
         .epochMilliseconds,
     ),
     recentCount: ballotDateStats.recentCount,
-    recentWindow: 'last 2 months',
+    recentWindow: RecentWindow.enum.last2Months,
     books,
     matrix,
     marks: tally.marks,

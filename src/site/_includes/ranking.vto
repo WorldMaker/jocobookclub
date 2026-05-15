@@ -19,7 +19,7 @@ layout: 'main.vto'
     {{ if oldest }}
       <p class='block'>
         The oldest ballot counted was cast on {{ new Date(oldest).toLocaleDateString() }}. {{ if recentCount }}
-          {{ recentCount }} ballots were recently cast ({{ recentWindow }}).
+          {{ recentCount }} ballots were recently cast ({{ recentWindowDescription }}).
         {{ /if }}
       </p>
     {{ /if }}

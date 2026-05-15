@@ -1,4 +1,5 @@
 import { Empty, Fragment, jsx, NodeDescription } from '@worldmaker/butterfloat'
+import { getRecentWindowDescription } from '@worldmaker/jocobookclub-api/models'
 import { Ranking } from './vm.ts'
 import { GenreTags } from '../genre-tags/index.tsx'
 import { GenreMarks } from '../genre-tags/mark.tsx'
@@ -139,7 +140,9 @@ export function Table({ ranking }: TableProps) {
         The oldest ballot counted was cast on{' '}
         {finalTally.oldest.toLocaleDateString()}.
         {finalTally.recentCount
-          ? ` ${finalTally.recentCount} ballots were recently cast (${finalTally.recentWindow}).`
+          ? ` ${finalTally.recentCount} ballots were recently cast (${
+            getRecentWindowDescription(finalTally.recentWindow)
+          }).`
           : ''}
       </p>
     )
