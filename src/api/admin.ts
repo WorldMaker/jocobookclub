@@ -4,6 +4,7 @@ import * as z from 'zod'
 import { Invite, updateInvite } from './models/invite.ts'
 import {
   getAllUserPreferredEmails,
+  getUserById,
   getUserIdByEmail,
   UserId,
 } from './models/user.ts'
@@ -14,6 +15,11 @@ import {
   type Preferred,
   updatePreferred,
 } from './models/preferred.ts'
+import { Ballot, updateUserBallot } from './models/ballot.ts'
+
+export const BallotDeactivationRequest = z.object({
+  before: z.coerce.date(),
+})
 
 export const PreferredRequest = z.object({
   multiplier: z.number().int().gte(1),
@@ -24,6 +30,88 @@ export const PreferredRequest = z.object({
 
 const app = new Hono<{ Variables: SessionVariables }>()
   .use('/*', adminToken)
+  .get('/ballot-stats', async (c) => {
+    // TODO: Should this entire thing be a queue operation?
+    const kv = c.get('kv')
+    const stats: Array<
+      {
+        updated: string
+        userId: string
+        email: string
+        canEmail: boolean
+        ranks: number[]
+      }
+    > = []
+    for await (const entry of kv.list({ prefix: ['ballot'] })) {
+      const maybeBallot = Ballot.safeParse(entry.value)
+      if (!maybeBallot.success) {
+        console.warn(
+          `Failed to parse ballot for ${entry.key}:`,
+          maybeBallot.error,
+        )
+        continue
+      }
+      const ballot = maybeBallot.data
+      const ranks = [
+        ...new Set(
+          Object.values(ballot.books).map((b) =>
+            typeof b === 'number' ? b : b.rank
+          ),
+        ),
+      ]
+      const user = await getUserById(kv, ballot.userId)
+      if (!user.success) {
+        console.warn(
+          `No user found for ballot ${entry.key} with userId ${ballot.userId}`,
+          user.error,
+        )
+        continue
+      }
+      stats.push({
+        updated: ballot.updated.toISOString(),
+        userId: ballot.userId,
+        email: user.data.email,
+        canEmail: user.data.canEmail ?? false,
+        ranks,
+      })
+    }
+    return c.json({ stats }, 200)
+  })
+  .post(
+    '/deactivate-ballots',
+    zValidator('json', BallotDeactivationRequest),
+    async (c) => {
+      // TODO: Should this entire thing be a queue operation?
+      const kv = c.get('kv')
+      const { before } = c.req.valid('json')
+      let deactivatedCount = 0
+      for await (const entry of kv.list({ prefix: ['ballot'] })) {
+        const maybeBallot = Ballot.safeParse(entry.value)
+        if (!maybeBallot.success) {
+          console.warn(
+            `Failed to parse ballot for ${entry.key}:`,
+            maybeBallot.error,
+          )
+          continue
+        }
+        const ballot = maybeBallot.data
+        if (ballot.updated < before) {
+          const deactivatedBallot = {
+            ...ballot,
+            active: false,
+            updated: new Date(),
+          }
+          await updateUserBallot(kv, deactivatedBallot)
+          deactivatedCount++
+        }
+      }
+      let queueId: string | null = null
+      if (deactivatedCount > 0) {
+        queueId = await pushRecountRequested(kv)
+      }
+      return c.json({ deactivatedCount, queueId }, 200)
+    },
+  )
   .get('/emails', async (c) => {
     const kv = c.get('kv')
     const emails = await getAllUserPreferredEmails(kv)
@@ -95,7 +183,7 @@ const app = new Hono<{ Variables: SessionVariables }>()
   })
   .post('/recount', async (c) => {
     const queueId = await pushRecountRequested(c.get('kv'))
-    return c.json({ success: true, queueId }, 200)
+    return c.json({ queueId }, 200)
   })
 
 export default app

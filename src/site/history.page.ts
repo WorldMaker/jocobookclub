@@ -1,5 +1,6 @@
 import {
   FinalTally,
+  getRecentWindowDescription,
   Mark,
   TallyBookMarks,
 } from '@worldmaker/jocobookclub-api/models'
@@ -227,6 +228,7 @@ export default async function* history({ search }: Lume.Data) {
       rankingDate: ranking.date,
       lastRankingUrl,
       lastRankingByLtId,
+      recentWindowDescription: getRecentWindowDescription(data.recentWindow),
       tags: ['history'],
     }
     lastRankingUrl = site.url(ranking.path, true)

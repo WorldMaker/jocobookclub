@@ -21,7 +21,7 @@ export const Tally = z.object({
   count: z.number().int().gte(0),
   mehCount: z.number().int().gte(0),
   updated: z.coerce.date(),
-  oldest: z.coerce.date(),
+  ballotDates: z.record(z.iso.date(), z.number().int().gte(0)),
   books: EligibleBooks,
   matrix: z.array(z.array(z.number().int().gte(0))),
   marks: z.array(BookMarks),
@@ -37,7 +37,7 @@ export function zeroTally(books: EligibleBooks, preferred: Preferred): Tally {
     count: 0,
     mehCount: 0,
     updated: new Date(),
-    oldest: new Date(),
+    ballotDates: {},
     books,
     matrix: books.map(() => books.map(() => 0)),
     marks: books.map(() => ({})),
@@ -56,7 +56,10 @@ export function getTallyFromBallot(
   if (!ballot.active) {
     return tally
   }
-  tally.oldest = ballot.updated
+  const ballotDate = ballot.updated.toTemporalInstant().toZonedDateTimeISO(
+    'America/New_York',
+  ).toPlainDate().toString()
+  tally.ballotDates[ballotDate] = (tally.ballotDates[ballotDate] ?? 0) + 1
   tally.preferredMultiplier = preferred.multiplier
   const isPreferred = preferred.userIds.has(ballot.userId)
   const voteStrength = isPreferred ? preferred.multiplier : 1
@@ -147,9 +150,16 @@ export function addTally(
     count: tally1.count + tally2.count,
     mehCount: tally1.mehCount + tally2.mehCount,
     updated: new Date(),
-    oldest: new Date(
-      Math.min(tally1.oldest.getTime(), tally2.oldest.getTime()),
-    ),
+    ballotDates: [
+      ...new Set([
+        ...Object.keys(tally1.ballotDates),
+        ...Object.keys(tally2.ballotDates),
+      ]),
+    ].reduce((acc, date) => {
+      acc[date] = (tally1.ballotDates[date] ?? 0) +
+        (tally2.ballotDates[date] ?? 0)
+      return acc
+    }, {} as Record<string, number>),
     books: tally1.books,
     matrix,
     marks: tally1.books.map((_book, i) => {
@@ -172,6 +182,20 @@ export function addTally(
   }
 }
 
+export const RecentWindow = z.enum({ unknown: 0, last2Months: 1 })
+
+export type RecentWindow = z.infer<typeof RecentWindow>
+
+export function getRecentWindowDescription(window?: RecentWindow) {
+  switch (window) {
+    case RecentWindow.enum.last2Months:
+      return 'last 2 months'
+    case RecentWindow.enum.unknown:
+    default:
+      return 'unknown'
+  }
+}
+
 export const TallyUserMarks = z.partialRecord(UserId, z.coerce.date())
 
 export type TallyUserMarks = z.infer<typeof TallyUserMarks>
@@ -191,6 +215,8 @@ export const FinalTally = z.object({
   mehCount: z.number().int().gte(0).optional(),
   updated: z.coerce.date(),
   oldest: z.coerce.date().optional(),
+  recentCount: z.number().int().gte(0).optional(),
+  recentWindow: RecentWindow.optional(),
   books: EligibleBooks,
   matrix: z.array(z.array(z.number().int().gte(0))),
   marks: z.array(TallyBookMarks).optional(),
@@ -257,11 +283,31 @@ export function tallyFinal(tally: Tally): FinalTally {
     .sort(([, a], [, b]) => a - b)
     .map(([book]) => book)
 
+  const twoMonthsAgo = Temporal.Now.plainDateISO().subtract({ months: 2 })
+  const ballotDateStats = Object.entries(tally.ballotDates).reduce(
+    (acc, [date, count]) => {
+      const ballotDate = Temporal.PlainDate.from(date)
+      if (Temporal.PlainDate.compare(ballotDate, acc.oldest) < 0) {
+        acc.oldest = ballotDate
+      }
+      if (Temporal.PlainDate.compare(ballotDate, twoMonthsAgo) >= 0) {
+        acc.recentCount += count
+      }
+      return acc
+    },
+    { recentCount: 0, oldest: Temporal.Now.plainDateISO() },
+  )
+
   return {
     count: tally.count,
     mehCount: tally.mehCount,
     updated: tally.updated,
-    oldest: tally.oldest,
+    oldest: new Date(
+      ballotDateStats.oldest.toZonedDateTime('America/New_York')
+        .epochMilliseconds,
+    ),
+    recentCount: ballotDateStats.recentCount,
+    recentWindow: RecentWindow.enum.last2Months,
     books,
     matrix,
     marks: tally.marks,
