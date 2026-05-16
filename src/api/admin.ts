@@ -99,7 +99,6 @@ const app = new Hono<{ Variables: SessionVariables }>()
           const deactivatedBallot = {
             ...ballot,
             active: false,
-            updated: new Date(),
           }
           await updateUserBallot(kv, deactivatedBallot)
           deactivatedCount++

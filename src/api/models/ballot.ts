@@ -30,5 +30,8 @@ export async function getUserBallot(kv: Deno.Kv, userId: UserId) {
 }
 
 export function updateUserBallot(kv: Deno.Kv, ballot: Ballot) {
-  return kv.set(['ballot', reverseUlid(ballot.userId)], Ballot.parse(ballot))
+  return kv.set(['ballot', reverseUlid(ballot.userId)], {
+    ...Ballot.parse(ballot),
+    updated: new Date(),
+  })
 }
