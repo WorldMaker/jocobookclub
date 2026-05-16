@@ -16,6 +16,7 @@ import {
   updatePreferred,
 } from './models/preferred.ts'
 import { Ballot, updateUserBallot } from './models/ballot.ts'
+import { getBallotEligibleBooks } from './clients/static-api.ts'
 
 export const BallotDeactivationRequest = z.object({
   before: z.coerce.date(),
@@ -40,8 +41,11 @@ const app = new Hono<{ Variables: SessionVariables }>()
         email: string
         canEmail: boolean
         ranks: number[]
+        bookCount: number
+        unrankedBallotCount: number
       }
     > = []
+    const eligibleBooks = await getBallotEligibleBooks()
     for await (const entry of kv.list({ prefix: ['ballot'] })) {
       const maybeBallot = Ballot.safeParse(entry.value)
       if (!maybeBallot.success) {
@@ -73,6 +77,10 @@ const app = new Hono<{ Variables: SessionVariables }>()
         email: user.data.email,
         canEmail: user.data.canEmail ?? false,
         ranks,
+        bookCount: Object.keys(ballot.books).length,
+        unrankedBallotCount: eligibleBooks.map((b) => ballot.books[b]).filter(
+          (b) => !b,
+        ).length,
       })
     }
     return c.json({ stats }, 200)
