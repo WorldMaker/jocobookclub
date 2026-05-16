@@ -129,7 +129,7 @@ const app = new Hono<{ Variables: SessionVariables }>()
         userId: session.userId,
         active: true,
         books: {},
-        updated: new Date().toISOString(),
+        updated: new Date(),
       })
     }
     return c.json(ballot.data)
