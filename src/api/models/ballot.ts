@@ -19,6 +19,7 @@ export const Ballot = z.object({
   active: z.boolean(),
   books: z.record(z.string(), z.xor([Rank, BookBallot])),
   updated: z.coerce.date(),
+  created: z.coerce.date().optional(),
 })
 
 export type Ballot = z.infer<typeof Ballot>
@@ -33,5 +34,6 @@ export function updateUserBallot(kv: Deno.Kv, ballot: Ballot) {
   return kv.set(['ballot', reverseUlid(ballot.userId)], {
     ...Ballot.parse(ballot),
     updated: new Date(),
+    created: ballot.created ?? ballot.updated,
   })
 }
