@@ -9,6 +9,10 @@ export const EligibleBooks = z.array(z.string())
 
 export type EligibleBooks = z.infer<typeof EligibleBooks>
 
+// Allowed percentage of books at Rank 1 for a ballot to be counted, to
+// encourage people to rank more books
+const SupportThreshold = 0.5
+
 /**
  * A tally of 0 or more ballots for a specific list of eligible books
  *
@@ -20,6 +24,8 @@ export type EligibleBooks = z.infer<typeof EligibleBooks>
 export const Tally = z.object({
   count: z.number().int().gte(0),
   mehCount: z.number().int().gte(0),
+  supportThreshold: z.number().positive().lte(1),
+  uncounted: z.number().int().gte(0),
   updated: z.coerce.date(),
   ballotDates: z.record(z.iso.date(), z.number().int().gte(0)),
   books: EligibleBooks,
@@ -36,6 +42,8 @@ export function zeroTally(books: EligibleBooks, preferred: Preferred): Tally {
   return {
     count: 0,
     mehCount: 0,
+    uncounted: 0,
+    supportThreshold: SupportThreshold,
     updated: new Date(),
     ballotDates: {},
     books,
@@ -51,10 +59,14 @@ export function getTallyFromBallot(
   books: EligibleBooks,
   ballot: Ballot,
   preferred: Preferred,
+  supportThreshold = SupportThreshold,
 ): Tally {
   const tally = zeroTally(books, preferred)
   if (!ballot.active) {
-    return tally
+    return {
+      ...tally,
+      uncounted: 1,
+    }
   }
   const ballotDate = ballot.updated.toTemporalInstant().toZonedDateTimeISO(
     'America/New_York',
@@ -108,6 +120,16 @@ export function getTallyFromBallot(
       }
     }
   }
+
+  const oneRanked = booksByRank.get(1)?.size ?? 0
+  const percentOneRanked = oneRanked / books.length
+  if (percentOneRanked >= supportThreshold) {
+    return {
+      ...zeroTally(books, preferred),
+      uncounted: 1,
+    }
+  }
+
   return tally
 }
 
@@ -129,6 +151,9 @@ export function addTally(
   if (tally1.books.length !== tally2.books.length) {
     throw new TallyBooksMismatchError('Books length mismatch')
   }
+  if (tally1.supportThreshold !== tally2.supportThreshold) {
+    throw new TallyBooksMismatchError('Support threshold mismatch')
+  }
   if (
     tally1.preferredMultiplier !== tally2.preferredMultiplier ||
     tally2.preferredMultiplier !== preferred.multiplier
@@ -149,6 +174,7 @@ export function addTally(
   return {
     count: tally1.count + tally2.count,
     mehCount: tally1.mehCount + tally2.mehCount,
+    uncounted: tally1.uncounted + tally2.uncounted,
     updated: new Date(),
     ballotDates: [
       ...new Set([
@@ -179,6 +205,7 @@ export function addTally(
     supports: tally1.supports.map((value, i) => value + tally2.supports[i]),
     preferredMultiplier: tally1.preferredMultiplier,
     preferred: new Set([...tally1.preferred, ...tally2.preferred]),
+    supportThreshold: tally1.supportThreshold,
   }
 }
 
@@ -213,6 +240,7 @@ export type TallyBookMarks = z.infer<typeof TallyBookMarks>
 export const FinalTally = z.object({
   count: z.number().int().gte(0),
   mehCount: z.number().int().gte(0).optional(),
+  uncounted: z.number().int().gte(0).optional(),
   updated: z.coerce.date(),
   oldest: z.coerce.date().optional(),
   recentCount: z.number().int().gte(0).optional(),
@@ -224,6 +252,7 @@ export const FinalTally = z.object({
   preferredMultiplier: z.number().int().gte(1).optional(),
   preferred: z.array(UserId).optional(),
   ranking: z.array(z.string()),
+  supportThreshold: z.number().positive().lte(1).optional(),
 })
 
 export type FinalTally = z.infer<typeof FinalTally>
@@ -301,6 +330,7 @@ export function tallyFinal(tally: Tally): FinalTally {
   return {
     count: tally.count,
     mehCount: tally.mehCount,
+    uncounted: tally.uncounted,
     updated: tally.updated,
     oldest: new Date(
       ballotDateStats.oldest.toZonedDateTime('America/New_York')
@@ -315,6 +345,7 @@ export function tallyFinal(tally: Tally): FinalTally {
     preferredMultiplier: tally.preferredMultiplier,
     preferred: Array.from(tally.preferred.values()),
     ranking,
+    supportThreshold: tally.supportThreshold,
   }
 }
 
