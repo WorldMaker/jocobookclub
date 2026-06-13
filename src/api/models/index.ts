@@ -7,6 +7,7 @@ export { Suggestion } from './suggestion.ts'
 export {
   FinalTally,
   getRecentWindowDescription,
+  Leaderboard,
   RecentWindow,
   Tally,
   TallyBookMarks,

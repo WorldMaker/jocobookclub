@@ -7,7 +7,7 @@ await esbuild.build({
   entryPoints: [
     { out: 'ballot-page', in: './pages/ballot.ts' },
     { out: 'book-page', in: './pages/book.ts' },
-    { out: 'final-tally', in: './final-tally/main.tsx' },
+    { out: 'final-tally', in: './pages/final-tally.ts' },
     { out: 'invite-register', in: './invite-register/main.tsx' },
     { out: 'login-form', in: './login-form/main.tsx' },
     { out: 'nav-menu', in: './nav-menu.ts' },

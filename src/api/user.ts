@@ -18,7 +18,7 @@ import {
 } from './models/passkey.ts'
 import { origin, rpId, rpName } from './models/rp.ts'
 import { deleteSession } from './models/session.ts'
-import { getFinalTally } from './models/tally.ts'
+import { getFinalTally, getLeaderboard } from './models/tally.ts'
 import { getUserById, updateUser, type UserInfo } from './models/user.ts'
 import { pushVoted } from './models/voting.ts'
 import { sessionToken, type SessionVariables } from './session-token.ts'
@@ -152,6 +152,14 @@ const app = new Hono<{ Variables: SessionVariables }>()
       return c.json({}, 404)
     }
     return c.json(tally.data, 200)
+  })
+  .get('/leaderboard', async (c) => {
+    const kv = c.get('kv')
+    const leaderboard = await getLeaderboard(kv)
+    if (!leaderboard.success) {
+      return c.json({}, 404)
+    }
+    return c.json(leaderboard.data, 200)
   })
   .delete('/session', async (c) => {
     const kv = c.get('kv')

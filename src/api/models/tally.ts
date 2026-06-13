@@ -1,6 +1,6 @@
 import * as z from 'zod'
 import { Ballot } from './ballot.ts'
-import { UserId } from './user.ts'
+import { getUserById, type User, UserId } from './user.ts'
 import { reverseUlid } from '../util/reverse.ts'
 import { BookMarks, Mark } from './mark.ts'
 import type { Preferred } from './preferred.ts'
@@ -12,6 +12,17 @@ export type EligibleBooks = z.infer<typeof EligibleBooks>
 // Allowed percentage of books at Rank 1 for a ballot to be counted, to
 // encourage people to rank more books
 const SupportThreshold = 1
+
+export const UserSupport = z.object({
+  userId: UserId,
+  name: z.string(),
+  preferred: z.boolean(),
+  multiplier: z.number().int().gte(1),
+  supportPercent: z.number().positive().lte(1),
+  totalBooksRanked: z.number().int().gte(0),
+})
+
+export type UserSupport = z.infer<typeof UserSupport>
 
 /**
  * A tally of 0 or more ballots for a specific list of eligible books
@@ -34,6 +45,7 @@ export const Tally = z.object({
   supports: z.array(z.number().int().gte(0)),
   preferredMultiplier: z.number().int().gte(1),
   preferred: z.set(UserId),
+  userSupports: z.array(UserSupport),
 })
 
 export type Tally = z.infer<typeof Tally>
@@ -52,12 +64,14 @@ export function zeroTally(books: EligibleBooks, preferred: Preferred): Tally {
     supports: books.map(() => 0),
     preferredMultiplier: preferred.multiplier,
     preferred: new Set(),
+    userSupports: [],
   }
 }
 
 export function getTallyFromBallot(
   books: EligibleBooks,
   ballot: Ballot,
+  user: User,
   preferred: Preferred,
   supportThreshold = SupportThreshold,
 ): Tally {
@@ -111,6 +125,7 @@ export function getTallyFromBallot(
       }
     }
   }
+  let supportedBooks = 0
   if (booksByRank.size === 1) {
     tally.mehCount = voteStrength
   } else {
@@ -118,6 +133,7 @@ export function getTallyFromBallot(
     for (const rank of supportRanks) {
       for (const bookIndex of booksByRank.get(rank)!) {
         tally.supports[bookIndex] = voteStrength
+        supportedBooks++
       }
     }
   }
@@ -136,6 +152,17 @@ export function getTallyFromBallot(
       ...zeroTally(books, preferred),
       uncounted: 1,
     }
+  }
+
+  if (user.canEmail && user.preferredName) {
+    tally.userSupports.push({
+      userId: ballot.userId,
+      name: user.preferredName,
+      preferred: isPreferred,
+      multiplier: voteStrength,
+      supportPercent: supportedBooks / books.length,
+      totalBooksRanked: Object.keys(ballot.books).length,
+    })
   }
 
   return tally
@@ -214,6 +241,10 @@ export function addTally(
     preferredMultiplier: tally1.preferredMultiplier,
     preferred: new Set([...tally1.preferred, ...tally2.preferred]),
     supportThreshold: tally1.supportThreshold,
+    userSupports: [...tally1.userSupports, ...tally2.userSupports].sort((
+      a,
+      b,
+    ) => b.supportPercent - a.supportPercent),
   }
 }
 
@@ -441,7 +472,16 @@ export async function tallyBucket(
     if (!ballot.success) {
       continue
     }
-    const userTally = getTallyFromBallot(tally.books, ballot.data, preferred)
+    const user = await getUserById(kv, ballot.data.userId)
+    if (!user.success) {
+      continue
+    }
+    const userTally = getTallyFromBallot(
+      tally.books,
+      ballot.data,
+      user.data,
+      preferred,
+    )
     tally = addTally(tally, userTally, preferred)
   }
   return tally
@@ -450,4 +490,22 @@ export async function tallyBucket(
 export async function getFinalTally(kv: Deno.Kv) {
   const maybeFinalTally = await kv.get(['final-tally'])
   return FinalTally.safeParse(maybeFinalTally.value)
+}
+
+/**
+ * The leaderboard of voting support.
+ *
+ * Currently only planned to be logged in user visible, so may
+ * not be compatible across versions
+ */
+export const Leaderboard = z.object({
+  updated: z.coerce.date(),
+  leaders: z.array(UserSupport),
+})
+
+export type Leaderboard = z.infer<typeof Leaderboard>
+
+export async function getLeaderboard(kv: Deno.Kv) {
+  const maybeLeaderboard = await kv.get(['leaderboard'])
+  return Leaderboard.safeParse(maybeLeaderboard.value)
 }
