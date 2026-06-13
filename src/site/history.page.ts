@@ -7,8 +7,6 @@ import {
 import rawMarks from './_data/genre/marks.json' with { type: 'json' }
 import site from './_config.ts'
 
-const UnderdogSupportThreshold = 0.2
-
 type BookType = 'previous' | 'upcoming' | 'ballot' | 'held'
 type BookEntry = {
   type: BookType
@@ -60,6 +58,7 @@ export default async function* history({ search }: Lume.Data) {
   const books: BooksByLtId = new Map()
   const bookRanks: BookDayRank = new Map()
 
+  //#region Utitlity Functions
   const addToCalendar = (book: CalendarEntry) => {
     if (!book.date) {
       return
@@ -89,7 +88,9 @@ export default async function* history({ search }: Lume.Data) {
     }
     bookRanks.get(ltid)![date.toString()] = rank
   }
+  //#endregion
 
+  //#region Calendar Prep
   const previousBooks = search.pages('previous')
   for (const page of previousBooks) {
     const book: PreviousBookEntry = {
@@ -171,7 +172,9 @@ export default async function* history({ search }: Lume.Data) {
     rankings.push(ranking)
     addToCalendar(ranking)
   }
+  //#endregion
 
+  //#region Calendar Pages
   const currentYear = Temporal.Now.plainDateISO().year
   const currentYearCalendar = calendar.get(currentYear) ?? new Map()
   calendar.delete(currentYear)
@@ -197,7 +200,9 @@ export default async function* history({ search }: Lume.Data) {
       tags: ['history'],
     }
   }
+  //#endregion
 
+  //#region Rankings
   rankings.sort((a, b) => Temporal.PlainDate.compare(a.date, b.date))
 
   const totalBooks: DayRank = {}
@@ -256,7 +261,9 @@ export default async function* history({ search }: Lume.Data) {
     contentType: 'application/json',
     content: JSON.stringify(totalBooks),
   }
+  //#endregion
 
+  //#region Marks
   const twoMonthsAgo = Temporal.Now.zonedDateTimeISO().subtract({ months: 2 })
 
   for (const [mark, info] of Object.entries(rawMarks)) {
@@ -309,18 +316,26 @@ export default async function* history({ search }: Lume.Data) {
       allMarks,
     }
   }
+  //#endregion
 
-  const underdogs = lastSupports
+  //#region Index/Underdogs
+  const sorted = lastSupports
     .map((support, index) => ({
       percentSupport: lastCount > 0 ? support / lastCount : 0,
       ltid: lastBooks[index],
     }))
-    .filter(({ percentSupport }) => percentSupport <= UnderdogSupportThreshold)
-    .map(({ ltid }) => ltid)
+    .sort((a, b) => a.percentSupport - b.percentSupport)
+
+  const firstQuartileMedianIdx = Math.floor(Math.floor(sorted.length / 2) / 2)
+
+  const underdogs = sorted.slice(0, firstQuartileMedianIdx).map(({ ltid }) =>
+    ltid
+  )
 
   yield {
     url: `/`,
     layout: 'index.vto',
     underdogs,
   }
+  //#endregion
 }
