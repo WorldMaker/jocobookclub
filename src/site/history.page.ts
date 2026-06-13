@@ -308,7 +308,10 @@ export default async function* history({ search }: Lume.Data) {
   }
 
   const underdogs = lastSupports
-    .map((support, index) => ({ percentSupport: support / lastBooks.length, ltid: lastBooks[index] }))
+    .map((support, index) => ({
+      percentSupport: support / lastBooks.length,
+      ltid: lastBooks[index],
+    }))
     .filter(({ percentSupport }) => percentSupport <= UnderdogSupportThreshold)
     .map(({ ltid }) => ltid)
 
