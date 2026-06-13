@@ -72,7 +72,9 @@ const app = new Hono<{ Variables: SessionVariables }>()
         )
         continue
       }
-      const unrankedBallotCount = eligibleBooks.map((b) => ballot.books[b]).filter(
+      const unrankedBallotCount = eligibleBooks.map((b) =>
+        ballot.books[b]
+      ).filter(
         (b) => !b,
       ).length
       stats.push({
@@ -88,27 +90,39 @@ const app = new Hono<{ Variables: SessionVariables }>()
     }
     return c.json({ stats }, 200)
   })
-  .get('/ballot-stats/:userId',
+  .get(
+    '/ballot-stats/:userId',
     zValidator(
       'param',
       z.object({
         userId: z.ulid(),
       }),
-    ), async (c) => {
-    const kv = c.get('kv')
-    const userId = c.req.param('userId')
-    const eligibleBooks = await getBallotEligibleBooks()
-    const maybeBallot = await getUserBallot(kv, userId)
-    if (!maybeBallot.success) {
-      return c.json({ updated: null, unrankedBallotCount: eligibleBooks.length, percentUnranked: 1 }, 200)
-    }
-    const ballot = maybeBallot.data
-    const unrankedBallotCount = eligibleBooks.map((b) => ballot.books[b]).filter(
-      (b) => !b,
-    ).length
-    const percentUnranked = unrankedBallotCount / eligibleBooks.length
-    return c.json({ updated: ballot.updated.toISOString(), unrankedBallotCount, percentUnranked }, 200)
-  })
+    ),
+    async (c) => {
+      const kv = c.get('kv')
+      const userId = c.req.param('userId')
+      const eligibleBooks = await getBallotEligibleBooks()
+      const maybeBallot = await getUserBallot(kv, userId)
+      if (!maybeBallot.success) {
+        return c.json({
+          updated: null,
+          unrankedBallotCount: eligibleBooks.length,
+          percentUnranked: 1,
+        }, 200)
+      }
+      const ballot = maybeBallot.data
+      const unrankedBallotCount =
+        eligibleBooks.map((b) => ballot.books[b]).filter(
+          (b) => !b,
+        ).length
+      const percentUnranked = unrankedBallotCount / eligibleBooks.length
+      return c.json({
+        updated: ballot.updated.toISOString(),
+        unrankedBallotCount,
+        percentUnranked,
+      }, 200)
+    },
+  )
   .post(
     '/deactivate-ballots',
     zValidator('json', BallotDeactivationRequest),

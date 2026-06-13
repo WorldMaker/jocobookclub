@@ -1,5 +1,6 @@
 import {
   ComponentContext,
+  Empty,
   Fragment,
   jsx,
   ObservableEvent,
@@ -9,6 +10,8 @@ import { map, takeUntil } from 'rxjs'
 import { filter } from 'rxjs'
 import { shareReplay } from 'rxjs'
 import { GenreTag, genreTags } from '../genre-tags/index.tsx'
+
+const UnrankedPercentWarningThreshold = 0.5
 
 export interface SuggestionCardProps {
   vm: SuggestionVm
@@ -106,6 +109,28 @@ export function SuggestionCard(
     )),
   )
 
+  const suggestionUnrankedPercent = vm.unrankedPercent.pipe(
+    map((percent) => {
+      if (percent === null || percent < UnrankedPercentWarningThreshold) {
+        return Empty
+      }
+      return () => (
+        <span
+          class='tag is-warning'
+          title={`${
+            percent.toLocaleString(undefined, {
+              style: 'percent',
+              minimumFractionDigits: 1,
+              maximumFractionDigits: 1,
+            })
+          }% of this user's ranked books are unranked`}
+        >
+          Low Voter
+        </span>
+      )
+    }),
+  )
+
   return (
     <div class='card'>
       <div class='card-content'>
@@ -131,6 +156,11 @@ export function SuggestionCard(
                     map((draft) => draft ? 'Draft' : ''),
                   ),
                 }}
+              />
+              <span
+                style='display: contents;'
+                childrenBind={suggestionUnrankedPercent}
+                childrenBindMode='replace'
               />
               <span
                 style='display: contents;'
