@@ -53,6 +53,11 @@ export class SuggestionVm {
     return this.#canEdit
   }
 
+  readonly #unrankedPercent: Observable<number | null>
+  get unrankedPercent() {
+    return this.#unrankedPercent
+  }
+
   constructor(
     suggestionEditor: SuggestionEditorVm,
     suggestion: Suggestion,
@@ -75,6 +80,32 @@ export class SuggestionVm {
           this.#suggestionEditor.session.admin ||
           this.#suggestionEditor.session.userId === suggestion.userId,
       ),
+      shareReplay(1),
+    )
+
+    this.#unrankedPercent = this.#suggestion.pipe(
+      switchMap(async (suggestion) => {
+        if (!this.#suggestionEditor.session.admin) {
+          return null
+        }
+        const userStats = await apiClient.admin['ballot-stats'][':userId'].$get(
+          {
+            param: {
+              userId: suggestion.userId,
+            },
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${this.#suggestionEditor.session.token}`,
+            },
+          },
+        )
+        if (!userStats.ok) {
+          return 1
+        }
+        const data = await userStats.json()
+        return data.percentUnranked
+      }),
       shareReplay(1),
     )
   }
