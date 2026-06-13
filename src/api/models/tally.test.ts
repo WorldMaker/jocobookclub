@@ -55,7 +55,7 @@ describe('tally', () => {
       ballot,
       fakeUser,
       emptyPreferred,
-      1,
+      0,
     )
     expect(tally.count).toEqual(1)
     expect(tally.supports).toEqual([0, 0, 0, 1, 0])
@@ -79,7 +79,7 @@ describe('tally', () => {
       ballot,
       fakeUser,
       preferred,
-      1,
+      0,
     )
     expect(tally.count).toEqual(3)
     expect(tally.supports).toEqual([0, 0, 0, 3, 0])
@@ -103,7 +103,7 @@ describe('tally', () => {
       ballot,
       { ...fakeUser, canEmail: true, preferredName: 'User One' },
       preferred,
-      1,
+      0,
     )
     expect(tally.count).toEqual(3)
     expect(tally.supports).toEqual([0, 0, 0, 3, 0])

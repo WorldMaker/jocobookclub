@@ -9,9 +9,10 @@ export const EligibleBooks = z.array(z.string())
 
 export type EligibleBooks = z.infer<typeof EligibleBooks>
 
-// Allowed percentage of books at Rank 1 for a ballot to be counted, to
-// encourage people to rank more books
-const SupportThreshold = 1
+// Percent of books [0, 1] that must be supported for a ballot to count. This
+// is intended to filter people ranking very few books or "haters" avoiding
+// a rich distribution of books across available ranks
+const SupportThreshold = 0
 
 export const UserSupport = z.object({
   userId: UserId,
@@ -138,13 +139,12 @@ export function getTallyFromBallot(
     }
   }
 
-  const oneRanked = booksByRank.get(1)?.size ?? 0
-  const percentOneRanked = oneRanked / books.length
-  if (percentOneRanked >= supportThreshold) {
+  const supportPercent = supportedBooks / books.length
+  if (supportPercent < supportThreshold) {
     console.log(
       `Ballot for ${ballot.userId} fails support threshold, skipping`,
       {
-        percentOneRanked,
+        supportPercent,
         supportThreshold,
       },
     )
