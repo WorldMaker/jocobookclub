@@ -6,6 +6,7 @@ import {
   Bucket,
   type EligibleBooks,
   getTally,
+  Leaderboard,
   TallyBooksMismatchError,
   tallyFinal,
   zeroTally,
@@ -109,5 +110,8 @@ export async function tallyFinalRanking(
   if (invalidBuckets) {
     throw new Error('Invalid buckets found, recount requested')
   }
-  return tallyFinal(finalTally)
+  return {
+    finalTally: tallyFinal(finalTally),
+    leaderboard: { leaders: finalTally.userSupports } satisfies Leaderboard,
+  }
 }
