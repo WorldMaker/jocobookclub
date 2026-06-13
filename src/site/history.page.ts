@@ -206,6 +206,7 @@ export default async function* history({ search }: Lume.Data) {
   let lastBooks: string[] = []
   let lastMarks: TallyBookMarks[] = []
   let lastSupports: number[] = []
+  let lastCount = 0
   for (const ranking of rankings) {
     const tally = FinalTally.safeParse(
       JSON.parse(await Deno.readTextFile(ranking.filename)),
@@ -239,6 +240,7 @@ export default async function* history({ search }: Lume.Data) {
     lastBooks = data.books
     lastMarks = data.marks ?? []
     lastSupports = data.supports ?? []
+    lastCount = data.count
   }
 
   for (const [ltid, book] of bookRanks.entries()) {
@@ -310,7 +312,7 @@ export default async function* history({ search }: Lume.Data) {
 
   const underdogs = lastSupports
     .map((support, index) => ({
-      percentSupport: support / lastBooks.length,
+      percentSupport: lastCount > 0 ? support / lastCount : 0,
       ltid: lastBooks[index],
     }))
     .filter(({ percentSupport }) => percentSupport <= UnderdogSupportThreshold)
