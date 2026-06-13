@@ -1,6 +1,6 @@
 import * as z from 'zod'
 import { Ballot } from './ballot.ts'
-import { getUserById, User, UserId } from './user.ts'
+import { getUserById, type User, UserId } from './user.ts'
 import { reverseUlid } from '../util/reverse.ts'
 import { BookMarks, Mark } from './mark.ts'
 import type { Preferred } from './preferred.ts'

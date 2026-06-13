@@ -6,7 +6,7 @@ import {
   Bucket,
   type EligibleBooks,
   getTally,
-  Leaderboard,
+  type Leaderboard,
   TallyBooksMismatchError,
   tallyFinal,
   zeroTally,
