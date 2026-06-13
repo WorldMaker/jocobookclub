@@ -36,7 +36,7 @@ export type UserSupport = z.infer<typeof UserSupport>
 export const Tally = z.object({
   count: z.number().int().gte(0),
   mehCount: z.number().int().gte(0),
-  supportThreshold: z.number().positive().lte(1),
+  supportThreshold: z.number().gte(0).lte(1),
   uncounted: z.number().int().gte(0),
   updated: z.coerce.date(),
   ballotDates: z.record(z.iso.date(), z.number().int().gte(0)),
