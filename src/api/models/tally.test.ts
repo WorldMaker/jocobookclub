@@ -26,8 +26,8 @@ describe('tally', () => {
     }
     const tally = getTallyFromBallot(eligibleBooks, ballot, emptyPreferred)
     const zero = zeroTally(eligibleBooks, emptyPreferred)
-    const uncounted = { ...zero, uncounted: 1 }
-    expect(tally).toMatchObject(uncounted)
+    const uncounted = { ...zero, uncounted: 1, updated: null }
+    expect({ ...tally, updated: null }).toMatchObject(uncounted)
   })
 
   it('should calculate supports from a simple, extreme ballot', () => {
@@ -73,8 +73,8 @@ describe('tally', () => {
     }
     const tally = getTallyFromBallot(eligibleBooks, ballot, emptyPreferred, 0.5)
     const zero = zeroTally(eligibleBooks, emptyPreferred)
-    const uncounted = { ...zero, uncounted: 1 }
-    expect(tally).toMatchObject(uncounted)
+    const uncounted = { ...zero, uncounted: 1, updated: null }
+    expect({ ...tally, updated: null }).toMatchObject(uncounted)
   })
 
   it('should recognize a meh ballot', () => {

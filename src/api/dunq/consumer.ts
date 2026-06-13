@@ -2,6 +2,10 @@ import { ulid } from '@std/ulid'
 
 const EmptyQueueRetries = 3
 
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 export async function consume<MessageType>(
   kv: Deno.Kv,
   consumer: (message: MessageType) => Promise<void>,
@@ -55,5 +59,6 @@ export async function consume<MessageType>(
 
     console.log('No messages found, retrying...', { consumerId, retries })
     retries--
+    await sleep(5_000)
   }
 }
