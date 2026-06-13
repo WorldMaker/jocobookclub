@@ -123,7 +123,6 @@ layout: 'main.vto'
                       <div class="ranking-interest">
                       {{ if supports?.[matrixIndex] || supports?.[matrixIndex] === 0 }}
                         {{ set supportPercent = (supports[matrixIndex] / count) * 100 }}
-                        {{> console.log({ supports: supports[matrixIndex], count, supportPercent }) }}
                         <span class='icon-text' title="{{ supportPercent.toFixed(0) }}% of ballots preferred this book over at least one other">
                           <span class='icon has-text-info'>
                             <i class='fa-duotone fa-solid fa-hand-holding-star'></i>
