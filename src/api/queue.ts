@@ -69,7 +69,7 @@ export async function listenQueue(kv: Deno.Kv, msg: unknown) {
           books,
           preferred,
         )
-        const result = tally.count > 0 && tally.uncounted === 0
+        const result = tally.count > 0 || tally.uncounted > 0
           ? await kv.atomic()
             .check(time)
             .check(recount)
