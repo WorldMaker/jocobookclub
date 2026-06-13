@@ -16,8 +16,10 @@ class BookSorter extends HTMLElement {
         const books = [...this.querySelectorAll<HTMLDivElement>('div.card')]
         books.sort((a, b) => {
           if (sort === 'rank') {
-            const rankA = ballot?.books[a.dataset.ltid!] ?? 0
-            const rankB = ballot?.books[b.dataset.ltid!] ?? 0
+            const bookA = ballot?.books[a.dataset.ltid!]
+            const bookB = ballot?.books[b.dataset.ltid!]
+            const rankA = typeof bookA === 'number' ? bookA : bookA?.rank ?? 0
+            const rankB = typeof bookB === 'number' ? bookB : bookB?.rank ?? 0
             return direction === 'asc' ? rankA - rankB : rankB - rankA
           } else {
             const fieldA = a.dataset[sort]!
