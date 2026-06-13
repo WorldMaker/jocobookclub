@@ -123,7 +123,7 @@ export function SuggestionCard(
               minimumFractionDigits: 1,
               maximumFractionDigits: 1,
             })
-          }% of this user's ranked books are unranked`}
+          } of this user's ranked books are unranked`}
         >
           Low Voter
         </span>
