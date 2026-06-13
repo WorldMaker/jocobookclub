@@ -28,4 +28,9 @@ const app = new Hono<{ Variables: KvProvidedVariables }>()
 
 Deno.serve(app.fetch)
 
+// Spin up a worker to process the queue if anything was left hanging from a shutdown or crash
+new Worker(new URL('./dunq-worker.ts', import.meta.url), {
+  type: 'module',
+})
+
 export default app
