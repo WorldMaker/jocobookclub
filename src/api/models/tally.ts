@@ -63,6 +63,7 @@ export function getTallyFromBallot(
 ): Tally {
   const tally = zeroTally(books, preferred)
   if (!ballot.active) {
+    console.log(`Ballot for ${ballot.userId} is inactive, skipping`)
     return {
       ...tally,
       uncounted: 1,
@@ -124,6 +125,13 @@ export function getTallyFromBallot(
   const oneRanked = booksByRank.get(1)?.size ?? 0
   const percentOneRanked = oneRanked / books.length
   if (percentOneRanked >= supportThreshold) {
+    console.log(
+      `Ballot for ${ballot.userId} fails support threshold, skipping`,
+      {
+        percentOneRanked,
+        supportThreshold,
+      },
+    )
     return {
       ...zeroTally(books, preferred),
       uncounted: 1,
