@@ -25,7 +25,7 @@ Blurb from a JoCoNaut:
 
 > Friend of the cruise and benevolent leader of the Writing Track John Scalzi is
 > best known for the _Old Man's War_ series that made him (in)famous in scifi,
-> but his first (self-)published novel is easy to overlook. Weird, often funny,
+> but his second standalone novel is easy to overlook. Weird, often funny,
 > including a long and elaborate fart joke sequence that can be both, it's an
 > interesting glimpse into where John Scalzi's novel writing career has been,
 > and a useful comparison to current silly fare like _When the Moon Hits Your
