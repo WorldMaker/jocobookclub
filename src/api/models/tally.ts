@@ -11,7 +11,7 @@ export type EligibleBooks = z.infer<typeof EligibleBooks>
 
 // Allowed percentage of books at Rank 1 for a ballot to be counted, to
 // encourage people to rank more books
-const SupportThreshold = 0.75
+const SupportThreshold = 1
 
 /**
  * A tally of 0 or more ballots for a specific list of eligible books
