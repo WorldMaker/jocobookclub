@@ -30,7 +30,12 @@ describe('tally', () => {
       updated: new Date(),
       userId: 'user1',
     }
-    const tally = getTallyFromBallot(eligibleBooks, ballot, fakeUser, emptyPreferred)
+    const tally = getTallyFromBallot(
+      eligibleBooks,
+      ballot,
+      fakeUser,
+      emptyPreferred,
+    )
     const zero = zeroTally(eligibleBooks, emptyPreferred)
     const uncounted = { ...zero, uncounted: 1, updated: null }
     expect({ ...tally, updated: null }).toMatchObject(uncounted)
@@ -45,7 +50,13 @@ describe('tally', () => {
       updated: new Date(),
       userId: 'user1',
     }
-    const tally = getTallyFromBallot(eligibleBooks, ballot, fakeUser, emptyPreferred, 1)
+    const tally = getTallyFromBallot(
+      eligibleBooks,
+      ballot,
+      fakeUser,
+      emptyPreferred,
+      1,
+    )
     expect(tally.count).toEqual(1)
     expect(tally.supports).toEqual([0, 0, 0, 1, 0])
   })
@@ -63,7 +74,13 @@ describe('tally', () => {
       multiplier: 3,
       userIds: new Set(['user1']),
     }
-    const tally = getTallyFromBallot(eligibleBooks, ballot, fakeUser, preferred, 1)
+    const tally = getTallyFromBallot(
+      eligibleBooks,
+      ballot,
+      fakeUser,
+      preferred,
+      1,
+    )
     expect(tally.count).toEqual(3)
     expect(tally.supports).toEqual([0, 0, 0, 3, 0])
   })
@@ -81,10 +98,23 @@ describe('tally', () => {
       multiplier: 3,
       userIds: new Set(['user1']),
     }
-    const tally = getTallyFromBallot(eligibleBooks, ballot, { ...fakeUser, canEmail: true, preferredName: 'User One' }, preferred, 1)
+    const tally = getTallyFromBallot(
+      eligibleBooks,
+      ballot,
+      { ...fakeUser, canEmail: true, preferredName: 'User One' },
+      preferred,
+      1,
+    )
     expect(tally.count).toEqual(3)
     expect(tally.supports).toEqual([0, 0, 0, 3, 0])
-    expect(tally.userSupports).toEqual([{ name: 'User One', preferred: true, multiplier: 3, userId: 'user1', supportPercent: 1 / 5, totalBooksRanked: 1 }])
+    expect(tally.userSupports).toEqual([{
+      name: 'User One',
+      preferred: true,
+      multiplier: 3,
+      userId: 'user1',
+      supportPercent: 1 / 5,
+      totalBooksRanked: 1,
+    }])
   })
 
   it('should return a zero tally for a simple, extreme ballot that fails the support threshold', () => {
@@ -96,7 +126,13 @@ describe('tally', () => {
       updated: new Date(),
       userId: 'user1',
     }
-    const tally = getTallyFromBallot(eligibleBooks, ballot, fakeUser, emptyPreferred, 0.5)
+    const tally = getTallyFromBallot(
+      eligibleBooks,
+      ballot,
+      fakeUser,
+      emptyPreferred,
+      0.5,
+    )
     const zero = zeroTally(eligibleBooks, emptyPreferred)
     const uncounted = { ...zero, uncounted: 1, updated: null }
     expect({ ...tally, updated: null }).toMatchObject(uncounted)
@@ -115,7 +151,12 @@ describe('tally', () => {
       updated: new Date(),
       userId: 'user1',
     }
-    const tally = getTallyFromBallot(eligibleBooks, ballot, fakeUser, emptyPreferred)
+    const tally = getTallyFromBallot(
+      eligibleBooks,
+      ballot,
+      fakeUser,
+      emptyPreferred,
+    )
     expect(tally.mehCount).toEqual(1)
   })
 
@@ -133,7 +174,12 @@ describe('tally', () => {
       updated: new Date(),
       userId: 'user1',
     }
-    const tally = getTallyFromBallot(eligibleBooks, ballot, fakeUser, emptyPreferred)
+    const tally = getTallyFromBallot(
+      eligibleBooks,
+      ballot,
+      fakeUser,
+      emptyPreferred,
+    )
     expect(tally.marks[0]['otter']!['user1']).toEqual(markDate)
     expect(tally.marks[1]['raccoon']!['user1']).toEqual(markDate)
     expect(tally.marks[2]).toEqual({})
