@@ -72,6 +72,17 @@ export class BallotManager {
       shareReplay(1),
     )
 
+    if (typeof document !== 'undefined') {
+      // since the ballot manager is a global singleton, ignoring disposal for this subscription should be fine
+      this.#unsaved.subscribe((unsaved) => {
+        if (unsaved && !document.title.startsWith('💾 ')) {
+          document.title = '💾 ' + document.title
+        } else if (!unsaved && document.title.startsWith('💾 ')) {
+          document.title = document.title.slice(2)
+        }
+      })
+    }
+
     this.#active = this.#ballot.pipe(
       map((ballot) => ballot ? ballot.active : false),
       shareReplay(1),
