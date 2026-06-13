@@ -239,7 +239,10 @@ export function addTally(
     preferredMultiplier: tally1.preferredMultiplier,
     preferred: new Set([...tally1.preferred, ...tally2.preferred]),
     supportThreshold: tally1.supportThreshold,
-    userSupports: [...tally1.userSupports, ...tally2.userSupports].sort((a, b) => b.supportPercent - a.supportPercent),
+    userSupports: [...tally1.userSupports, ...tally2.userSupports].sort((
+      a,
+      b,
+    ) => b.supportPercent - a.supportPercent),
   }
 }
 
@@ -471,7 +474,12 @@ export async function tallyBucket(
     if (!user.success) {
       continue
     }
-    const userTally = getTallyFromBallot(tally.books, ballot.data, user.data, preferred)
+    const userTally = getTallyFromBallot(
+      tally.books,
+      ballot.data,
+      user.data,
+      preferred,
+    )
     tally = addTally(tally, userTally, preferred)
   }
   return tally
@@ -484,7 +492,7 @@ export async function getFinalTally(kv: Deno.Kv) {
 
 /**
  * The leaderboard of voting support.
- * 
+ *
  * Currently only planned to be logged in user visible, so may
  * not be compatible across versions
  */

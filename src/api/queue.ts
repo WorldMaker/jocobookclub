@@ -32,7 +32,11 @@ export async function listenQueue(kv: Deno.Kv, msg: unknown) {
         if (time.value && time.value >= qmessage.data.at) {
           return
         }
-        const { finalTally, leaderboard } = await tallyFinalRanking(kv, books, preferred)
+        const { finalTally, leaderboard } = await tallyFinalRanking(
+          kv,
+          books,
+          preferred,
+        )
         await kv.atomic()
           .check(time)
           .set(['final-tally-time'], qmessage.data.at)
