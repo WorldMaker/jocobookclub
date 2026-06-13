@@ -327,8 +327,10 @@ export default async function* history({ search }: Lume.Data) {
     .sort((a, b) => a.percentSupport - b.percentSupport)
 
   const firstQuartileMedianIdx = Math.floor(Math.floor(sorted.length / 2) / 2)
-  
-  const underdogs = sorted.slice(0, firstQuartileMedianIdx).map(({ ltid }) => ltid)
+
+  const underdogs = sorted.slice(0, firstQuartileMedianIdx).map(({ ltid }) =>
+    ltid
+  )
 
   yield {
     url: `/`,
