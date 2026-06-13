@@ -299,6 +299,7 @@ export default async function* history({ search }: Lume.Data) {
       url: `/marks/${mark}/`,
       layout: 'mark.vto',
       ...info,
+      title: info.name,
       lastRankingByLtId,
       mark,
       books,
