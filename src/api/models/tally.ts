@@ -145,7 +145,7 @@ export function addTally(
   tally2: Tally,
   preferred: Preferred,
 ): Tally {
-  if (tally2.count === 0) {
+  if (tally2.count === 0 && tally2.uncounted === 0) {
     return tally1
   }
   if (tally1.books.length !== tally2.books.length) {
