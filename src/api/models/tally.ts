@@ -125,6 +125,7 @@ export function getTallyFromBallot(
       }
     }
   }
+  let supportedBooks = 0
   if (booksByRank.size === 1) {
     tally.mehCount = voteStrength
   } else {
@@ -132,6 +133,7 @@ export function getTallyFromBallot(
     for (const rank of supportRanks) {
       for (const bookIndex of booksByRank.get(rank)!) {
         tally.supports[bookIndex] = voteStrength
+        supportedBooks++
       }
     }
   }
@@ -158,8 +160,8 @@ export function getTallyFromBallot(
       name: user.preferredName,
       preferred: isPreferred,
       multiplier: voteStrength,
-      supportPercent: percentOneRanked,
-      totalBooksRanked: books.length,
+      supportPercent: supportedBooks / books.length,
+      totalBooksRanked: Object.keys(ballot.books).length,
     })
   }
 
