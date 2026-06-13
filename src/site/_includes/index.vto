@@ -43,7 +43,8 @@ tags: [main]
 </div>
 
 <section class="section">
-    <h1 class="title" id="ballot"><span class="icon has-text-info"><i class="fa-duotone fa-solid fa-box-ballot"></i></span> Current Ballot</h1>
+    <h1 class="title" id="ballot"><span class="icon has-text-info"><i class="fa-duotone fa-solid fa-box-ballot"></i></span> Focused Ballot</h1>
+    <h2 class="subtitle">These books are the most in need of support. Recently added and/or low ranked books.</h2>
 
     <p class="block container">Rank your interest in every book from 1 to 5 excited dolphins <i class="fa-duotone fa-solid fa-dolphin"></i>! Unranked books
     are counted as 1 dolphin. <a href="./rules">Other Club Rules</a></p>
@@ -52,18 +53,34 @@ tags: [main]
     <hr />
 
     <book-sorter class="grid is-col-min-18">
-    {{ for book of search.pages("ballot") }}
-    {{ include "book-card.vto" { ...book, currentBallot: true } }}
+    {{ for ltid of underdogs }}
+    {{ include "book-card.vto" { ...search.page(`ltid='${ltid}'`), currentBallot: true } }}
     {{ /for }}
     </book-sorter>
     
     <sort-picker></sort-picker>
     <hr />
+    <div class="block buttons">
+        <a class="button" href="/ballot/"><span class="icon"><i class="fa-duotone fa-solid fa-box-ballot"></i></span><span>Complete Ballot</span></a>
+        {{ for tag of Object.keys(genre.tags) }}
+            <a class="button {{ if tags?.includes(tag) }} has-background-dark has-text-info{{ /if }}" href="/tags/{{ tag }}" title="{{ genre.tags[tag].title }}">
+                <span class="icon {{ genre.tags[tag].iconClass }}"><i class="fa-duotone fa-solid {{ genre.tags[tag].icon }}"></i></span>
+                <span>{{ genre.tags[tag].name ?? genre.tags[tag].title }}</span>
+            </a>
+        {{ /for }}
+        {{ for mark of Object.keys(genre.marks) }}
+            <a class="button {{ if tags?.includes(mark) }} has-background-dark has-text-info{{ /if }}" href="/marks/{{ mark }}" title="{{ genre.marks[mark].name }}">
+                <span class="icon {{ genre.marks[mark].iconClass }}"><i class="fa-duotone fa-solid {{ genre.marks[mark].icon }}"></i></span>
+                <span>{{ genre.marks[mark].name }}</span>
+            </a>
+        {{ /for }}
+    </div>
     <vote-button></vote-button>
 </section>
 
 <footer class="footer">
     <div class="content buttons">
+        <a class="button" href="/ballot/"><span class="icon"><i class="fa-duotone fa-solid fa-box-ballot"></i></span><span>Complete Ballot</span></a>
         <a class="button" href="./previous/"><span class="icon"><i class="fa-duotone fa-solid fa-books"></i></span><span>Previous Club Choices</span></a>
         <a class="button" href="./ranking/"><span class="icon"><i class="fa-duotone fa-solid fa-ballot"></i></span><span>Current Rankings</span></a>
         <a class="button" href="./rules/"><span class="icon"><i class="fa-duotone fa-solid fa-scale-balanced"></i></span><span>Club Rules</span></a>

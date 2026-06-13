@@ -37,7 +37,7 @@
                         <i class="fa-duotone fa-solid fa-book-sparkles"></i>
                         <span class="is-hidden-desktop">Upcoming Books</span>
                     </a>
-                    <a class="navbar-item" title="Current Ballot" href="/#ballot">
+                    <a class="navbar-item {{ if tags?.includes('current-ballot') }} has-background-dark has-text-info{{ /if }}" title="Current Ballot" href="/ballot/">
                         <i class="fa-duotone fa-solid fa-box-ballot"></i>
                         <span class="is-hidden-desktop">Current Ballot</span>
                     </a>

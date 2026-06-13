@@ -7,6 +7,8 @@ import {
 import rawMarks from './_data/genre/marks.json' with { type: 'json' }
 import site from './_config.ts'
 
+const UnderdogSupportThreshold = 0.2
+
 type BookType = 'previous' | 'upcoming' | 'ballot' | 'held'
 type BookEntry = {
   type: BookType
@@ -203,6 +205,7 @@ export default async function* history({ search }: Lume.Data) {
   let lastRankingByLtId: Record<string, number> = {}
   let lastBooks: string[] = []
   let lastMarks: TallyBookMarks[] = []
+  let lastSupports: number[] = []
   for (const ranking of rankings) {
     const tally = FinalTally.safeParse(
       JSON.parse(await Deno.readTextFile(ranking.filename)),
@@ -235,6 +238,7 @@ export default async function* history({ search }: Lume.Data) {
     lastRankingByLtId = rankingByLtId
     lastBooks = data.books
     lastMarks = data.marks ?? []
+    lastSupports = data.supports ?? []
   }
 
   for (const [ltid, book] of bookRanks.entries()) {
@@ -301,5 +305,16 @@ export default async function* history({ search }: Lume.Data) {
       recentMarks,
       allMarks,
     }
+  }
+
+  const underdogs = lastSupports
+    .map((support, index) => ({ percentSupport: support / lastBooks.length, ltid: lastBooks[index] }))
+    .filter(({ percentSupport }) => percentSupport <= UnderdogSupportThreshold)
+    .map(({ ltid }) => ltid)
+
+  yield {
+    url: `/`,
+    layout: 'index.vto',
+    underdogs,
   }
 }
