@@ -89,6 +89,7 @@ export async function tallyFinalRanking(
       await queueRecountBucketRequested(kv, bucket)
       console.warn('Invalid tally found, requesting recount for bucket', {
         bucket,
+        error: tally.error,
       })
       invalidBuckets = true
       continue
@@ -100,6 +101,7 @@ export async function tallyFinalRanking(
         await queueRecountBucketRequested(kv, bucket)
         console.warn('Tally books mismatch, requesting recount for bucket', {
           bucket,
+          error,
         })
         invalidBuckets = true
         continue
