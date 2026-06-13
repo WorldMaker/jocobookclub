@@ -15,7 +15,7 @@ import {
   type Preferred,
   updatePreferred,
 } from './models/preferred.ts'
-import { Ballot, updateUserBallot } from './models/ballot.ts'
+import { Ballot, getUserBallot, updateUserBallot } from './models/ballot.ts'
 import { getBallotEligibleBooks } from './clients/static-api.ts'
 
 export const BallotDeactivationRequest = z.object({
@@ -43,6 +43,7 @@ const app = new Hono<{ Variables: SessionVariables }>()
         ranks: number[]
         bookCount: number
         unrankedBallotCount: number
+        percentUnranked: number
       }
     > = []
     const eligibleBooks = await getBallotEligibleBooks()
@@ -71,6 +72,9 @@ const app = new Hono<{ Variables: SessionVariables }>()
         )
         continue
       }
+      const unrankedBallotCount = eligibleBooks.map((b) => ballot.books[b]).filter(
+        (b) => !b,
+      ).length
       stats.push({
         updated: ballot.updated.toISOString(),
         userId: ballot.userId,
@@ -78,12 +82,32 @@ const app = new Hono<{ Variables: SessionVariables }>()
         canEmail: user.data.canEmail ?? false,
         ranks,
         bookCount: Object.keys(ballot.books).length,
-        unrankedBallotCount: eligibleBooks.map((b) => ballot.books[b]).filter(
-          (b) => !b,
-        ).length,
+        unrankedBallotCount,
+        percentUnranked: unrankedBallotCount / eligibleBooks.length,
       })
     }
     return c.json({ stats }, 200)
+  })
+  .get('/ballot-stats/:userId',
+    zValidator(
+      'param',
+      z.object({
+        userId: z.ulid(),
+      }),
+    ), async (c) => {
+    const kv = c.get('kv')
+    const userId = c.req.param('userId')
+    const eligibleBooks = await getBallotEligibleBooks()
+    const maybeBallot = await getUserBallot(kv, userId)
+    if (!maybeBallot.success) {
+      return c.json({ updated: null, unrankedBallotCount: eligibleBooks.length, percentUnranked: 1 }, 200)
+    }
+    const ballot = maybeBallot.data
+    const unrankedBallotCount = eligibleBooks.map((b) => ballot.books[b]).filter(
+      (b) => !b,
+    ).length
+    const percentUnranked = unrankedBallotCount / eligibleBooks.length
+    return c.json({ updated: ballot.updated.toISOString(), unrankedBallotCount, percentUnranked }, 200)
   })
   .post(
     '/deactivate-ballots',
