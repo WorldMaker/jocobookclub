@@ -66,14 +66,14 @@ layout: 'main.vto'
                     {{ set bookMarks = marks?.[matrixIndex] }}
                     {{ if bookMarks }}
                       {{ for mark, users of bookMarks }}
-                        {{ set count = Object.keys(users).length }}
+                        {{ set markCount = Object.keys(users).length }}
                         {{ if genre.marks[mark] }}
-                          <a class="tags has-addons" title="{{ genre.marks[mark].name }} ({{ count }})" href="/marks/{{ mark }}">
+                          <a class="tags has-addons" title="{{ genre.marks[mark].name }} ({{ markCount }})" href="/marks/{{ mark }}">
                             <span class="tag {{ genre.marks[mark].tagClass }}">
                                 <span class="icon {{ genre.marks[mark].tagIconClass }}"><i class="fa-duotone fa-solid {{ genre.marks[mark].icon }}"></i></span>
                             </span>
                             <span class="tag is-hidden-mobile">
-                                {{ count }}
+                                {{ markCount }}
                             </span>
                           </a>
                         {{ /if }}
@@ -123,6 +123,7 @@ layout: 'main.vto'
                       <div class="ranking-interest">
                       {{ if supports?.[matrixIndex] || supports?.[matrixIndex] === 0 }}
                         {{ set supportPercent = (supports[matrixIndex] / count) * 100 }}
+                        {{> console.log({ supports: supports[matrixIndex], count, supportPercent }) }}
                         <span class='icon-text' title="{{ supportPercent.toFixed(0) }}% of ballots preferred this book over at least one other">
                           <span class='icon has-text-info'>
                             <i class='fa-duotone fa-solid fa-hand-holding-star'></i>
