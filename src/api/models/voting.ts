@@ -112,6 +112,6 @@ export async function tallyFinalRanking(
   }
   return {
     finalTally: tallyFinal(finalTally),
-    leaderboard: { leaders: finalTally.userSupports } satisfies Leaderboard,
+    leaderboard: { leaders: finalTally.userSupports, updated: new Date() } satisfies Leaderboard,
   }
 }

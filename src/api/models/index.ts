@@ -5,6 +5,7 @@ export type { Passkey, PasskeyMeta } from './passkey.ts'
 export { Session } from './session.ts'
 export { Suggestion } from './suggestion.ts'
 export {
+  Leaderboard,
   FinalTally,
   getRecentWindowDescription,
   RecentWindow,

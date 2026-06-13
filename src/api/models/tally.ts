@@ -489,6 +489,7 @@ export async function getFinalTally(kv: Deno.Kv) {
  * not be compatible across versions
  */
 export const Leaderboard = z.object({
+  updated: z.coerce.date(),
   leaders: z.array(UserSupport),
 })
 
