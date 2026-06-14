@@ -439,5 +439,20 @@
   },
   "8c784b55-c3e6-4e6b-8221-a8da7bf632d4": {
     "Moderate": "Death"
+  },
+  "bea60a60-8dc1-416f-98b3-8ecff3039d0d": {
+    "Graphic": "Abandonment, Sexual content, Death of parent",
+    "Moderate": "Death, Child abuse, Cursing",
+    "Minor": "Homophobia, Racism, Physical abuse"
+  },
+  "3462dd5f-1dc0-484a-b341-3a9470946b4c": {
+    "Graphic": "Body horror, Animal death, Death",
+    "Moderate": "War, Suicide, Murder",
+    "Minor": "Fire/Fire injury, Vomit, Transphobia"
+  },
+  "1c21fe32-ad00-43e9-9a9a-5bea0e5ef3d4": {
+    "Graphic": "Colonisation, War, Racism",
+    "Moderate": "Medical trauma, Xenophobia, Genocide",
+    "Minor": "Rape, Slavery, Torture"
   }
 }
