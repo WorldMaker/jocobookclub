@@ -206,6 +206,7 @@ export default async function* history({ search }: Lume.Data) {
   rankings.sort((a, b) => Temporal.PlainDate.compare(a.date, b.date))
 
   const totalBooks: DayRank = {}
+  let lastRankingDate: Temporal.PlainDate | null = null
   let lastRankingUrl: string | null = null
   let lastRankingByLtId: Record<string, number> = {}
   let lastBooks: string[] = []
@@ -242,6 +243,7 @@ export default async function* history({ search }: Lume.Data) {
     }
     lastRankingUrl = site.url(ranking.path, true)
     lastRankingByLtId = rankingByLtId
+    lastRankingDate = ranking.date
     lastBooks = data.books
     lastMarks = data.marks ?? []
     lastSupports = data.supports ?? []
@@ -310,6 +312,8 @@ export default async function* history({ search }: Lume.Data) {
       layout: 'mark.vto',
       ...info,
       title: info.name,
+      lastRankingDate,
+      lastRankingUrl,
       lastRankingByLtId,
       mark,
       books,
