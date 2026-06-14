@@ -37,4 +37,4 @@ Blurb from a JoCoNaut:
 > a baffled American doctor, Alex must unravel the secret of the House of Usher
 > before it consumes them all."
 
-Held because *Nettle and Bone* from T. Kingfisher is on the current ballot.
+Held because _Nettle and Bone_ from T. Kingfisher is on the current ballot.
