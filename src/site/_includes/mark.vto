@@ -22,7 +22,8 @@ bfscript: /bf/tag-page.js
     <h2 class="subtitle">Books marked {{name}} by a specifically chosen <i class="fa-duotone fa-solid fa-user-astronaut"></i> JoCoNaut.</h2>
     <div class="grid is-col-min-18">
     {{ for ltid, marks of allMarks }}
-        {{ for userId, date of marks }}
+        {{ for amark of marks }}
+            {{> const [userId, date] = amark }}
             {{ if userId === highlightUserId }}
                 {{ include "book-card.vto" { ...search.page(`ltid='${ltid}'`), currentBallot: true, rank: lastRankingByLtId[ltid], markInfo: genre.marks[mark], markCount: marks.length } }}
             {{ /if }}
@@ -50,7 +51,7 @@ bfscript: /bf/tag-page.js
         <span class="icon"><i class="fa-duotone fa-solid fa-users"></i></span>
         <span>All Marked Books</span>
     </h1>
-    <h2 class="subtitle">All books marked {{name}} by any <i class="fa-duotone fa-solid fa-user-astronaut"></i> JoCoNaut in the last ranking.</h2>
+    <h2 class="subtitle">All books marked {{name}} by any <i class="fa-duotone fa-solid fa-user-astrout"></i> JoCoNaut in the last ranking.</h2>
     <div class="grid is-col-min-18">
     {{ for ltid, marks of allMarks }}
         {{ if marks.length > 0 }}
@@ -66,3 +67,4 @@ bfscript: /bf/tag-page.js
 </section>
 
 {{ include "bf/tag-page.html" }}
+na
