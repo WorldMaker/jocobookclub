@@ -138,7 +138,7 @@ export function Table({ ranking }: TableProps) {
     ? (
       <p class='block'>
         The oldest ballot counted was cast on{' '}
-        {finalTally.oldest.toLocaleDateString()}.
+        <time datetime={finalTally.oldest.toISOString()}>{finalTally.oldest.toLocaleDateString(undefined, { dateStyle: 'short' })}</time>.
         {finalTally.recentCount
           ? ` ${finalTally.recentCount} ballots were recently cast (${
             getRecentWindowDescription(finalTally.recentWindow)
@@ -153,7 +153,7 @@ export function Table({ ranking }: TableProps) {
         <i class='fa-duotone fa-solid fa-user-astronaut'></i> {finalTally.count}
         {' '}
         JoCoNauts participated in these rankings calculated on{' '}
-        {updated.toLocaleDateString()} at {updated.toLocaleTimeString()}.
+        <time class='has-background-info-dark' datetime={updated.toISOString()}>{updated.toLocaleString(undefined, { dateStyle: 'full', timeStyle: 'long' })}</time>.
       </p>
       {preferredBlock}
       {oldestBlock}

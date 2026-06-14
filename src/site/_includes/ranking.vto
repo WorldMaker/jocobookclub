@@ -1,13 +1,15 @@
 ---
 layout: 'main.vto'
+bfscript: /bf/local-time.js
 ---
 
 <section class="section">
     <h1 class="title"><span class="icon has-text-info"><i class="fa-duotone fa-solid fa-ranking-star"></i></span> {{ title }}</h1>
 
     <p class='block'>
+        {{ set instant = new Date(updated).toTemporalInstant().toZonedDateTimeISO('America/New_York') }}
         <i class='fa-duotone fa-solid fa-user-astronaut'></i> {{ count }} JoCoNauts
-        participated in these rankings calculated on {{ new Date(updated).toLocaleDateString() }} at {{ new Date(updated).toLocaleTimeString() }}.
+        participated in these rankings calculated on <local-time><time datetime="{{ instant.toString() }}">{{ instant.toLocaleString(undefined, { dateStyle: 'full', timeStyle: 'long' }) }}</time></local-time>.
     </p>
 
     {{ if (preferredMultiplier ?? 1) > 1 && (preferred?.length ?? 0) > 0 }}
@@ -18,7 +20,8 @@ layout: 'main.vto'
 
     {{ if oldest }}
       <p class='block'>
-        The oldest ballot counted was cast on {{ new Date(oldest).toLocaleDateString() }}. {{ if recentCount }}
+        {{ set instant = new Date(oldest).toTemporalInstant().toZonedDateTimeISO('America/New_York').toPlainDate() }}
+        The oldest ballot counted was cast on <time datetime="{{ instant.toString() }}">{{ instant.toLocaleString(undefined, { dateStyle: 'short' }) }}</time>. {{ if recentCount }}
           {{ recentCount }} ballots were recently cast ({{ recentWindowDescription }}).
         {{ /if }}
       </p>
