@@ -55,15 +55,30 @@ export class BallotManager {
             if (typeof lastBook !== 'object') {
               return true
             } else if (
-              typeof lastBook === 'object' &&
-              (lastBook.rank !== maybeBook.rank ||
-                ('mark' in maybeBook) !== ('mark' in lastBook) ||
-                ('mark' in maybeBook && 'mark' in lastBook &&
-                  (maybeBook.mark![0] !== lastBook.mark![0] ||
-                    maybeBook.mark![1].getTime() >
-                      lastBook.mark![1].getTime())))
+              typeof lastBook === 'object'
             ) {
-              return true
+              if (lastBook.rank !== maybeBook.rank) {
+                return true
+              }
+              const lastHasMark = 'mark' in lastBook &&
+                typeof lastBook.mark !== 'undefined'
+              const maybeHasMark = 'mark' in maybeBook &&
+                typeof maybeBook.mark !== 'undefined'
+              if (lastHasMark !== maybeHasMark) {
+                return true
+              } else if (
+                lastHasMark && maybeHasMark
+              ) {
+                if (maybeBook.mark![0] !== lastBook.mark![0]) {
+                  return true
+                }
+                if (
+                  maybeBook.mark![1].getTime() >
+                    lastBook.mark![1].getTime()
+                ) {
+                  return true
+                }
+              }
             }
           }
         }
