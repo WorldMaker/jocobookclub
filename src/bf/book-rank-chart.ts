@@ -37,7 +37,7 @@ class BookRankChart extends HTMLElement {
       )
       return
     }
-    const rank = await rankResponse.json()
+    const rank = await rankResponse.json() as Record<string, number>
     const totalsResponse = await fetch(`${StaticApiBase}/total-books.json`)
     if (!totalsResponse.ok) {
       console.warn(
@@ -55,12 +55,12 @@ class BookRankChart extends HTMLElement {
     this.appendChild(canvas)
 
     const data = Object.entries(rank)
-      .map(([date, rank]) => ({ x: date, y: rank }))
+      .map(([date, rank]) => ({ x: date, y: -rank }))
       .sort((a, b) => new Date(a.x).getTime() - new Date(b.x).getTime())
     console.log('Rank data for book', ltid, data)
 
     const totalData = data
-      .map(({ x }) => x in totals ? ({ x, y: totals[x] }) : null)
+      .map(({ x }) => x in totals ? ({ x, y: -totals[x] }) : null)
       .filter((total) => total !== null)
     console.log('Total books data', totalData)
 
@@ -86,8 +86,8 @@ class BookRankChart extends HTMLElement {
         responsive: true,
         scales: {
           y: {
-            suggestedMin: 0,
-            suggestedMax: 20,
+            suggestedMin: -20,
+            suggestedMax: 0,
           },
           x: {
             type: 'time',
