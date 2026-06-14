@@ -299,6 +299,7 @@ export default async function* history({ search }: Lume.Data) {
 
     const recentMarks = Object.entries(recentMarksByUser).reduce(
       (acc, [userId, [ltid, date]]) => ({
+        ...acc,
         [ltid]: [...(acc[ltid] ?? []), [userId, date] satisfies [string, Date]],
       }),
       {} as Record<string, [string, Date][]>,
