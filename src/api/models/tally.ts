@@ -291,7 +291,7 @@ export const FinalTally = z.object({
   preferredMultiplier: z.number().int().gte(1).optional(),
   preferred: z.array(UserId).optional(),
   ranking: z.array(z.string()),
-  supportThreshold: z.number().positive().lte(1).optional(),
+  supportThreshold: z.number().gte(0).lte(1).optional(),
 })
 
 export type FinalTally = z.infer<typeof FinalTally>
