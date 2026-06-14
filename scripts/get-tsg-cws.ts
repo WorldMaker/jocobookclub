@@ -74,8 +74,13 @@ for await (const f of walk('./src/site/', { exts: ['.md'] })) {
           tsgid: attrs.tsgid,
           title: attrs.title,
         })
-        const intentional = dom.window.document.querySelector('.book-pane > p')
-          .textContent.includes("doesn't have any")
+        const intentional = Array.from<HTMLElement>(
+          dom.window.document.querySelectorAll('.book-pane > p'),
+        )
+          .some((p) =>
+            typeof p.textContent === 'string' &&
+            p.textContent.includes("doesn't have any")
+          )
         if (!intentional) {
           console.log(dom.serialize())
           exit(1)
