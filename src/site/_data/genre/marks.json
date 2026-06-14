@@ -18,7 +18,8 @@
     "icon": "fa-lobster",
     "name": "Lobster",
     "tagClass": "is-danger",
-    "tagIconClass": ""
+    "tagIconClass": "",
+    "highlightUserId": "01JJ2XCD6C339ZW7CBC4Y8HSAK"
   },
   "otter": {
     "iconClass": "has-text-link",
