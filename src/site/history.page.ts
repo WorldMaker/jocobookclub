@@ -99,7 +99,9 @@ export default async function* history({ search }: Lume.Data) {
   //#endregion
 
   //#region Cruises
-  for (const [startStr, endStr, name] of cruises as [string, string, string][]) {
+  for (
+    const [startStr, endStr, name] of cruises as [string, string, string][]
+  ) {
     const startDate = Temporal.PlainDate.from(startStr)
     const endDate = Temporal.PlainDate.from(endStr)
     for (
