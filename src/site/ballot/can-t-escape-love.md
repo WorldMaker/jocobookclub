@@ -13,7 +13,7 @@ cw: |-
   Graphic: Sexual content, Ableism, Medical content
   Moderate: Cursing, Sexism, Toxic relationship
   Minor: Chronic illness, Pregnancy, Gaslighting
-tags: [romance]
+tags: [romance, joyful]
 updated: '2025-08-17T03:54:24.282Z'
 ---
 

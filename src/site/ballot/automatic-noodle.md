@@ -11,6 +11,7 @@ cw: 'Post-American post-dystopian, social media, cryptocurrency '
 tags:
   - boat
   - scifi
+  - joyful
 updated: '2025-09-09T05:31:28.169Z'
 ---
 

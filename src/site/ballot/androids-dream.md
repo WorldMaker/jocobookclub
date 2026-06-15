@@ -18,6 +18,7 @@ whyBlurb: >-
 tags:
   - boat
   - scifi
+  - joyful
 updated: '2026-02-07T21:25:31.068Z'
 ---
 
