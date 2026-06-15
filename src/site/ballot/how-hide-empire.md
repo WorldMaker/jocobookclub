@@ -10,11 +10,9 @@ whyBlurb: >-
   528 pages. A fascinating and very readable history of the current and former
   overseas possessions of the United States of America - from Puerto Rico to the
   Philippines to a bunch of rocks covered in bird shit.
-
   "At various times, the inhabitants of the U.S. Empire have been shot, shelled,
   starved, interned, dispossessed, tortured, and experimented on. What they
   haven’t been, by and large, is seen."
-
   One of my favorite history books.
 tags:
   - non-fiction

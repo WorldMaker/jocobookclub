@@ -9,7 +9,6 @@ author: T. Kingfisher
 whyBlurb: >-
   A 165-page retelling of The Fall of the House of Usher in T. Kingfisher's
   signature style: creepy as hell, but also really funny.
-
   "When Alex Easton, a retired soldier, receives word that their childhood
   friend Madeline Usher is dying, they race to the ancestral home of the Ushers
   in the remote countryside of Ruritania. What they find there is a nightmare of
