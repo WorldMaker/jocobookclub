@@ -4,6 +4,7 @@ import {
   Mark,
   TallyBookMarks,
 } from '@worldmaker/jocobookclub-api/models'
+import cruises from './_data/cruises.json' with { type: 'json' }
 import rawMarks from './_data/genre/marks.json' with { type: 'json' }
 import site from './_config.ts'
 
@@ -36,10 +37,17 @@ type RankingEntry = {
   url: string
 }
 
+type CruiseEntry = {
+  type: 'cruise'
+  date: Temporal.PlainDate
+  name: string
+}
+
 type CalendarEntry =
   | PreviousBookEntry
   | ScheduledUpcomingBookEntry
   | RankingEntry
+  | CruiseEntry
 
 type DayCalendary = Map<number, CalendarEntry[]>
 type MonthCalendar = Map<number, DayCalendary>
@@ -89,6 +97,23 @@ export default async function* history({ search }: Lume.Data) {
     bookRanks.get(ltid)![date.toString()] = rank
   }
   //#endregion
+
+  //#region Cruises
+  for (const [startStr, endStr, name] of cruises as [string, string, string][]) {
+    const startDate = Temporal.PlainDate.from(startStr)
+    const endDate = Temporal.PlainDate.from(endStr)
+    for (
+      let date = startDate;
+      Temporal.PlainDate.compare(date, endDate) <= 0;
+      date = date.add({ days: 1 })
+    ) {
+      addToCalendar({
+        type: 'cruise',
+        date,
+        name,
+      })
+    }
+  }
 
   //#region Calendar Prep
   const previousBooks = search.pages('previous')

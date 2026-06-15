@@ -31,6 +31,7 @@ layout: 'main.vto'
                         <ul>
                         {{ for entry of entries }}
                              <li>
+                             {{ if entry.tags }}
                              <div class="tags">
                                 {{ for tag of entry.tags }}
                                     {{ if genre.tags[tag] }}
@@ -42,6 +43,7 @@ layout: 'main.vto'
                                     {{ /if }}
                                 {{ /for }}
                             </div>
+                            {{ /if }}
                              {{ if entry.type === 'ranking' }}
                                 <a href="{{ entry.url }}" title="Ranking" class="button is-small is-fullwidth is-info is-outlined">
                                     <span class="icon"><i class="fa-duotone fa-solid fa-ranking-star"></i></span>
@@ -57,6 +59,11 @@ layout: 'main.vto'
                                     <span class="icon has-text-info"><i class="fa-duotone fa-solid fa-book-sparkles"></i></span>
                                     <span class="book-title">{{ entry.title }}</span><span class="is-hidden-mobile"> by {{ entry.author }}</span>
                                 </a>
+                             {{ else if entry.type === 'cruise' }}
+                                <div class="cruise-entry has-background-info-dark">
+                                    <span class="icon has-text-info"><i class="fa-duotone fa-solid fa-ship"></i></span>
+                                    {{ entry.name }}
+                                </div>
                              {{ /if }}
                             
                              </li>
