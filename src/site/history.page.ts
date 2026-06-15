@@ -116,6 +116,7 @@ export default async function* history({ search }: Lume.Data) {
       })
     }
   }
+  //#endregion
 
   //#region Calendar Prep
   const previousBooks = search.pages('previous')
