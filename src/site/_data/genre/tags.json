@@ -57,5 +57,13 @@
     "description": "Books generally outside of the other main genres, often with a mainstream appeal.",
     "tagClass": "is-warning",
     "tagIconClass": ""
+  },
+  "joyful": {
+    "iconClass": "has-text-success is-light",
+    "icon": "fa-tree-palm",
+    "title": "Joyful",
+    "description": "Books that are cozy, hopeful, uplifting, heartwarming, great \"beach reads\", or generally bring joy to the reader.",
+    "tagClass": "is-success is-light",
+    "tagIconClass": ""
   }
 }
