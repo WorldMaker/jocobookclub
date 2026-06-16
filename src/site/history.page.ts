@@ -76,36 +76,54 @@ function createCalendarFileContents(calendar: YearCalendar) {
       for (const [_day, entries] of dayCalendar.entries()) {
         for (const entry of entries) {
           switch (entry.type) {
-            case 'previous': {
-              const vevent = new ICAL.Component('vevent')
-              const event = new ICAL.Event(vevent)
-              event.summary = `JoCo Book Club Discussed: "${entry.title}" by ${entry.author}`
-              event.uid = `book-${entry.ltid}`
-              event.startDate = ICAL.Time.fromDateString(entry.date.toString())
-              event.description = `JoCo Book Club Discussed: "${entry.title}" by ${entry.author}\n\nTags: ${entry.tags.join(', ')}\n\nURL: ${entry.url}`
-              vevent.updatePropertyWithValue('dtstamp', now)
-              cal.addSubcomponent(vevent)
-            }
+            case 'previous':
+              {
+                const vevent = new ICAL.Component('vevent')
+                const event = new ICAL.Event(vevent)
+                event.summary =
+                  `JoCo Book Club Discussed: "${entry.title}" by ${entry.author}`
+                event.uid = `book-${entry.ltid}`
+                event.startDate = ICAL.Time.fromDateString(
+                  entry.date.toString(),
+                )
+                event.description =
+                  `JoCo Book Club Discussed: "${entry.title}" by ${entry.author}\n\nTags: ${
+                    entry.tags.join(', ')
+                  }\n\nURL: ${entry.url}`
+                vevent.updatePropertyWithValue('dtstamp', now)
+                cal.addSubcomponent(vevent)
+              }
               break
-            case 'upcoming': {
-              const vevent = new ICAL.Component('vevent')
-              const event = new ICAL.Event(vevent)
-              event.summary = `JoCo Book Club Meeting: "${entry.title}" by ${entry.author}`
-              event.uid = `book-${entry.ltid}`
-              const startDateTime = new Date(entry.date.toPlainDateTime(entry.time).toZonedDateTime(entry.timezone).epochMilliseconds)
-              event.startDate = ICAL.Time.fromJSDate(startDateTime, true)
-              event.duration = ICAL.Duration.fromSeconds(2 * 60 * 60) // 2 hours
-              event.description = `JoCo Book Club Meeting: "${entry.title}" by ${entry.author}\n\nTags: ${entry.tags.join(', ')}\n\nURL: ${entry.url}`
-              vevent.updatePropertyWithValue('dtstamp', now)
-              cal.addSubcomponent(vevent)
-            }
+            case 'upcoming':
+              {
+                const vevent = new ICAL.Component('vevent')
+                const event = new ICAL.Event(vevent)
+                event.summary =
+                  `JoCo Book Club Meeting: "${entry.title}" by ${entry.author}`
+                event.uid = `book-${entry.ltid}`
+                const startDateTime = new Date(
+                  entry.date.toPlainDateTime(entry.time).toZonedDateTime(
+                    entry.timezone,
+                  ).epochMilliseconds,
+                )
+                event.startDate = ICAL.Time.fromJSDate(startDateTime, true)
+                event.duration = ICAL.Duration.fromSeconds(2 * 60 * 60) // 2 hours
+                event.description =
+                  `JoCo Book Club Meeting: "${entry.title}" by ${entry.author}\n\nTags: ${
+                    entry.tags.join(', ')
+                  }\n\nURL: ${entry.url}`
+                vevent.updatePropertyWithValue('dtstamp', now)
+                cal.addSubcomponent(vevent)
+              }
               break
           }
         }
       }
     }
   }
-  for (const [startStr, endStr, name] of cruises as [string, string, string][]) {
+  for (
+    const [startStr, endStr, name] of cruises as [string, string, string][]
+  ) {
     const vevent = new ICAL.Component('vevent')
     const event = new ICAL.Event(vevent)
     event.summary = name
@@ -262,7 +280,7 @@ export default async function* history({ search }: Lume.Data) {
     addToCalendar(ranking)
   }
   //#endregion
-  
+
   //#region iCalendar File
   yield {
     url: '/calendar.ics',
