@@ -83,10 +83,17 @@ layout: 'main.vto'
 <section class="section">
     <div class="container">
         <h2 class="subtitle"><a href="/history/"><i class="fa fa-solid fa-duotone fa-calendar"></i> Club History</a></h2>
-        <ul>
+        <ul class="block">
             {{ for pastYear of pastYears }}
                 <li><a href="/history/{{ pastYear }}/">{{ pastYear }}</a></li>
             {{ /for }}
         </ul>
+        <p class="block">
+        <a href="/calendar.ics" class="button is-info is-outlined">
+            <span class="icon"><i class="fa-duotone fa-solid fa-calendar-arrow-down"></i></span>
+            <span>Download Calendar (.ics)</span>
+        </a>
+        (Right-click and "Copy Link" to subscribe to auto-updates in your calendar app)
+        </p>
     </div>
 </section>
