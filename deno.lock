@@ -78,6 +78,7 @@
     "npm:estree-walker@3.0.3": "3.0.3",
     "npm:hono@^4.6.16": "4.9.0",
     "npm:hono@latest": "4.9.0",
+    "npm:ical.js@^2.2.1": "2.2.1",
     "npm:jsdom@*": "26.0.0",
     "npm:jsdom@26": "26.0.0",
     "npm:markdown-it-attrs@4.1.6": "4.1.6_markdown-it@14.1.0",
@@ -765,6 +766,9 @@
         "debug"
       ]
     },
+    "ical.js@2.2.1": {
+      "integrity": "sha512-yK/UlPbEs316igb/tjRgbFA8ZV75rCsBJp/hWOatpyaPNlgw0dGDmU+FoicOcwX4xXkeXOkYiOmCqNPFpNPkQg=="
+    },
     "iconv-lite@0.6.3": {
       "integrity": "sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==",
       "dependencies": [
@@ -1223,6 +1227,11 @@
           "npm:hono@^4.6.16",
           "npm:jsdom@26",
           "npm:rxjs@^7.8.1"
+        ]
+      },
+      "src/site": {
+        "dependencies": [
+          "npm:ical.js@^2.2.1"
         ]
       }
     }
