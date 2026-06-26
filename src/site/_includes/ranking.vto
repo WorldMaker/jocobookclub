@@ -24,6 +24,9 @@ bfscript: /bf/local-time.js
         The oldest ballot counted was cast on <time datetime="{{ instant.toString() }}">{{ instant.toLocaleString(undefined, { dateStyle: 'short' }) }}</time>. {{ if recentCount }}
           {{ recentCount }} ballots were recently cast ({{ recentWindowDescription }}).
         {{ /if }}
+        {{ if (supportThreshold ?? 0) > 0 }}
+          {{ uncounted }} ballots were either inactive or did not support at least {{ supportThreshold?.toLocaleString(undefined, { style: 'percent' }) }} of the ballot.
+        {{ /if }}
       </p>
     {{ /if }}
 
