@@ -74,7 +74,10 @@ export async function buildBallotStamps(document: Document) {
     { append: true },
   )
 
-  const sortPicker = SortPicker()
+  const { context: pickerContext } = makeTestComponentContext({
+    off: makeTestEvent<PointerEvent>(NEVER),
+  })
+  const sortPicker = SortPicker({}, pickerContext)
   const sortPickerStamp = buildStamp(sortPicker, document)
   sortPickerStamp.id = 'sort-picker'
   await Deno.writeTextFile(

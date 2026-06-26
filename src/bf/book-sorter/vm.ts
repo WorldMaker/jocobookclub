@@ -1,7 +1,7 @@
 import { butterfly, StateSetter } from '@worldmaker/butterfloat'
 import { Observable } from 'rxjs'
 
-export type Sort = 'title' | 'author' | 'rank'
+export type Sort = 'title' | 'author' | 'rank' | '_off'
 
 export type SortDirection = 'asc' | 'desc'
 
@@ -30,7 +30,7 @@ export class SortVm {
   setSort(sort: Sort) {
     // toggle direction if sort is already selected
     this.#setSort((currentSort) => {
-      if (currentSort === sort) {
+      if (currentSort === sort && sort !== '_off') {
         this.#setDirection((currentDirection) => {
           const toggledDirection = currentDirection === 'asc' ? 'desc' : 'asc'
           localStorage.setItem('sort-direction', toggledDirection)
