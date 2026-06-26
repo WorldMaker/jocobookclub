@@ -149,7 +149,11 @@ export function Table({ ranking }: TableProps) {
           }).`
           : ''}
         {(finalTally.supportThreshold ?? 0) > 0
-          ? ` ${finalTally.uncounted} ballots were either inactive or did not support at least ${finalTally.supportThreshold?.toLocaleString(undefined, { style: 'percent' })} of the ballot.`
+          ? ` ${finalTally.uncounted} ballots were either inactive or did not support at least ${
+            finalTally.supportThreshold?.toLocaleString(undefined, {
+              style: 'percent',
+            })
+          } of the ballot.`
           : ''}
       </p>
     )
