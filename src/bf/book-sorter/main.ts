@@ -13,6 +13,9 @@ class BookSorter extends HTMLElement {
 
     this.#subscription = combineLatest([sortVm.sort, sortVm.direction, ballot])
       .subscribe(([sort, direction, ballot]) => {
+        if (sort === '_off') {
+          return
+        }
         const books = [...this.querySelectorAll<HTMLDivElement>('div.card')]
         books.sort((a, b) => {
           if (sort === 'rank') {

@@ -54,13 +54,29 @@ export function SortButton(
   )
 }
 
-export function SortPicker() {
+export function SortPicker(
+  _: unknown,
+  { bindEffect, events }: ComponentContext<
+    { off: ObservableEvent<PointerEvent> }
+  >,
+) {
+  bindEffect(events.off, () => sortVm.setSort('_off'))
+  const isOff = sortVm.sort.pipe(map((s) => s === '_off'), shareReplay(1))
   return (
     <div class='level'>
       <div class='level-item buttons has-addons'>
         <SortButton sort='title' name='Title' />
         <SortButton sort='author' name='Author' />
         <SortButton sort='rank' name='Rank' />
+        <button
+          type='button'
+          class='button'
+          title='Disable sorting'
+          classBind={{ 'is-info': isOff, 'is-selected': isOff }}
+          events={{ click: events.off }}
+        >
+          <span>Off</span>
+        </button>
       </div>
     </div>
   )
