@@ -54,7 +54,12 @@ export function SortButton(
   )
 }
 
-export function SortPicker(_: unknown, { bindEffect, events }: ComponentContext<{ off: ObservableEvent<PointerEvent> }>) {
+export function SortPicker(
+  _: unknown,
+  { bindEffect, events }: ComponentContext<
+    { off: ObservableEvent<PointerEvent> }
+  >,
+) {
   bindEffect(events.off, () => sortVm.setSort('_off'))
   const isOff = sortVm.sort.pipe(map((s) => s === '_off'), shareReplay(1))
   return (
