@@ -12,7 +12,7 @@ export type EligibleBooks = z.infer<typeof EligibleBooks>
 // Percent of books [0, 1] that must be supported for a ballot to count. This
 // is intended to filter people ranking very few books or "haters" avoiding
 // a rich distribution of books across available ranks
-const SupportThreshold = 0
+const SupportThreshold = 0.25
 
 export const UserSupport = z.object({
   userId: UserId,
