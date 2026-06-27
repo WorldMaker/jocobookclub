@@ -156,7 +156,7 @@ describe('tally', () => {
       ballot,
       fakeUser,
       emptyPreferred,
-      0
+      0,
     )
     expect(tally.mehCount).toEqual(1)
   })
