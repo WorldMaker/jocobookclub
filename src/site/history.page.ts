@@ -1,141 +1,29 @@
 import {
   FinalTally,
   getRecentWindowDescription,
-  Mark,
-  TallyBookMarks,
 } from '@worldmaker/jocobookclub-api/models'
-import ICAL from 'ical.js'
 import cruises from './_data/cruises.json' with { type: 'json' }
-import rawMarks from './_data/genre/marks.json' with { type: 'json' }
 import site from './_config.ts'
-
-type BookType = 'previous' | 'upcoming' | 'ballot' | 'held'
-type BookEntry = {
-  type: BookType
-  title: string
-  author: string
-  date?: Temporal.PlainDate
-  time?: Temporal.PlainTime
-  timezone?: string
-  ltid: string
-  tags: string[]
-  url: string
-}
-type PreviousBookEntry = BookEntry & {
-  type: 'previous'
-  date: Temporal.PlainDate
-}
-type ScheduledUpcomingBookEntry = BookEntry & {
-  type: 'upcoming'
-  date: Temporal.PlainDate
-  time: Temporal.PlainTime
-  timezone: string
-}
-
-type BooksByLtId = Map<string, BookEntry>
-
-type RankingEntry = {
-  type: 'ranking'
-  date: Temporal.PlainDate
-  filename: string
-  path: string
-  url: string
-}
-
-type CruiseEntry = {
-  type: 'cruise'
-  date: Temporal.PlainDate
-  name: string
-}
-
-type CalendarEntry =
-  | PreviousBookEntry
-  | ScheduledUpcomingBookEntry
-  | RankingEntry
-  | CruiseEntry
-
-type DayCalendary = Map<number, CalendarEntry[]>
-type MonthCalendar = Map<number, DayCalendary>
-type YearCalendar = Map<number, MonthCalendar>
-
-type DayRank = Record<string, number>
-type BookDayRank = Map<string, DayRank>
+import {
+  BookDayRank,
+  BookEntry,
+  BooksByLtId,
+  CalendarEntry,
+  DayRank,
+  LastRankingData,
+  PreviousBookEntry,
+  RankingEntry,
+  ScheduledUpcomingBookEntry,
+  YearCalendar,
+} from './history.model.ts'
+import { marks } from './marks.ts'
+import { index } from './index.ts'
+import { createCalendarFileContents } from './calendar.ts'
+import { tags } from './tags.ts'
 
 function toPlainDate(date: Date): Temporal.PlainDate {
   // Lume dates are always in UTC
   return date.toTemporalInstant().toZonedDateTimeISO('UTC').toPlainDate()
-}
-
-function createCalendarFileContents(calendar: YearCalendar) {
-  const cal = new ICAL.Component(['vcalendar', [], []])
-  cal.updatePropertyWithValue('prodid', '-//JoCo Book Club//iCal.js//EN')
-  cal.updatePropertyWithValue('version', '2.0')
-  const now = ICAL.Time.fromJSDate(new Date(), true)
-  for (const [_year, monthCalendar] of calendar.entries()) {
-    for (const [_month, dayCalendar] of monthCalendar.entries()) {
-      for (const [_day, entries] of dayCalendar.entries()) {
-        for (const entry of entries) {
-          switch (entry.type) {
-            case 'previous':
-              {
-                const vevent = new ICAL.Component('vevent')
-                const event = new ICAL.Event(vevent)
-                event.summary =
-                  `JoCo Book Club Discussed: "${entry.title}" by ${entry.author}`
-                event.uid = `book-${entry.ltid}`
-                event.startDate = ICAL.Time.fromDateString(
-                  entry.date.toString(),
-                )
-                event.description =
-                  `JoCo Book Club Discussed: "${entry.title}" by ${entry.author}\n\nTags: ${
-                    entry.tags.join(', ')
-                  }\n\nURL: ${entry.url}`
-                vevent.updatePropertyWithValue('dtstamp', now)
-                cal.addSubcomponent(vevent)
-              }
-              break
-            case 'upcoming':
-              {
-                const vevent = new ICAL.Component('vevent')
-                const event = new ICAL.Event(vevent)
-                event.summary =
-                  `JoCo Book Club Meeting: "${entry.title}" by ${entry.author}`
-                event.uid = `book-${entry.ltid}`
-                const startDateTime = new Date(
-                  entry.date.toPlainDateTime(entry.time).toZonedDateTime(
-                    entry.timezone,
-                  ).epochMilliseconds,
-                )
-                event.startDate = ICAL.Time.fromJSDate(startDateTime, true)
-                event.duration = ICAL.Duration.fromSeconds(2 * 60 * 60) // 2 hours
-                event.description =
-                  `JoCo Book Club Meeting: "${entry.title}" by ${entry.author}\n\nTags: ${
-                    entry.tags.join(', ')
-                  }\n\nURL: ${entry.url}`
-                vevent.updatePropertyWithValue('dtstamp', now)
-                cal.addSubcomponent(vevent)
-              }
-              break
-          }
-        }
-      }
-    }
-  }
-  for (
-    const [startStr, endStr, name] of cruises as [string, string, string][]
-  ) {
-    const vevent = new ICAL.Component('vevent')
-    const event = new ICAL.Event(vevent)
-    event.summary = name
-    event.uid = `cruise-${startStr}`
-    event.startDate = ICAL.Time.fromDateString(startStr)
-    // ical.js treats end dates as exclusive, but cruises are inclusive, so add one day to make it work
-    const endDate = Temporal.PlainDate.from(endStr).add({ days: 1 })
-    event.endDate = ICAL.Time.fromDateString(endDate.toString())
-    vevent.updatePropertyWithValue('dtstamp', now)
-    cal.addSubcomponent(vevent)
-  }
-  return cal.toString()
 }
 
 export default async function* history({ search }: Lume.Data) {
@@ -321,13 +209,17 @@ export default async function* history({ search }: Lume.Data) {
   rankings.sort((a, b) => Temporal.PlainDate.compare(a.date, b.date))
 
   const totalBooks: DayRank = {}
-  let lastRankingDate: Temporal.PlainDate | null = null
-  let lastRankingUrl: string | null = null
-  let lastRankingByLtId: Record<string, number> = {}
-  let lastBooks: string[] = []
-  let lastMarks: TallyBookMarks[] = []
-  let lastSupports: number[] = []
-  let lastCount = 0
+  const lastRanking: LastRankingData = {
+    url: null,
+    byLtId: {},
+    date: Temporal.Now.plainDateISO(),
+    books: [],
+    booksByLtId: books,
+    marks: [],
+    supports: [],
+    ranking: [],
+    count: 0,
+  }
   for (const ranking of rankings) {
     const tally = FinalTally.safeParse(
       JSON.parse(await Deno.readTextFile(ranking.filename)),
@@ -351,18 +243,19 @@ export default async function* history({ search }: Lume.Data) {
       url: ranking.path,
       booksByLtId: books,
       rankingDate: ranking.date,
-      lastRankingUrl,
-      lastRankingByLtId,
+      lastRankingUrl: lastRanking.url,
+      lastRankingByLtId: lastRanking.byLtId,
       recentWindowDescription: getRecentWindowDescription(data.recentWindow),
       tags: ['history'],
     }
-    lastRankingUrl = site.url(ranking.path, true)
-    lastRankingByLtId = rankingByLtId
-    lastRankingDate = ranking.date
-    lastBooks = data.books
-    lastMarks = data.marks ?? []
-    lastSupports = data.supports ?? []
-    lastCount = data.count
+    lastRanking.url = site.url(ranking.path, true)
+    lastRanking.byLtId = rankingByLtId
+    lastRanking.date = ranking.date
+    lastRanking.books = data.books
+    lastRanking.marks = data.marks ?? []
+    lastRanking.supports = data.supports ?? []
+    lastRanking.ranking = data.ranking
+    lastRanking.count = data.count
   }
 
   for (const [ltid, book] of bookRanks.entries()) {
@@ -380,82 +273,7 @@ export default async function* history({ search }: Lume.Data) {
   }
   //#endregion
 
-  //#region Marks
-  const twoMonthsAgo = Temporal.Now.zonedDateTimeISO().subtract({ months: 2 })
-
-  for (const [mark, info] of Object.entries(rawMarks)) {
-    const recentMarksByUser: Record<string, [string, Date]> = {}
-    const allMarks: Record<string, [string, Date][]> = {}
-
-    for (let i = 0; i < lastBooks.length; i++) {
-      const ltid = lastBooks[i]
-      if (!(ltid in allMarks)) {
-        allMarks[ltid] = []
-      }
-      const bookMarks = lastMarks[i]?.[mark as Mark]
-      if (bookMarks) {
-        for (const [userId, date] of Object.entries(bookMarks)) {
-          const instant = date!.toTemporalInstant()
-          if (Temporal.Instant.compare(instant, twoMonthsAgo) > 0) {
-            if (
-              userId in recentMarksByUser &&
-              Temporal.Instant.compare(
-                  instant,
-                  recentMarksByUser[userId][1].toTemporalInstant(),
-                ) > 0
-            ) {
-              recentMarksByUser[userId] = [ltid, date!]
-            } else if (!(userId in recentMarksByUser)) {
-              recentMarksByUser[userId] = [ltid, date!]
-            }
-          }
-          allMarks[ltid].push([userId, date!])
-        }
-      }
-    }
-
-    const recentMarks = Object.entries(recentMarksByUser).reduce(
-      (acc, [userId, [ltid, date]]) => ({
-        ...acc,
-        [ltid]: [...(acc[ltid] ?? []), [userId, date] satisfies [string, Date]],
-      }),
-      {} as Record<string, [string, Date][]>,
-    )
-
-    yield {
-      url: `/marks/${mark}/`,
-      layout: 'mark.vto',
-      ...info,
-      title: info.name,
-      lastRankingDate,
-      lastRankingUrl,
-      lastRankingByLtId,
-      mark,
-      books,
-      recentMarks,
-      allMarks,
-    }
-  }
-  //#endregion
-
-  //#region Index/Underdogs
-  const sorted = lastSupports
-    .map((support, index) => ({
-      percentSupport: lastCount > 0 ? support / lastCount : 0,
-      ltid: lastBooks[index],
-    }))
-    .sort((a, b) => a.percentSupport - b.percentSupport)
-
-  const firstQuartileMedianIdx = Math.floor(Math.floor(sorted.length / 2) / 2)
-
-  const underdogs = sorted.slice(0, firstQuartileMedianIdx).map(({ ltid }) =>
-    ltid
-  )
-
-  yield {
-    url: `/`,
-    layout: 'index.vto',
-    underdogs,
-  }
-  //#endregion
+  yield* index(lastRanking)
+  yield* marks(lastRanking)
+  yield* tags(lastRanking)
 }

@@ -11,9 +11,24 @@ bfscript: /bf/tag-page.js
     {{ if description }}
     <h2 class="subtitle">{{description}}</h2>
     {{ /if }}
-    <tag-tally-top5 tag="{{tag}}">
-        <p>You will need to have JS enabled and to login to see the current rankings.</p>
-    </tag-tally-top5>
+    <p class="block">As of <a href="{{ lastRankingUrl }}">{{ lastRankingDate.toLocaleString() }}</a>:</p>
+
+    <ol type="1" class="block">
+    {{ for book of top5 }}
+        {{ if book.title }}
+        <li>
+            <span>
+                <a href="{{ book.url }}">{{ book.title }}</a>
+                [<a href="https://www.librarything.com/work/{{ book.ltid }}">LT</a>]
+            </span>
+            <span> by </span>
+            <span>{{ book.author }}</span>
+        </li>
+        {{ else }}
+        <li>[Missing Information]</li>
+        {{ /if }}
+    {{ /for }}
+    </ol>
 
     <hr />
     
@@ -22,7 +37,7 @@ bfscript: /bf/tag-page.js
 
     <book-sorter class="grid is-col-min-18">
         {{ for book of search.pages(`ballot ${tag}`) }}
-        {{ include "book-card.vto" { ...book, currentBallot: true } }}
+        {{ include "book-card.vto" { ...book, currentBallot: true, rank: lastRankingByLtId[book.ltid] } }}
         {{ /for }}
     </book-sorter>
 
