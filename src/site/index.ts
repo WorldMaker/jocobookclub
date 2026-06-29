@@ -14,9 +14,17 @@ export function* index(lastRanking: LastRankingData) {
     ltid
   )
 
+  const top5 = lastRanking.ranking
+    .toReversed()
+    .slice(0, 5)
+    .map((ltid) => lastRanking.booksByLtId.get(ltid))
+
   yield {
     url: `/`,
     layout: 'index.vto',
     underdogs,
+    lastRankingDate: lastRanking.date,
+    lastRankingUrl: lastRanking.url,
+    top5,
   }
 }

@@ -59,7 +59,9 @@ export interface LastRankingData {
   byLtId: Record<string, number>
   date: Temporal.PlainDate
   books: string[]
+  booksByLtId: BooksByLtId
   marks: TallyBookMarks[]
   supports: number[]
+  ranking: string[]
   count: number
 }

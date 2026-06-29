@@ -35,9 +35,26 @@ tags: [main]
         <section class="section cell">
             <h1 class="title"><span class="icon has-text-primary"><i class="fa-duotone fa-solid fa-ballot"></i></span> Current Rankings</h1>
 
-            <final-tally-top5><p>You will need to have JS enabled and to login to see the current rankings.</p></final-tally-top5>
+            <p class="block">As of <a href="{{ lastRankingUrl }}">{{ lastRankingDate.toLocaleString() }}</a>:</p>
 
-            <a href="./ranking/" class="button is-link is-fullwidth">View Full Rankings</a>
+            <ol type="1" class="block">
+            {{ for book of top5 }}
+                {{ if book.title }}
+                <li>
+                    <span>
+                        <a href="{{ book.url }}">{{ book.title }}</a>
+                        [<a href="https://www.librarything.com/work/{{ book.ltid }}">LT</a>]
+                    </span>
+                    <span> by </span>
+                    <span>{{ book.author }}</span>
+                </li>
+                {{ else }}
+                <li>[Missing Information]</li>
+                {{ /if }}
+            {{ /for }}
+            </ol>
+
+            <a href="./ranking/" class="button is-link is-fullwidth">Leaderboard</a>
         </section>
     </div>
 </div>

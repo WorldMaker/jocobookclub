@@ -202,8 +202,10 @@ export default async function* history({ search }: Lume.Data) {
     byLtId: {},
     date: Temporal.Now.plainDateISO(),
     books: [],
+    booksByLtId: books,
     marks: [],
     supports: [],
+    ranking: [],
     count: 0,
   }
   for (const ranking of rankings) {
@@ -240,6 +242,7 @@ export default async function* history({ search }: Lume.Data) {
     lastRanking.books = data.books
     lastRanking.marks = data.marks ?? []
     lastRanking.supports = data.supports ?? []
+    lastRanking.ranking = data.ranking
     lastRanking.count = data.count
   }
 
