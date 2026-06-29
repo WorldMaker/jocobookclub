@@ -1,65 +1,12 @@
 import {
   FinalTally,
   getRecentWindowDescription,
-  Mark,
-  TallyBookMarks,
 } from '@worldmaker/jocobookclub-api/models'
 import ICAL from 'ical.js'
 import cruises from './_data/cruises.json' with { type: 'json' }
-import rawMarks from './_data/genre/marks.json' with { type: 'json' }
 import site from './_config.ts'
-
-type BookType = 'previous' | 'upcoming' | 'ballot' | 'held'
-type BookEntry = {
-  type: BookType
-  title: string
-  author: string
-  date?: Temporal.PlainDate
-  time?: Temporal.PlainTime
-  timezone?: string
-  ltid: string
-  tags: string[]
-  url: string
-}
-type PreviousBookEntry = BookEntry & {
-  type: 'previous'
-  date: Temporal.PlainDate
-}
-type ScheduledUpcomingBookEntry = BookEntry & {
-  type: 'upcoming'
-  date: Temporal.PlainDate
-  time: Temporal.PlainTime
-  timezone: string
-}
-
-type BooksByLtId = Map<string, BookEntry>
-
-type RankingEntry = {
-  type: 'ranking'
-  date: Temporal.PlainDate
-  filename: string
-  path: string
-  url: string
-}
-
-type CruiseEntry = {
-  type: 'cruise'
-  date: Temporal.PlainDate
-  name: string
-}
-
-type CalendarEntry =
-  | PreviousBookEntry
-  | ScheduledUpcomingBookEntry
-  | RankingEntry
-  | CruiseEntry
-
-type DayCalendary = Map<number, CalendarEntry[]>
-type MonthCalendar = Map<number, DayCalendary>
-type YearCalendar = Map<number, MonthCalendar>
-
-type DayRank = Record<string, number>
-type BookDayRank = Map<string, DayRank>
+import { BookDayRank, BookEntry, BooksByLtId, CalendarEntry, DayRank, LastRankingData, PreviousBookEntry, RankingEntry, ScheduledUpcomingBookEntry, YearCalendar } from './history.model.ts'
+import { marks } from './marks.ts'
 
 function toPlainDate(date: Date): Temporal.PlainDate {
   // Lume dates are always in UTC
@@ -321,13 +268,15 @@ export default async function* history({ search }: Lume.Data) {
   rankings.sort((a, b) => Temporal.PlainDate.compare(a.date, b.date))
 
   const totalBooks: DayRank = {}
-  let lastRankingDate: Temporal.PlainDate | null = null
-  let lastRankingUrl: string | null = null
-  let lastRankingByLtId: Record<string, number> = {}
-  let lastBooks: string[] = []
-  let lastMarks: TallyBookMarks[] = []
-  let lastSupports: number[] = []
-  let lastCount = 0
+  const lastRanking: LastRankingData = {
+    url: null,
+    byLtId: {},
+    date: Temporal.Now.plainDateISO(),
+    books: [],
+    marks: [],
+    supports: [],
+    count: 0,
+  }
   for (const ranking of rankings) {
     const tally = FinalTally.safeParse(
       JSON.parse(await Deno.readTextFile(ranking.filename)),
@@ -351,18 +300,18 @@ export default async function* history({ search }: Lume.Data) {
       url: ranking.path,
       booksByLtId: books,
       rankingDate: ranking.date,
-      lastRankingUrl,
-      lastRankingByLtId,
+      lastRankingUrl: lastRanking.url,
+      lastRankingByLtId: lastRanking.byLtId,
       recentWindowDescription: getRecentWindowDescription(data.recentWindow),
       tags: ['history'],
     }
-    lastRankingUrl = site.url(ranking.path, true)
-    lastRankingByLtId = rankingByLtId
-    lastRankingDate = ranking.date
-    lastBooks = data.books
-    lastMarks = data.marks ?? []
-    lastSupports = data.supports ?? []
-    lastCount = data.count
+    lastRanking.url = site.url(ranking.path, true)
+    lastRanking.byLtId = rankingByLtId
+    lastRanking.date = ranking.date
+    lastRanking.books = data.books
+    lastRanking.marks = data.marks ?? []
+    lastRanking.supports = data.supports ?? []
+    lastRanking.count = data.count
   }
 
   for (const [ltid, book] of bookRanks.entries()) {
@@ -380,69 +329,13 @@ export default async function* history({ search }: Lume.Data) {
   }
   //#endregion
 
-  //#region Marks
-  const twoMonthsAgo = Temporal.Now.zonedDateTimeISO().subtract({ months: 2 })
-
-  for (const [mark, info] of Object.entries(rawMarks)) {
-    const recentMarksByUser: Record<string, [string, Date]> = {}
-    const allMarks: Record<string, [string, Date][]> = {}
-
-    for (let i = 0; i < lastBooks.length; i++) {
-      const ltid = lastBooks[i]
-      if (!(ltid in allMarks)) {
-        allMarks[ltid] = []
-      }
-      const bookMarks = lastMarks[i]?.[mark as Mark]
-      if (bookMarks) {
-        for (const [userId, date] of Object.entries(bookMarks)) {
-          const instant = date!.toTemporalInstant()
-          if (Temporal.Instant.compare(instant, twoMonthsAgo) > 0) {
-            if (
-              userId in recentMarksByUser &&
-              Temporal.Instant.compare(
-                  instant,
-                  recentMarksByUser[userId][1].toTemporalInstant(),
-                ) > 0
-            ) {
-              recentMarksByUser[userId] = [ltid, date!]
-            } else if (!(userId in recentMarksByUser)) {
-              recentMarksByUser[userId] = [ltid, date!]
-            }
-          }
-          allMarks[ltid].push([userId, date!])
-        }
-      }
-    }
-
-    const recentMarks = Object.entries(recentMarksByUser).reduce(
-      (acc, [userId, [ltid, date]]) => ({
-        ...acc,
-        [ltid]: [...(acc[ltid] ?? []), [userId, date] satisfies [string, Date]],
-      }),
-      {} as Record<string, [string, Date][]>,
-    )
-
-    yield {
-      url: `/marks/${mark}/`,
-      layout: 'mark.vto',
-      ...info,
-      title: info.name,
-      lastRankingDate,
-      lastRankingUrl,
-      lastRankingByLtId,
-      mark,
-      books,
-      recentMarks,
-      allMarks,
-    }
-  }
-  //#endregion
+  yield *marks(lastRanking)
 
   //#region Index/Underdogs
-  const sorted = lastSupports
+  const sorted = lastRanking.supports
     .map((support, index) => ({
-      percentSupport: lastCount > 0 ? support / lastCount : 0,
-      ltid: lastBooks[index],
+      percentSupport: lastRanking.count > 0 ? support / lastRanking.count : 0,
+      ltid: lastRanking.books[index],
     }))
     .sort((a, b) => a.percentSupport - b.percentSupport)
 
