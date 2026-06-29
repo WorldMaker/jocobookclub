@@ -8,6 +8,7 @@ import { BookDayRank, BookEntry, BooksByLtId, CalendarEntry, DayRank, LastRankin
 import { marks } from './marks.ts'
 import { index } from './index.ts'
 import { createCalendarFileContents } from './calendar.ts'
+import { tags } from './tags.ts'
 
 function toPlainDate(date: Date): Temporal.PlainDate {
   // Lume dates are always in UTC
@@ -261,6 +262,7 @@ export default async function* history({ search }: Lume.Data) {
   }
   //#endregion
 
-  yield *marks(lastRanking)
   yield *index(lastRanking)
+  yield *marks(lastRanking)
+  yield *tags(lastRanking)
 }
