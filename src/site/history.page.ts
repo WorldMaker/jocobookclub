@@ -4,7 +4,18 @@ import {
 } from '@worldmaker/jocobookclub-api/models'
 import cruises from './_data/cruises.json' with { type: 'json' }
 import site from './_config.ts'
-import { BookDayRank, BookEntry, BooksByLtId, CalendarEntry, DayRank, LastRankingData, PreviousBookEntry, RankingEntry, ScheduledUpcomingBookEntry, YearCalendar } from './history.model.ts'
+import {
+  BookDayRank,
+  BookEntry,
+  BooksByLtId,
+  CalendarEntry,
+  DayRank,
+  LastRankingData,
+  PreviousBookEntry,
+  RankingEntry,
+  ScheduledUpcomingBookEntry,
+  YearCalendar,
+} from './history.model.ts'
 import { marks } from './marks.ts'
 import { index } from './index.ts'
 import { createCalendarFileContents } from './calendar.ts'
@@ -262,7 +273,7 @@ export default async function* history({ search }: Lume.Data) {
   }
   //#endregion
 
-  yield *index(lastRanking)
-  yield *marks(lastRanking)
-  yield *tags(lastRanking)
+  yield* index(lastRanking)
+  yield* marks(lastRanking)
+  yield* tags(lastRanking)
 }

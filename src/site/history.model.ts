@@ -1,6 +1,4 @@
-import {
-  TallyBookMarks,
-} from '@worldmaker/jocobookclub-api/models'
+import { TallyBookMarks } from '@worldmaker/jocobookclub-api/models'
 
 export type BookType = 'previous' | 'upcoming' | 'ballot' | 'held'
 export interface BookEntry {

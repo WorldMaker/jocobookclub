@@ -1,7 +1,7 @@
 import { LastRankingData } from './history.model.ts'
 
 export function* index(lastRanking: LastRankingData) {
-   const sorted = lastRanking.supports
+  const sorted = lastRanking.supports
     .map((support, index) => ({
       percentSupport: lastRanking.count > 0 ? support / lastRanking.count : 0,
       ltid: lastRanking.books[index],
