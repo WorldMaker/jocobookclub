@@ -1,5 +1,5 @@
+import { getRecentWindowDescription } from '@worldmaker/jocobookclub-api/models'
 import site from './_config.ts'
-import { getRecentWindowDescription } from './bf/chunk-JUXZOUOV.js'
 import { getHistory } from './history.data.ts'
 
 export default async function* ranking() {
