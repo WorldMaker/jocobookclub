@@ -5,7 +5,9 @@ export default async function* index() {
   const { booksByLtId, lastRanking } = await getHistory(site)
   const sorted = (lastRanking.tally.supports ?? [])
     .map((support, index) => ({
-      percentSupport: lastRanking.tally.count > 0 ? support / lastRanking.tally.count : 0,
+      percentSupport: lastRanking.tally.count > 0
+        ? support / lastRanking.tally.count
+        : 0,
       ltid: lastRanking.tally.books[index],
     }))
     .sort((a, b) => a.percentSupport - b.percentSupport)

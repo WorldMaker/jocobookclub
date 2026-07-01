@@ -15,7 +15,9 @@ export default async function* ranking() {
       rankingDate: ranking.date,
       lastRankingUrl: ranking.lastEntry?.url,
       lastRankingByLtId: ranking.lastEntry?.byLtId,
-      recentWindowDescription: getRecentWindowDescription(ranking.tally.recentWindow),
+      recentWindowDescription: getRecentWindowDescription(
+        ranking.tally.recentWindow,
+      ),
       tags: ['history'],
     }
   }

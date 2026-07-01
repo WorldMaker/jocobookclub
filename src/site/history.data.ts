@@ -1,7 +1,17 @@
 import { FinalTally } from '@worldmaker/jocobookclub-api/models'
 import Site from 'lume/core/site.ts'
 import cruises from './_data/cruises.json' with { type: 'json' }
-import { BookDayRank, BookEntry, BooksByLtId, CalendarEntry, History, PreviousBookEntry, RankingEntry, ScheduledUpcomingBookEntry, YearCalendar } from './history.model.ts'
+import {
+  BookDayRank,
+  BookEntry,
+  BooksByLtId,
+  CalendarEntry,
+  History,
+  PreviousBookEntry,
+  RankingEntry,
+  ScheduledUpcomingBookEntry,
+  YearCalendar,
+} from './history.model.ts'
 
 let history: History | null = null
 
