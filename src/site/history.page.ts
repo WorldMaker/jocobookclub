@@ -4,7 +4,6 @@ import { getHistory } from './history.data.ts'
 export default async function* history() {
   const { calendar } = await getHistory(site)
 
-  //#region Calendar Pages
   const currentYear = Temporal.Now.plainDateISO().year
   const currentYearCalendar = calendar.get(currentYear) ?? new Map()
   calendar.delete(currentYear)
@@ -33,5 +32,4 @@ export default async function* history() {
       tags: ['history'],
     }
   }
-  //#endregion
 }
