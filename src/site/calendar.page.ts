@@ -1,6 +1,8 @@
 import ICAL from 'ical.js'
 import cruises from './_data/cruises.json' with { type: 'json' }
 import { YearCalendar } from './history.model.ts'
+import site from './_config.ts'
+import { getHistory } from './history.data.ts'
 
 export function createCalendarFileContents(calendar: YearCalendar) {
   const cal = new ICAL.Component(['vcalendar', [], []])
@@ -72,4 +74,13 @@ export function createCalendarFileContents(calendar: YearCalendar) {
     cal.addSubcomponent(vevent)
   }
   return cal.toString()
+}
+
+export default async function* calendar() {
+  const { calendar } = await getHistory(site)
+  yield {
+    url: '/calendar.ics',
+    contentType: 'text/calendar',
+    content: createCalendarFileContents(calendar),
+  }
 }
