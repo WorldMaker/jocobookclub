@@ -184,7 +184,7 @@ export default async function* history({ search }: Lume.Data) {
   const pastYears = [...calendar.keys()].sort()
   yield {
     layout: 'calendar.vto',
-    title: 'Club History',
+    title: 'Calendar',
     url: '/history/',
     year: currentYear,
     calendar: currentYearCalendar,
@@ -193,9 +193,10 @@ export default async function* history({ search }: Lume.Data) {
   }
 
   for (const [year, yearCalendar] of calendar.entries()) {
+    const title = year < currentYear ? `Club History — ${year}` : `Upcoming Club Events — ${year}`
     yield {
       layout: 'calendar.vto',
-      title: `Club History — ${year}`,
+      title,
       url: `/history/${year}/`,
       year,
       calendar: yearCalendar,
