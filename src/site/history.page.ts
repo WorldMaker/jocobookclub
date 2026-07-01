@@ -1,10 +1,8 @@
-import { getRecentWindowDescription } from '@worldmaker/jocobookclub-api/models'
 import site from './_config.ts'
 import { getHistory } from './history.data.ts'
 
 export default async function* history() {
-  const { booksByLtId: books, calendar, rankings, bookRanks, totalBooks } =
-    await getHistory(site)
+  const { calendar } = await getHistory(site)
 
   //#region Calendar Pages
   const currentYear = Temporal.Now.plainDateISO().year

@@ -1,4 +1,4 @@
-import { FinalTally, TallyBookMarks } from '@worldmaker/jocobookclub-api/models'
+import { FinalTally } from '@worldmaker/jocobookclub-api/models'
 
 export type BookType = 'previous' | 'upcoming' | 'ballot' | 'held'
 export interface BookEntry {
