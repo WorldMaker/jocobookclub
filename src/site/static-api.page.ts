@@ -1,5 +1,6 @@
 import genreTags from './_data/genre/tags.json' with { type: 'json' }
 import site from './_config.ts'
+import { getHistory } from './history.data.ts'
 
 interface BookInfo {
   title: string
@@ -20,7 +21,7 @@ function byLtId(books: BookInfo[]): BooksByLtid {
   )
 }
 
-export default function* staticApi({ search }: Lume.Data) {
+export default async function* staticApi({ search }: Lume.Data) {
   const previousBooks = search.pages('previous')
     .map((page) => ({
       title: page.title!,
@@ -82,4 +83,21 @@ export default function* staticApi({ search }: Lume.Data) {
       content: JSON.stringify(tagBooksByLtid),
     }
   }
+
+  //#region Book Ranks
+  const { bookRanks, totalBooks } = await getHistory(site)
+  for (const [ltid, book] of bookRanks.entries()) {
+    yield {
+      url: `/static-api/book-ranks/${ltid}.json`,
+      contentType: 'application/json',
+      content: JSON.stringify(book),
+    }
+  }
+
+  yield {
+    url: `/static-api/total-books.json`,
+    contentType: 'application/json',
+    content: JSON.stringify(totalBooks),
+  }
+  //#endregion
 }

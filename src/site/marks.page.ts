@@ -1,20 +1,22 @@
 import { Mark } from '@worldmaker/jocobookclub-api/models'
 import rawMarks from './_data/genre/marks.json' with { type: 'json' }
-import { LastRankingData } from './history.model.ts'
+import site from './_config.ts'
+import { getHistory } from './history.data.ts'
 
-export function* marks(lastRanking: LastRankingData) {
+export default async function* marks() {
+  const { lastRanking } = await getHistory(site)
   const twoMonthsAgo = Temporal.Now.zonedDateTimeISO().subtract({ months: 2 })
 
   for (const [mark, info] of Object.entries(rawMarks)) {
     const recentMarksByUser: Record<string, [string, Date]> = {}
     const allMarks: Record<string, [string, Date][]> = {}
 
-    for (let i = 0; i < lastRanking.books.length; i++) {
-      const ltid = lastRanking.books[i]
+    for (let i = 0; i < lastRanking.tally.books.length; i++) {
+      const ltid = lastRanking.tally.books[i]
       if (!(ltid in allMarks)) {
         allMarks[ltid] = []
       }
-      const bookMarks = lastRanking.marks[i]?.[mark as Mark]
+      const bookMarks = lastRanking.tally.marks?.[i]?.[mark as Mark]
       if (bookMarks) {
         for (const [userId, date] of Object.entries(bookMarks)) {
           const instant = date!.toTemporalInstant()
@@ -53,7 +55,7 @@ export function* marks(lastRanking: LastRankingData) {
       lastRankingUrl: lastRanking.url,
       lastRankingByLtId: lastRanking.byLtId,
       mark,
-      books: lastRanking.books,
+      books: lastRanking.tally.books,
       recentMarks,
       allMarks,
     }

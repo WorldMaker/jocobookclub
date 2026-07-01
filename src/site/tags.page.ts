@@ -1,5 +1,6 @@
 import genreTags from './_data/genre/tags.json' with { type: 'json' }
-import { LastRankingData } from './history.model.ts'
+import site from './_config.ts'
+import { getHistory } from './history.data.ts'
 
 interface TagInfo {
   iconClass: string
@@ -9,13 +10,14 @@ interface TagInfo {
   description?: string
 }
 
-export function* tags(lastRanking: LastRankingData) {
+export default async function* tags() {
+  const { booksByLtId, lastRanking } = await getHistory(site)
   for (const [tag, info] of Object.entries(genreTags)) {
-    const top5 = lastRanking.ranking
+    const top5 = lastRanking.tally.ranking
       .toReversed()
-      .filter((ltid) => lastRanking.booksByLtId.get(ltid)?.tags.includes(tag))
+      .filter((ltid) => booksByLtId.get(ltid)?.tags.includes(tag))
       .slice(0, 5)
-      .map((ltid) => lastRanking.booksByLtId.get(ltid))
+      .map((ltid) => booksByLtId.get(ltid))
       .filter((book) => book !== undefined)
 
     yield {

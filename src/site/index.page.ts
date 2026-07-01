@@ -1,10 +1,12 @@
-import { LastRankingData } from './history.model.ts'
+import site from './_config.ts'
+import { getHistory } from './history.data.ts'
 
-export function* index(lastRanking: LastRankingData) {
-  const sorted = lastRanking.supports
+export default async function* index() {
+  const { booksByLtId, lastRanking } = await getHistory(site)
+  const sorted = (lastRanking.tally.supports ?? [])
     .map((support, index) => ({
-      percentSupport: lastRanking.count > 0 ? support / lastRanking.count : 0,
-      ltid: lastRanking.books[index],
+      percentSupport: lastRanking.tally.count > 0 ? support / lastRanking.tally.count : 0,
+      ltid: lastRanking.tally.books[index],
     }))
     .sort((a, b) => a.percentSupport - b.percentSupport)
 
@@ -14,10 +16,10 @@ export function* index(lastRanking: LastRankingData) {
     ltid
   )
 
-  const top5 = lastRanking.ranking
+  const top5 = lastRanking.tally.ranking
     .toReversed()
     .slice(0, 5)
-    .map((ltid) => lastRanking.booksByLtId.get(ltid))
+    .map((ltid) => booksByLtId.get(ltid))
 
   yield {
     url: `/`,

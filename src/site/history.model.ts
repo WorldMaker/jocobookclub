@@ -1,4 +1,4 @@
-import { TallyBookMarks } from '@worldmaker/jocobookclub-api/models'
+import { FinalTally, TallyBookMarks } from '@worldmaker/jocobookclub-api/models'
 
 export type BookType = 'previous' | 'upcoming' | 'ballot' | 'held'
 export interface BookEntry {
@@ -31,6 +31,9 @@ export interface RankingEntry {
   filename: string
   path: string
   url: string
+  tally: FinalTally
+  byLtId: Record<string, number>
+  lastEntry?: RankingEntry | null
 }
 
 export interface CruiseEntry {
@@ -52,14 +55,11 @@ export type YearCalendar = Map<number, MonthCalendar>
 export type DayRank = Record<string, number>
 export type BookDayRank = Map<string, DayRank>
 
-export interface LastRankingData {
-  url: string | null
-  byLtId: Record<string, number>
-  date: Temporal.PlainDate
-  books: string[]
+export interface History {
   booksByLtId: BooksByLtId
-  marks: TallyBookMarks[]
-  supports: number[]
-  ranking: string[]
-  count: number
+  calendar: YearCalendar
+  rankings: RankingEntry[]
+  bookRanks: BookDayRank
+  totalBooks: DayRank
+  lastRanking: RankingEntry
 }
