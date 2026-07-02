@@ -4,6 +4,26 @@ bfscript: /bf/ballot-page.js
 tags: [main]
 ---
 
+{{ set h = await history() }}
+{{ set booksByLtId = h.booksByLtId }}
+{{ set lastRanking = h.lastRanking }}
+{{ set top5 = lastRanking.tally.ranking
+    .toReversed()
+    .slice(0, 5)
+    .map((ltid) => booksByLtId.get(ltid)) }}
+{{ set sorted = (lastRanking.tally.supports ?? [])
+    .map((support, index) => ({
+      percentSupport: lastRanking.tally.count > 0
+        ? support / lastRanking.tally.count
+        : 0,
+      ltid: lastRanking.tally.books[index],
+    }))
+    .sort((a, b) => a.percentSupport - b.percentSupport) }}
+{{ set firstQuartileMedianIdx = Math.floor(sorted.length / 4) }}
+{{ set underdogs = sorted
+    .slice(0, firstQuartileMedianIdx)
+    .map(({ ltid }) => ltid) }}
+
 <section class="hero is-info">
     <div class="hero-body">
         <h1 class="title"><i class="fa-duotone fa-solid fa-book-open-cover"></i> <span>JoCo Book Club</span></h1>
@@ -35,7 +55,7 @@ tags: [main]
         <section class="section cell">
             <h1 class="title"><span class="icon has-text-primary"><i class="fa-duotone fa-solid fa-ballot"></i></span> Current Rankings</h1>
 
-            <p class="block">As of <a href="{{ lastRankingUrl }}">{{ lastRankingDate.toLocaleString() }}</a>:</p>
+            <p class="block">As of <a href="{{ lastRanking.url }}">{{ lastRanking.date.toLocaleString() }}</a>:</p>
 
             <ol type="1" class="block">
             {{ for book of top5 }}

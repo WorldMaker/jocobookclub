@@ -211,5 +211,7 @@ export async function getHistory(site: Site): Promise<History> {
     lastRanking,
   }
 
+  site.data('history', history)
+
   return history!
 }
