@@ -5,7 +5,8 @@ bfscript: /bf/book-page.js
 ---
 
 <section class="section">
-    {{ include "book-card.vto" { currentBallot: tags.some(t => /^(ballot|held)$/.test(t)) } }}
+    {{ set lastRanking = (await history()).lastRanking }}
+    {{ include "book-card.vto" { currentBallot: tags.some(t => /^(ballot|held)$/.test(t)), rank: lastRanking.byLtId[ltid] } }}
 </section>
 
 {{ include "bf/book-page.html" }}
