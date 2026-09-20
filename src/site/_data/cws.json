@@ -454,5 +454,15 @@
     "Graphic": "Colonisation, War, Racism",
     "Moderate": "Medical trauma, Xenophobia, Genocide",
     "Minor": "Rape, Slavery, Torture"
+  },
+  "52da5099-42f1-492e-848b-c674e08624e2": {
+    "Graphic": "Alcohol, Sexual content, Cursing",
+    "Moderate": "Panic attacks/disorders, Infidelity, Addiction",
+    "Minor": "Violence, Drug use, Body shaming"
+  },
+  "8b4215ea-b066-4559-b315-084a3450c517": {
+    "Graphic": "Gore, Body horror, Racial slurs",
+    "Moderate": "Ableism, Suicidal thoughts, Animal death",
+    "Minor": "Homophobia, Car accident, Drug use"
   }
 }

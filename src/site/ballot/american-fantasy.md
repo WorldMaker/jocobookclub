@@ -12,18 +12,11 @@ whyBlurb: >+
   manager. It's more character/relationship-driven than plot-driven. It's a
   quick read, with a mix of fun, drama, and head-shaking. There are a couple of
   queer characters, but that's not the focus of the book.
-
-
   I heard about American Fantasy as one of the "What's Making Us Happy" picks on
   Pop Culture Happy Hour.
-
-
   Published: April 7, 2026
-
   Pages: 304
-
   Audiobook length: 8 hours
-
 cw: 'alcohol, sex, suicidal thoughts, very minor violence'
 tags:
   - romance
